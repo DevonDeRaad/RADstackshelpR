@@ -1,5 +1,19 @@
-
-#open function:
+#' Optimize the m parameter during denovo stacks assembly
+#'
+#' This function requires the path to stacks vcf file(s) as input.
+#' There are slots for varying the m parameter from 3-7 (as recommended by Paris et al. 2017).
+#' After running stacks with each of the m options, plug the output vcf files into this 
+#' function to visualize the effect of varying m on depth and number of SNPs/loci built to 
+#' recognize which value optimizes the m parameter for your dataset at the 'R80' cutoff (Paris et al. 2017). 
+#'
+#' @param m3 Path to the input vcf file for a run when m=3
+#' @param m4 Path to the input vcf file for a run when m=4
+#' @param m5 Path to the input vcf file for a run when m=5
+#' @param m6 Path to the input vcf file for a run when m=6
+#' @param m7 Path to the input vcf file for a run when m=7
+#' @return A list containing two dataframes, 'depth.df' showing depth per sample for each m value,
+#' and 'm.df' showing the number of SNPs and loci retained at various filtering levels for each m value
+#' @export
 optimize_m <- function(m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL){
   #initialize empty depth.df
   depth.df<- data.frame(m=character(), avg.depth=numeric())

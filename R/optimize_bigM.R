@@ -1,5 +1,21 @@
-
-#open function:
+#' Optimize the M parameter during denovo stacks assembly
+#'
+#' This function requires the path to stacks vcf file(s) as input.
+#' There are slots for varying the M parameter from 1-8 (as recommended by Paris et al. 2017).
+#' After running stacks with each of the M options, plug the output vcf files into this 
+#' function to visualize the effect of varying m on the number of SNPs and loci built to 
+#' recognize which value optimizes the M parameter for your dataset at the 'R80' cutoff (Paris et al. 2017). 
+#'
+#' @param M1 Path to the input vcf file for a run when M=1
+#' @param M2 Path to the input vcf file for a run when M=2
+#' @param M3 Path to the input vcf file for a run when M=3
+#' @param M4 Path to the input vcf file for a run when M=4
+#' @param M5 Path to the input vcf file for a run when M=5
+#' @param M6 Path to the input vcf file for a run when M=6
+#' @param M7 Path to the input vcf file for a run when M=7
+#' @param M8 Path to the input vcf file for a run when M=8
+#' @return A dataframe showing the number of SNPs and loci retained across filtering levels for each M value
+#' @export
 optimize_M <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M8=NULL){
   #initialize empty M.df
   M.df<- data.frame(M=character(), filt=as.numeric(), snps=numeric(), V4=character())

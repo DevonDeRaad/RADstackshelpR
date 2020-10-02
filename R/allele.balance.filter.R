@@ -1,4 +1,14 @@
-
+#' Filter out heterozygous sites failing an allele balance check
+#'
+#' This function requires a vcfR object as input, and returns a vcfR object filtered 
+#' to convert heterozygous sites with an allele balance falling outside of .25-.75 to 'NA'.
+#' From: https://www.ddocent.com/filtering/ "Allele balance: a number between 0 and 1 
+#' representing the ratio of reads showing the reference allele to all reads, 
+#' considering only reads from individuals called as heterozygous, we expect that the 
+#' allele balance in our data (for real loci) should be close to 0.5".
+#'
+#' @param vcfR a vcfR object
+#' @return The vcfR object input, with the sites failing the allele balance filter converted to 'NA'
 #' @export
 filter.allele.balance <- function(vcfR){
   

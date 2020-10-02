@@ -1,5 +1,16 @@
-
-#open function:
+#' Optimize the n parameter during denovo stacks assembly
+#'
+#' This function requires the path to stacks vcf file(s) as input.
+#' There are slots for varying the n parameter across M-1, M, and M-1 (as recommended by Paris et al. 2017).
+#' After running stacks with each of the n options, plug the output vcf files into this 
+#' function to visualize the effect of varying m on number of SNPs and loci built to 
+#' recognize which value optimizes the n parameter for your dataset at the 'R80' cutoff (Paris et al. 2017). 
+#'
+#' @param nequalsMminus1 Path to the input vcf file for a run when n=M-1
+#' @param nequalsM Path to the input vcf file for a run when n=M
+#' @param nequalsMplus1 Path to the input vcf file for a run when n=M+1
+#' @return A dataframe showing the number of SNPs and loci retained across filtering levels for each n value
+#' @export
 optimize_n <- function(nequalsMminus1=NULL,nequalsM=NULL,nequalsMplus1=NULL){
   #initialize empty n.df
   n.df<- data.frame(m=character(), filt=as.numeric(), snps=numeric(), V4=character())

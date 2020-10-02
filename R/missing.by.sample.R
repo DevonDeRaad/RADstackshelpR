@@ -1,9 +1,30 @@
-#leans heavily on the tutorial from Knaus:
-#https://knausb.github.io/vcfR_documentation/sequence_coverage.html
-
+#' Vizualise missing data per sample, remove samples above a missing data cutoff
+#'
+#' This function can be run in two ways: 1) Without 'cutoff' specified. This will vizualise the 
+#' amount of missing data in each sample across a variety of potential missing data cutoffs. 
+#' Additionally, it will show you a dotplot ordering the amount of overall missing data in each sample. 
+#' Based on these visualizations, you can make an informed decision on what you think might be an optimal 
+#' cutoff to remove samples that are missing too much data to be retained for downstream analyses. 2) 
+#' with 'cutoff' specified. This option will show you the dotplot with the cutoff you set, and then 
+#' remove samples above the missing data cutoff you set, and return the filtered vcf to you.
+#' 
+#' Note: This decision is highly project specific, but these visualizations should help you get a feel for how 
+#' very low data samples cannot be rescued simply by a missing data SNP filter. If you want to remove 
+#' specific samples from your vcf that cannot be specified with a simple cutoff refer to this great tutorial: 
+#' https://knausb.github.io/vcfR_documentation/sequence_coverage.html which was the basis for the code 
+#' implemented in this function.
+#' 
+#' @param vcfR a vcfR object
+#' @param popmap if specifies, it must be a two column dataframe with columns names 'id' and 'pop'. 
+#' IDs must match the IDs in the vcfR object
+#' @param cutoff a numeric value between 0-1 specifying the maximum proportion of missing data 
+#' allowed in a sample to be retained for downstream analyses
+#' @return if 'cutoff' is not specified, will return a dataframe containing the average depth and proportion 
+#' missing data in each sample. If 'cutoff' is specified, the samples falling above the missing data cutoff 
+#' will be removed, and the filtered vcfR object will be returned.
 #' @export
 missing.by.sample <- function(vcfR, popmap=NULL, cutoff=NULL){
-        
+  
   #extract depth from the vcf
   dp<- vcfR::extract.gt(vcfR, element='DP', as.numeric=TRUE)
   
@@ -13,6 +34,9 @@ missing.by.sample <- function(vcfR, popmap=NULL, cutoff=NULL){
                 print("No popmap provided")
                 } 
             else {
+              if (colnames(popmap)[1] != "id" | colnames(popmap)[2] != "pop"){
+                stop("popmap must be a dataframe with two columns, 'id' and 'pop'")
+              }
                 #calculate missingness by pop here and make dotplot
                   #popmap must be a two column dataframe with 'id' and 'pop' columns
                   #id's must match the ids in the vcf file

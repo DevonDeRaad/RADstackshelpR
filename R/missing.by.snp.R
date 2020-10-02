@@ -1,4 +1,20 @@
-
+#' Vizualise missing data per SNP, remove SNPs above a missing data cutoff
+#'
+#' This function can be run in two ways: 1) Without 'cutoff' specified. This will vizualise the 
+#' amount of missing data in each sample across a variety of potential missing data cutoffs. 
+#' Additionally, it will show you dotplots visualizing the number of total SNPs retained across 
+#' a variety of filtering cutoffs, and the total proportion of missing data. 
+#' Based on these visualizations, you can make an informed decision on what you think might be an optimal 
+#' cutoff to minimize the overall missingness of your dataset while still retaining an appropriate amount of SNPs 
+#' for the downstream inferences you hope to make 2) with 'cutoff' specified. This option will show you the 
+#' dotplots with the cutoff you set, and then remove SNPs above the missing data cutoff.
+#' 
+#' @param vcfR a vcfR object
+#' @param cutoff a numeric value between 0-1 specifying the maximum proportion of missing data 
+#' allowed in a SNP to be retained for downstream analyses
+#' @return if 'cutoff' is not specified, will return a dataframe containing the proportion missing data  
+#' and the total SNPs retained across each filtering level. If 'cutoff' is specified, SNPs 
+#' falling above the missing data cutoff will be removed, and the filtered vcfR object will be returned.
 #' @export
 missing.by.snp <- function(vcfR, cutoff=NULL){
   
@@ -11,7 +27,7 @@ missing.by.snp <- function(vcfR, cutoff=NULL){
     #calculate the proportion of individuals successfully genotyped at each SNP
     miss<-rowSums(is.na(dp.matrix))/ncol(dp.matrix)
     
-    #loop that stores a vector of # non-missing loci retained for each individual
+    #loop that stores a vector of # non-missing SNPs retained for each individual
     #looped over all possible completeness filter values
     #initialize df.x
     df.x<- data.frame(filt=numeric(), missingness=numeric(), snps.retained=numeric())
@@ -140,6 +156,8 @@ missing.by.snp <- function(vcfR, cutoff=NULL){
       ggplot2::labs(x = "SNP completeness cutoff", y = "total % missing data")
 
     gridExtra::grid.arrange(plot1,plot2)
+    
+    return(df.x)
   }
   
 }
