@@ -2,9 +2,9 @@
 #'
 #' This function requires the path to stacks vcf file(s) as input.
 #' There are slots for varying the m parameter from 3-7 (as recommended by Paris et al. 2017).
-#' After running stacks with each of the m options, plug the output vcf files into this 
-#' function to visualize the effect of varying m on depth and number of SNPs/loci built to 
-#' recognize which value optimizes the m parameter for your dataset at the 'R80' cutoff (Paris et al. 2017). 
+#' After running stacks with each of the m options, plug the output vcf files into this
+#' function to visualize the effect of varying m on depth and number of SNPs/loci built to
+#' recognize which value optimizes the m parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 #'
 #' @param m3 Path to the input vcf file for a run when m=3
 #' @param m4 Path to the input vcf file for a run when m=4
@@ -23,7 +23,7 @@ optimize_m <- function(m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL){
   ms<-c("m3","m4","m5","m6","m7")
   #start on first position in vector of m identifiers
   j=1
-  
+
   #open for loop for each m identifier
   for(x in list(m3,m4,m5,m6,m7)){
     #open if else statement, if no m of given value, move j up to next m identifier, else calculate snps/loci retained
@@ -37,7 +37,7 @@ optimize_m <- function(m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL){
       m<- rep(ms[j], times = length(dep))
       ###cbind depth and m identifier into depth df
       depth.df<- rbind(depth.df, as.data.frame(cbind(m,dep)))
-      
+
       #initialize vectors to hold filt level, snps retained, poly loci retained
       filt<- vector("numeric", length = 11)
       snps<- vector("numeric", length = 11)
@@ -50,7 +50,7 @@ optimize_m <- function(m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL){
         #calculate the number of snps retained at this cutoff
         snps[k]<-nrow(vcf.r@gt[(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i),])
         #calculate number of polymorphic loci retained at this cutoff
-        poly.loci[k]<-length(unique(stringr::str_extract(vcf.r@fix[,3][(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i)], pattern = "[0-9]+")))
+        poly.loci[k]<-length(unique(vcf.r@fix[,1][(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i)]))
         k=k+1
         #close for loop
       }
@@ -67,7 +67,7 @@ optimize_m <- function(m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL){
     }
     #close for loop
   }
-  
+
   #take depth df output from all of these possibilities
   #plot hist of depth at each m value on same plot
   depth.df$m<-as.factor(depth.df$m)
@@ -96,13 +96,13 @@ optimize_m <- function(m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL){
     ggplot2::ggplot(m.df, ggplot2::aes(x=filt, y=retained, col = m, shape=snp.locus))+
       ggplot2::geom_point(alpha = .75, size=3)+
       ggplot2::ggtitle("total SNPs and polymorphic loci retained by filtering scheme")+
-      ggplot2::xlab("fraction of non-missing genotypes required to retain each SNP (0-1)")+ 
+      ggplot2::xlab("fraction of non-missing genotypes required to retain each SNP (0-1)")+
       ggplot2::ylab("# SNPs/loci")+
       ggplot2::theme_light()+
       ggplot2::geom_vline(xintercept=.8)+
       ggplot2::labs(col = "min. stack depth", shape="")
   )
-  
+
   #return the depth and snp/loci dataframes in case you want to do your own visualizations
   out <- list()
   out$depth<-depth.df

@@ -18,7 +18,6 @@ Imports:
 	vcfR,
 	ggplot2,
 	ggridges,
-	stringr,
 	gridExtra,
 	adegenet
 Suggests: 
