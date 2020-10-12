@@ -2,9 +2,9 @@
 #'
 #' This function requires the path to stacks vcf file(s) as input.
 #' There are slots for varying the n parameter across M-1, M, and M-1 (as recommended by Paris et al. 2017).
-#' After running stacks with each of the n options, plug the output vcf files into this 
-#' function to visualize the effect of varying m on number of SNPs and loci built to 
-#' recognize which value optimizes the n parameter for your dataset at the 'R80' cutoff (Paris et al. 2017). 
+#' After running stacks with each of the n options, plug the output vcf files into this
+#' function to visualize the effect of varying m on number of SNPs and loci built to
+#' recognize which value optimizes the n parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 #'
 #' @param nequalsMminus1 Path to the input vcf file for a run when n=M-1
 #' @param nequalsM Path to the input vcf file for a run when n=M
@@ -18,14 +18,14 @@ optimize_n <- function(nequalsMminus1=NULL,nequalsM=NULL,nequalsMplus1=NULL){
   ns<-c("nequalsMminus1","nequalsM","nequalsMplus1")
   #start on first position in vector of m identifiers
   j=1
-  
+
   #open for loop for each m identifier
   for(x in list(nequalsMminus1,nequalsM,nequalsMplus1)){
     #open if else statement, if no m of given value, move j up to next m identifier, else calculate snps/loci retained
     if(is.null(x)){j=j+1} else{
       ##read in vcfR
       vcf.r<- vcfR::read.vcfR(x) #read in all data
-      
+
       #initialize vectors to hold filt level, snps retained, poly loci retained
       filt<- vector("numeric", length = 11)
       snps<- vector("numeric", length = 11)
@@ -38,7 +38,7 @@ optimize_n <- function(nequalsMminus1=NULL,nequalsM=NULL,nequalsMplus1=NULL){
         #calculate the number of snps retained at this cutoff
         snps[k]<-nrow(vcf.r@gt[(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i),])
         #calculate number of polymorphic loci retained at this cutoff
-        poly.loci[k]<-length(unique(stringr::str_extract(vcf.r@fix[,3][(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i)], pattern = "[0-9]+")))
+        poly.loci[k]<-length(unique(vcf.r@fix[,1][(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i)]))
         k=k+1
         #close for loop
       }
@@ -55,7 +55,7 @@ optimize_n <- function(nequalsMminus1=NULL,nequalsM=NULL,nequalsMplus1=NULL){
     j=j+1
     #close for loop
   }
-  
+
   print("Optimal n value returns the most polymorphic loci in the 80% complete matrix (Paris et al. 2017)")
   #take m df output from all these possibilities
   #plot number of SNPs retained colored by m at each filt level, as open circles
@@ -78,7 +78,7 @@ optimize_n <- function(nequalsMminus1=NULL,nequalsM=NULL,nequalsMplus1=NULL){
       ggplot2::geom_vline(xintercept=.8)+
       ggplot2::labs(col = c("mismatches allowed\nbetween stacks\nduring catalogue building"), shape="")
   )
-  
+
   #return the depth and snp/loci dataframes in case you want to do your own visualizations
   return(n.df)
   #close function

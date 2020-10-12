@@ -2,9 +2,9 @@
 #'
 #' This function requires the path to stacks vcf file(s) as input.
 #' There are slots for varying the M parameter from 1-8 (as recommended by Paris et al. 2017).
-#' After running stacks with each of the M options, plug the output vcf files into this 
-#' function to visualize the effect of varying m on the number of SNPs and loci built to 
-#' recognize which value optimizes the M parameter for your dataset at the 'R80' cutoff (Paris et al. 2017). 
+#' After running stacks with each of the M options, plug the output vcf files into this
+#' function to visualize the effect of varying m on the number of SNPs and loci built to
+#' recognize which value optimizes the M parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 #'
 #' @param M1 Path to the input vcf file for a run when M=1
 #' @param M2 Path to the input vcf file for a run when M=2
@@ -23,7 +23,7 @@ optimize_M <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M
   Ms<-c("M1","M2","M3","M4","M5","M6","M7","M8")
   #start on first position in vector of m identifiers
   j=1
-  
+
   #open for loop for each m identifier
   for(x in list(M1,M2,M3,M4,M5,M6,M7,M8)){
     #open if else statement, if no m of given value, move j up to next m identifier, else calculate snps/loci retained
@@ -43,7 +43,7 @@ optimize_M <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M
         #calculate the number of snps retained at this cutoff
         snps[k]<-nrow(vcf.r@gt[(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i),])
         #calculate number of polymorphic loci retained at this cutoff
-        poly.loci[k]<-length(unique(stringr::str_extract(vcf.r@fix[,3][(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i)], pattern = "[0-9]+")))
+        poly.loci[k]<-length(unique(vcf.r@fix[,1][(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i)]))
         k=k+1
         #close for loop
       }
@@ -60,7 +60,7 @@ optimize_M <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M
     }
     #close for loop
   }
-  
+
   print("Optimal M value returns the most polymorphic loci in the 80% complete matrix (Paris et al. 2017)")
   #take m df output from all these possibilities
   #plot number of SNPs retained colored by m at each filt level, as open circles
@@ -83,9 +83,9 @@ optimize_M <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M
       ggplot2::geom_vline(xintercept=.8)+
       ggplot2::labs(col = c("mismatches allowed\nbetween stacks\nwithin a locus"), shape="")
   )
-  
+
   print("Correctly setting M requires a balance – set it too low and alleles from the same locus will not collapse, set it too high and paralogous or repetitive loci will incorrectly merge together. When alleles from the same locus are undermerged, the software will incorrectly consider them as independent loci. When loci are overmerged because they happen to be close in sequence space, an errant locus with false polymorphism will result. Therefore, M is particularly dataset‐specific because it depends on the natural levels of polymorphism in the species, as well as the amount of error generated during the preparation and sequencing of the RAD‐seq libraries.")
-  
+
   #return the depth and snp/loci dataframes in case you want to do your own visualizations
   return(M.df)
     #close function
