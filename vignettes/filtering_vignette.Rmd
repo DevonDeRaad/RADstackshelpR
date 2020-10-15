@@ -66,10 +66,10 @@ This is a max depth filter (super high depth loci are likely multiple loci stuck
 Note: we want to apply this 'per SNP' rather than 'per genotype' otherwise we will simply be removing most of the genotypes from our deepest sequenced samples (because sequencing depth is so variable between samples)
 ```{r, fig.height = 6, fig.width = 8, fig.align = "center"}
 #visualize and pick appropriate max depth cutoff
-max.depth(vcfR)
+max_depth(vcfR)
 par(mfrow=c(1,1))
 #filter vcf by the max depth cutoff you chose
-vcfR<-max.depth(vcfR, maxdepth = 100)
+vcfR<-max_depth(vcfR, maxdepth = 100)
 ```
 
 Note: It may be a good idea to additionally filter out SNPs that are significantly out of HWE if you have a really good idea of what the population structure in your sample looks like and good sample sizes in each pop. For this dataset, which is highly structured (many isolated island pops) with species boundaries that are in flux, I am not going to use a HWE filter, because I don't feel comfortable confidently identifying populations in which we can expect HWE.
@@ -128,10 +128,10 @@ Our package contains a convenient wrapper function that streamlines the investig
 Warning: this is a heavy function if it is run without the 'min.mac' option. It is converting the entire vcf into a genlight and running 6 unique dapc iterations, which will take a minute for larger datasets. If you set 'min.mac' it will just filter your dataset, and should run quickly.
 ```{r, fig.height = 6, fig.width = 8, fig.align = "center"}
 #use min.mac() to investigate the effect of multiple cutoffs
-min.mac(vcfR = vcfR, popmap = popmap)
+min_mac(vcfR = vcfR, popmap = popmap)
 
 #based on these visualizations, I will remove singletons from the dataset, as it doesn't affect group inference
-vcfR<-min.mac(vcfR, min.mac = 2)
+vcfR<-min_mac(vcfR, min.mac = 2)
 ```
 
 check once more to see how many SNPs and individuals remain compared to our original, unfiltered vcf

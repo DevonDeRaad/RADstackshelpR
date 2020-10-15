@@ -25,7 +25,7 @@
 #' @return if 'min.mac' is not specified, will print out DAPC results. If 'min.mac' is specified, SNPs
 #' falling below the MAC cutoff will be removed, and the filtered vcfR object will be returned.
 #' @export
-min.mac <- function(vcfR, popmap=NULL, min.mac=NULL){
+min_mac <- function(vcfR, popmap=NULL, min.mac=NULL){
 
   if (is.null(popmap) & is.null(min.mac)){
     stop("popmap must be provided in order to compare dapc clustering to a set of a priori defined groups")
