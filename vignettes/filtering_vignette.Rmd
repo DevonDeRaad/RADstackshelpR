@@ -15,10 +15,6 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(dev = "png", dev.args = list(type = "cairo-png"))
 ```
 
-```{r, include=FALSE}
-devtools::load_all(".")
-```
-
 ```{r setup}
 library(RADstackshelpR)
 library(vcfR)
@@ -67,7 +63,10 @@ Note: we want to apply this 'per SNP' rather than 'per genotype' otherwise we wi
 ```{r, fig.height = 6, fig.width = 8, fig.align = "center"}
 #visualize and pick appropriate max depth cutoff
 max_depth(vcfR)
+
+#reset plotting window
 par(mfrow=c(1,1))
+
 #filter vcf by the max depth cutoff you chose
 vcfR<-max_depth(vcfR, maxdepth = 100)
 ```
@@ -85,10 +84,12 @@ It is also wise to take missing data into account by population. Often we don't 
 On the flip side of that coin, you may have designed a project to get information about a rare sample/population that lacks existing genetic sampling, and therefore must retain specific samples despite low sequencing and high missing data. This is a reality, and simply needs to be addressed carefully.
 
 We run this function first without specifying 'cutoff', to visualize the distribution of missing data per sample. Then we run the function with a set cutoff for the maximum amount of missing data allowed to retain a sample, which will remove samples falling below our cutoff from the vcf.
-```{r, fig.height = 6, fig.width = 8, fig.align = "center"}
+```{r, fig.height = 8, fig.width = 10, fig.align = "center"}
 #run function to visualize samples
 miss<-missing.by.sample(vcfR=vcfR, popmap = popmap)
-
+```
+We can see that there is a group of samples with an excess of missing data, which clump at the bottom of the 'SNPs retained by filtering scheme' plot, and are outliers in the dotplot showing missing data proportion per sample. We want to remove those samples which we won't be able to make inferences about due to excess missing data.
+```{r, , fig.height = 8, fig.width = 10, fig.align = "center"}
 #run function to drop samples above the threshold we want from the vcf
 vcfR<-missing.by.sample(vcfR=vcfR, cutoff = .91)
 
@@ -111,7 +112,11 @@ We run this function without setting cutoff to visualize the distribution of mis
 ```{r, fig.height = 6, fig.width = 8, fig.align = "center"}
 #visualize missing data by SNP and the effect of various cutoffs on the missingness of each sample
 missing.by.snp(vcfR)
-#choose a value that retains an acceptable amount of missing data in each sample, and maximizes SNPs retained while minimizing overall missing data, and filter vcf
+```
+
+```{r, , fig.height = 6, fig.width = 8, fig.align = "center"}
+#choose a value that retains an acceptable amount of missing data in each sample
+#and maximizes SNPs retained while minimizing overall missing data, and filter vcf
 vcfR<-missing.by.snp(vcfR, cutoff = .85)
 ```
 
@@ -135,9 +140,12 @@ vcfR<-min_mac(vcfR, min.mac = 2)
 ```
 
 check once more to see how many SNPs and individuals remain compared to our original, unfiltered vcf
-```{r, fig.height = 6, fig.width = 8, fig.align = "center"}
+```{r}
 vcfR
+```
 
+Plot heatmaps showing the depth and genotype quality. Each row is a SNP and each column is a sample.
+```{r, fig.height = 8, fig.width = 10, fig.align = "center"}
 #plot depth per snp and per sample
 dp <- extract.gt(vcfR, element = "DP", as.numeric=TRUE)
 heatmap.bp(dp, rlabels = FALSE)
@@ -147,12 +155,14 @@ gq <- extract.gt(vcfR, element = "GQ", as.numeric=TRUE)
 heatmap.bp(gq, rlabels = FALSE)
 ```
 
-We can use the convenient function 'write.vcf' from vcfR to export our filtered vcf file for downstream analyses
+Overall, the GQ and DP are consistenly high across SNPs and samples. We could remove a few more of the samples (columns) with the lowest depths and most missing data if we wanted to clean up our dataset even more.
+
+Now we can use the convenient function 'write.vcf' from the package vcfR to export our filtered vcf file for downstream analyses
 ```{r}
-#write.vcf(vcfR, "~/Desktop/aph.data/filtered.vcf.gz")
+#write.vcf(vcfR, "~/Desktop/aph.data/filtered.vcf")
 ```
 
 If you need physically unlinked loci (which is a requirement of some programs, e.g. structure) this filtering step should always be done last, because it is not quality aware. Introducing a quality-blind linkage filter before doing the quality based filtering shown here would potentially remove quality SNPs while leaving us with only the low quality SNPs in a locus or genomic region.
 If filtering for linkage is needed, it can be done on our output vcf file with a simple one-liner via vcftools (set thin to whatever bp distance you assume linakge decays at in your study organism)
-vcftools --vcf vcf.vcf --thin 10000 --recode --out vcf
+vcftools --vcf filtered.vcf --thin 10000 --recode --out vcf
 

@@ -144,12 +144,15 @@
 <div class="sourceCode"><pre class="downlit">
 <span class="co">#visualize and pick appropriate max depth cutoff</span>
 <span class="fu"><a href="../reference/max_depth.html">max_depth</a></span><span class="op">(</span><span class="va">vcfR</span><span class="op">)</span></pre></div>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code><a href="https://rdrr.io/r/graphics/par.html">#&gt; [1] "dashed line indicates a mean depth across all SNPs of 46.7"
+
+#reset plotting window
 par(mfrow=c(1,1))
+
 #filter vcf by the max depth cutoff you chose
 vcfR&lt;-max_depth(vcfR, maxdepth = 100)</a></code></pre>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-7-2.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-6-2.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "12.85% of SNPs were above a mean depth of 100 and were removed from the vcf"</code></pre>
 <p>Note: It may be a good idea to additionally filter out SNPs that are significantly out of HWE if you have a really good idea of what the population structure in your sample looks like and good sample sizes in each pop. For this dataset, which is highly structured (many isolated island pops) with species boundaries that are in flux, I am not going to use a HWE filter, because I don't feel comfortable confidently identifying populations in which we can expect HWE.</p>
 <div class="sourceCode"><pre class="downlit">
@@ -173,12 +176,11 @@ vcfR&lt;-max_depth(vcfR, maxdepth = 100)</a></code></pre>
 <span class="va">miss</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/missing.by.sample.html">missing.by.sample</a></span><span class="op">(</span>vcfR<span class="op">=</span><span class="va">vcfR</span>, popmap <span class="op">=</span> <span class="va">popmap</span><span class="op">)</span>
 <span class="co">#&gt; `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.</span>
 <span class="co">#&gt; `stat_bindot()` using `bins = 30`. Pick better value with `binwidth`.</span></pre></div>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-9-1.png" width="768" style="display: block; margin: auto;"><img src="filtering_vignette_files/figure-html/unnamed-chunk-9-2.png" width="768" style="display: block; margin: auto;"><img src="filtering_vignette_files/figure-html/unnamed-chunk-9-3.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;"><img src="filtering_vignette_files/figure-html/unnamed-chunk-8-2.png" width="960" style="display: block; margin: auto;"><img src="filtering_vignette_files/figure-html/unnamed-chunk-8-3.png" width="960" style="display: block; margin: auto;"> We can see that there is a group of samples with an excess of missing data, which clump at the bottom of the 'SNPs retained by filtering scheme' plot, and are outliers in the dotplot showing missing data proportion per sample. We want to remove those samples which we won't be able to make inferences about due to excess missing data.</p>
 <div class="sourceCode"><pre class="downlit">
-
 <span class="co">#run function to drop samples above the threshold we want from the vcf</span>
 <span class="va">vcfR</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/missing.by.sample.html">missing.by.sample</a></span><span class="op">(</span>vcfR<span class="op">=</span><span class="va">vcfR</span>, cutoff <span class="op">=</span> <span class="fl">.91</span><span class="op">)</span></pre></div>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-9-4.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "20 samples are above a 0.91 missing data cutoff, and were removed from VCF"
 
 #subset popmap to only include retained individuals
@@ -211,10 +213,12 @@ vcfR@gt&lt;-vcfR@gt[,c(1:20,22:57,21,58:95)]
 #&gt; 8  0.85  0.05870236         17090
 #&gt; 9  0.90  0.03948609         13333
 #&gt; 10 0.95  0.01901272          8294
-#&gt; 11 1.00  0.00000000          1809
-#choose a value that retains an acceptable amount of missing data in each sample, and maximizes SNPs retained while minimizing overall missing data, and filter vcf
-vcfR&lt;-missing.by.snp(vcfR, cutoff = .85)</code></pre>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-10-3.png" width="768" style="display: block; margin: auto;"></p>
+#&gt; 11 1.00  0.00000000          1809</code></pre>
+<div class="sourceCode"><pre class="downlit">
+<span class="co">#choose a value that retains an acceptable amount of missing data in each sample</span>
+<span class="co">#and maximizes SNPs retained while minimizing overall missing data, and filter vcf</span>
+<span class="va">vcfR</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/missing.by.snp.html">missing.by.snp</a></span><span class="op">(</span><span class="va">vcfR</span>, cutoff <span class="op">=</span> <span class="fl">.85</span><span class="op">)</span></pre></div>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "90.68% of SNPs fell below a completeness cutoff of 0.85 and were removed from the VCF"</code></pre>
 </div>
 <div id="step-4-investigate-the-effect-of-a-minor-allele-frequency-cutoff-on-our-downstream-inferences-" class="section level1">
@@ -225,72 +229,73 @@ vcfR&lt;-missing.by.snp(vcfR, cutoff = .85)</code></pre>
 <p>Our package contains a convenient wrapper function that streamlines the investigation of different MAF cutoffs. Warning: this is a heavy function if it is run without the 'min.mac' option. It is converting the entire vcf into a genlight and running 6 unique dapc iterations, which will take a minute for larger datasets. If you set 'min.mac' it will just filter your dataset, and should run quickly.</p>
 <div class="sourceCode"><pre class="downlit">
 <span class="co">#use min.mac() to investigate the effect of multiple cutoffs</span>
-<span class="fu"><a href="../reference/min_mac.html">min_mac</a></span><span class="op">(</span>vcfR <span class="op">=</span> <span class="va">vcfR</span>, popmap <span class="op">=</span> <span class="va">popmap</span><span class="op">)</span></pre></div>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;"></p>
+<span class="fu"><a href="../reference/min_mac.html">min_mac</a></span><span class="op">(</span>vcfR <span class="op">=</span> <span class="va">vcfR</span>, popmap <span class="op">=</span> <span class="va">popmap</span><span class="op">)</span>
+<span class="co">#&gt; Loading required namespace: adegenet</span></pre></div>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "for 1 minimum MAC cutoff, compare k means clustering to popmap assignment"
 #&gt;            
 #&gt;              1  2  3  4  5
-#&gt;   californi  0 31  0  0  0
-#&gt;   coerulesc  0  0  0  6  0
-#&gt;   insularis  0  0  8  0  0
-#&gt;   sumichras 10  0  0  0  0
-#&gt;   woodhouse  0  0  0  0 39</code></pre>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-11-2.png" width="768" style="display: block; margin: auto;"></p>
+#&gt;   californi 31  0  0  0  0
+#&gt;   coerulesc  0  0  6  0  0
+#&gt;   insularis  0  0  0  8  0
+#&gt;   sumichras  0  0  0  0 10
+#&gt;   woodhouse  0  7  0  0 32</code></pre>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-2.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "DAPC with min. MAC 1 and 16208 total SNPs, complete"
 #&gt; [1] "for 2 minimum MAC cutoff, compare k means clustering to popmap assignment"
 #&gt;            
 #&gt;              1  2  3  4  5
-#&gt;   californi  0  0  0 31  0
+#&gt;   californi  0  0 31  0  0
 #&gt;   coerulesc  0  0  0  0  6
-#&gt;   insularis  0  0  8  0  0
+#&gt;   insularis  8  0  0  0  0
 #&gt;   sumichras  0 10  0  0  0
-#&gt;   woodhouse 39  0  0  0  0</code></pre>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-11-3.png" width="768" style="display: block; margin: auto;"></p>
+#&gt;   woodhouse  0  0  0 39  0</code></pre>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-3.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "DAPC with min. MAC 2 and 11188 total SNPs, complete"
 #&gt; [1] "for 3 minimum MAC cutoff, compare k means clustering to popmap assignment"
 #&gt;            
 #&gt;              1  2  3  4  5
-#&gt;   californi  0 31  0  0  0
-#&gt;   coerulesc  0  0  6  0  0
+#&gt;   californi 31  0  0  0  0
+#&gt;   coerulesc  0  6  0  0  0
 #&gt;   insularis  0  0  0  8  0
-#&gt;   sumichras 10  0  0  0  0
+#&gt;   sumichras  0  0 10  0  0
 #&gt;   woodhouse  0  0  0  0 39</code></pre>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-11-4.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-4.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "DAPC with min. MAC 3 and 8531 total SNPs, complete"
 #&gt; [1] "for 4 minimum MAC cutoff, compare k means clustering to popmap assignment"
 #&gt;            
 #&gt;              1  2  3  4  5
-#&gt;   californi 27  0  4  0  0
-#&gt;   coerulesc  0  6  0  0  0
+#&gt;   californi  0  0  0  0 31
+#&gt;   coerulesc  6  0  0  0  0
 #&gt;   insularis  0  0  0  8  0
-#&gt;   sumichras  0  0  0  0 10
-#&gt;   woodhouse  0  0  0  0 39</code></pre>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-11-5.png" width="768" style="display: block; margin: auto;"></p>
+#&gt;   sumichras  0 10  0  0  0
+#&gt;   woodhouse  0  0 39  0  0</code></pre>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-5.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "DAPC with min. MAC 4 and 7052 total SNPs, complete"
 #&gt; [1] "for 5 minimum MAC cutoff, compare k means clustering to popmap assignment"
 #&gt;            
 #&gt;              1  2  3  4  5
-#&gt;   californi  0  0 31  0  0
-#&gt;   coerulesc  0  0  0  6  0
-#&gt;   insularis  0  0  0  0  8
-#&gt;   sumichras 10  0  0  0  0
+#&gt;   californi 31  0  0  0  0
+#&gt;   coerulesc  0  0  0  0  6
+#&gt;   insularis  0  0  0  8  0
+#&gt;   sumichras  0  0 10  0  0
 #&gt;   woodhouse  0 39  0  0  0</code></pre>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-11-6.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-6.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "DAPC with min. MAC 5 and 6023 total SNPs, complete"
 #&gt; [1] "for 10 minimum MAC cutoff, compare k means clustering to popmap assignment"
 #&gt;            
 #&gt;              1  2  3  4  5
-#&gt;   californi  0  0  0 31  0
+#&gt;   californi  0  0  0  0 31
 #&gt;   coerulesc  0  6  0  0  0
-#&gt;   insularis  0  0  0  0  8
-#&gt;   sumichras 10  0  0  0  0
-#&gt;   woodhouse  0  0 39  0  0</code></pre>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-11-7.png" width="768" style="display: block; margin: auto;"></p>
+#&gt;   insularis  8  0  0  0  0
+#&gt;   sumichras  0  0 10  0  0
+#&gt;   woodhouse  0  0  0 39  0</code></pre>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-7.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "DAPC with min. MAC 10 and 3555 total SNPs, complete"
 
 #based on these visualizations, I will remove singletons from the dataset, as it doesn't affect group inference
 vcfR&lt;-min_mac(vcfR, min.mac = 2)</code></pre>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-11-8.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-8.png" width="768" style="display: block; margin: auto;"></p>
 <pre><code>#&gt; [1] "34.53% of SNPs fell below a minor allele count of 2 and were removed from the VCF"</code></pre>
 <p>check once more to see how many SNPs and individuals remain compared to our original, unfiltered vcf</p>
 <div class="sourceCode"><pre class="downlit">
@@ -301,22 +306,24 @@ vcfR&lt;-min_mac(vcfR, min.mac = 2)</code></pre>
 <span class="co">#&gt; 11,188 variants</span>
 <span class="co">#&gt; Object size: 77.1 Mb</span>
 <span class="co">#&gt; 5.896 percent missing data</span>
-<span class="co">#&gt; *****        *****         *****</span>
-
+<span class="co">#&gt; *****        *****         *****</span></pre></div>
+<p>Plot heatmaps showing the depth and genotype quality. Each row is a SNP and each column is a sample.</p>
+<div class="sourceCode"><pre class="downlit">
 <span class="co">#plot depth per snp and per sample</span>
 <span class="va">dp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/vcfR/man/extract_gt.html">extract.gt</a></span><span class="op">(</span><span class="va">vcfR</span>, element <span class="op">=</span> <span class="st">"DP"</span>, as.numeric<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/vcfR/man/heatmap_bp.html">heatmap.bp</a></span><span class="op">(</span><span class="va">dp</span>, rlabels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></pre></div>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-1.png" width="768" style="display: block; margin: auto;"></p>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-14-1.png" width="960" style="display: block; margin: auto;"></p>
 <div class="sourceCode"><pre class="downlit">
 
 <span class="co">#plot genotype quality per snp and per sample</span>
 <span class="va">gq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/vcfR/man/extract_gt.html">extract.gt</a></span><span class="op">(</span><span class="va">vcfR</span>, element <span class="op">=</span> <span class="st">"GQ"</span>, as.numeric<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/vcfR/man/heatmap_bp.html">heatmap.bp</a></span><span class="op">(</span><span class="va">gq</span>, rlabels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></pre></div>
-<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-12-2.png" width="768" style="display: block; margin: auto;"></p>
-<p>We can use the convenient function 'write.vcf' from vcfR to export our filtered vcf file for downstream analyses</p>
+<p><img src="filtering_vignette_files/figure-html/unnamed-chunk-14-2.png" width="960" style="display: block; margin: auto;"></p>
+<p>Overall, the GQ and DP are consistenly high across SNPs and samples. We could remove a few more of the samples (columns) with the lowest depths and most missing data if we wanted to clean up our dataset even more.</p>
+<p>Now we can use the convenient function 'write.vcf' from the package vcfR to export our filtered vcf file for downstream analyses</p>
 <div class="sourceCode"><pre class="downlit">
-<span class="co">#write.vcf(vcfR, "~/Desktop/aph.data/filtered.vcf.gz")</span></pre></div>
-<p>If you need physically unlinked loci (which is a requirement of some programs, e.g. structure) this filtering step should always be done last, because it is not quality aware. Introducing a quality-blind linkage filter before doing the quality based filtering shown here would potentially remove quality SNPs while leaving us with only the low quality SNPs in a locus or genomic region. If filtering for linkage is needed, it can be done on our output vcf file with a simple one-liner via vcftools (set thin to whatever bp distance you assume linakge decays at in your study organism) vcftools --vcf vcf.vcf --thin 10000 --recode --out vcf</p>
+<span class="co">#write.vcf(vcfR, "~/Desktop/aph.data/filtered.vcf")</span></pre></div>
+<p>If you need physically unlinked loci (which is a requirement of some programs, e.g. structure) this filtering step should always be done last, because it is not quality aware. Introducing a quality-blind linkage filter before doing the quality based filtering shown here would potentially remove quality SNPs while leaving us with only the low quality SNPs in a locus or genomic region. If filtering for linkage is needed, it can be done on our output vcf file with a simple one-liner via vcftools (set thin to whatever bp distance you assume linakge decays at in your study organism) vcftools --vcf filtered.vcf --thin 10000 --recode --out vcf</p>
 </div>
   </div>
 
