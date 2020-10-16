@@ -1,5 +1,4 @@
 
-<<<<<<< HEAD
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 RADstackshelpR <img src="man/figures/logo.png" align="right" alt="" width="120" />
 ==================================================================================
@@ -30,10 +29,3 @@ The reference aligned workflow simply consists of swapping the parameter iterati
 ### filtering
 
 Finally, both workflows converge on a set of filtering steps which is heavily based on the Ddocent filtering tutorial (available at <https://www.ddocent.com/filtering/>). The data visualization and vcf filtering steps are implemented via RADstackshelpR functions, and a full vignette detailing the filtering workflow is available at <https://devonderaad.github.io/RADstackshelpR/articles/filtering_vignette.html>. Much of the code in this package used to manipulate vcfR files in R and implement the various filters was adapted from the tutorial on working with reduced-representation genomic data in R by JF Tabima, BJ Knaus, and NJ Grünwald, available at <https://grunwaldlab.github.io/Population_Genetics_in_R/gbs_analysis.html>. I am extremely grateful to them for making this tutorial publicly available, as working through their exercises was the genesis of this package.
-=======
-This package is designed to automate the task of exploring and filtering RAD data using the STACKS pipeline.
-
-# Install development version from GitHub
-devtools::install_github("DevonDeRaad/RADstackshelpR")
-
->>>>>>> 27cf26359a3551a108b11e9010885f66a7369679
