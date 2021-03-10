@@ -30,7 +30,7 @@ optimize_m <- function(m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL){
     if(is.null(x)){j=j+1} else{
       #calculate depth first
       ##read in vcfR
-      vcf.r<- vcfR::read.vcfR(x) #read in all data
+      invisible(utils::capture.output(vcf.r<- vcfR::read.vcfR(x))) #read in all data
       ###calc avg depth of each individual
       dep<- (colSums(vcfR::extract.gt(vcf.r, element='DP', as.numeric=TRUE), na.rm = T)) / (colSums(is.na(vcfR::extract.gt(vcf.r, element='DP', as.numeric=TRUE)) == "FALSE"))
       ###rep m identifier, times = number of samples in the vcf

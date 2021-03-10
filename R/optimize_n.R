@@ -24,7 +24,7 @@ optimize_n <- function(nequalsMminus1=NULL,nequalsM=NULL,nequalsMplus1=NULL){
     #open if else statement, if no m of given value, move j up to next m identifier, else calculate snps/loci retained
     if(is.null(x)){j=j+1} else{
       ##read in vcfR
-      vcf.r<- vcfR::read.vcfR(x) #read in all data
+      vcf.r<- invisible(utils::capture.output(vcfR::read.vcfR(x))) #read in all data
 
       #initialize vectors to hold filt level, snps retained, poly loci retained
       filt<- vector("numeric", length = 11)
