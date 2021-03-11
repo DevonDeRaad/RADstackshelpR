@@ -14,12 +14,12 @@ depth.df<-output$depth
 depth.df$m<-as.factor(depth.df$m)
 depth.df$dep<-as.numeric(as.character(depth.df$dep))
 print("Visualize how different values of m affect average depth in each sample")
-return(
+  return(
   ggplot2::ggplot(depth.df, ggplot2::aes(x = dep, y = m)) +
     ggridges::geom_density_ridges(jittered_points = TRUE, position = "raincloud", alpha = .35, cex=.5) +
     ggplot2::theme_classic() +
-    ggplot2::labs(x = "average depth in each sample", y = "m value (minimum stack depth)") +
+    ggplot2::labs(x = "average depth in each sample", y = "m value") +
     ggplot2::theme(legend.position = "none")
-)
+  )
 #close function
 }

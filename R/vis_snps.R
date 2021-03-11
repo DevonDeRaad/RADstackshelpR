@@ -21,7 +21,7 @@ vis_snps <- function(output=NULL, stacks_param=NULL){
 
   cat("Visualize how different values of", stacks_param, "affect number of SNPs retained.
 Density plot shows the distribution of the number of SNPs retained in each sample,
-while the asterisk denotes number of SNPs retained at an 80% completeness cutoff.", "\n")
+while the asterisk denotes the total number of SNPs retained at an 80% completeness cutoff.", "\n")
   return(
     ggplot2::ggplot(snp.df, ggplot2::aes(x = snps, y = var)) +
       ggridges::geom_density_ridges(jittered_points = FALSE, alpha = .5) +

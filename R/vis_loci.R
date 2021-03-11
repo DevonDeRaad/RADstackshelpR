@@ -24,7 +24,7 @@ vis_loci <- function(output=NULL, stacks_param=NULL){
 
   cat("Visualize how different values of", stacks_param, "affect number of polymorphic loci retained.
 Density plot shows the distribution of the number of loci retained in each sample,
-while the asterisk denotes number of loci retained at an 80% completeness cutoff. The optimal value is denoted by red color.", "\n")
+while the asterisk denotes the total number of loci retained at an 80% completeness cutoff. The optimal value is denoted by red color.", "\n")
   return(
     ggplot2::ggplot(loci.df, ggplot2::aes(x = poly.loci, y = var)) +
       ggridges::geom_density_ridges(jittered_points = FALSE, alpha = .5) +
