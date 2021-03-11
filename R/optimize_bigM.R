@@ -20,7 +20,7 @@
 #' retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci
 #' retained at an 80% completeness cutoff.
 #' @export
-optimize_M <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M8=NULL){
+optimize_bigM <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M8=NULL){
   #initialize empty snp.df
   snp.df<- data.frame(var=character(), snps=numeric())
   #initialize empty loci.df

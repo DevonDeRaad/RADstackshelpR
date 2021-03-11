@@ -18,13 +18,16 @@ optimize_m(m3 = NULL, m4 = NULL, m5 = NULL, m6 = NULL, m7 = NULL)
 \item{m7}{Path to the input vcf file for a run when m=7}
 }
 \value{
-A list containing two dataframes, 'depth.df' showing depth per sample for each m value,
-and 'm.df' showing the number of SNPs and loci retained at various filtering levels for each m value
+A list containing five summary dataframes, 'depth' showing depth per sample for each m value,
+'snp' showing the number of non-missing SNPs retained in each sample at each m value, 'loci' showing the
+number of non-missing loci retained in each sample at each m value, 'snp.R80' showing the total number of SNPs
+retained at an 80\% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci
+retained at an 80\% completeness cutoff.
 }
 \description{
 This function requires the path to stacks vcf file(s) as input.
 There are slots for varying the m parameter from 3-7 (as recommended by Paris et al. 2017).
 After running stacks with each of the m options, plug the output vcf files into this
-function to visualize the effect of varying m on depth and number of SNPs/loci built to
-recognize which value optimizes the m parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
+function to calculate the effect of varying m on depth and number of SNPs/loci built. Plug the output of this function into
+vis_loci() to visualize the optimal the m parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 }

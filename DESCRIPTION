@@ -1,5 +1,5 @@
 Package: RADstackshelpR
-Title: Optimize the Stacks Pipeline via R
+Title: Optimize the denovo Stacks Pipeline via R
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Devon",
@@ -17,8 +17,7 @@ Imports:
 	vcfR,
 	ggplot2,
 	ggridges,
-	gridExtra,
-	adegenet
+	gridExtra
 Suggests: 
     knitr,
     rmarkdown
