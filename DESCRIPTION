@@ -18,7 +18,5 @@ Imports:
 	ggplot2,
 	ggridges,
 	gridExtra
-Suggests: 
-    knitr,
-    rmarkdown
+Suggests: knitr, rmarkdown
 VignetteBuilder: knitr

@@ -10,7 +10,7 @@ vis_depth <- function(output=NULL){
 
 #take depth df output from all of these possibilities
 #plot hist of depth at each m value on same plot
-depth.df<-out$depth
+depth.df<-output$depth
 depth.df$m<-as.factor(depth.df$m)
 depth.df$dep<-as.numeric(as.character(depth.df$dep))
 print("Visualize how different values of m affect average depth in each sample")

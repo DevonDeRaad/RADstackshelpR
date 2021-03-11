@@ -1,0 +1,49 @@
+---
+title: "Optimize denovo STACKS pipeline"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Optimize denovo STACKS pipeline}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+```{r}
+#load package
+library(RADstackshelpR)
+```
+
+Step 1: Demultiplex each sample using 'process_radtags'.
+Step 2: Samples with a demultiplexed file size of < 2 megabytes simply don't have enough information to be relevant downstream, and can be removed right away. (Note: this will help ensure that there are enough loci retained at an 80% completeness cutoff to make informed optimization decisions)
+Step 3: Iterate over values of m ranging from 3-7, while leaving all other parameters at default values.
+Step 4: Visualize the output of these 5 runs and determine the optimal value for m.
+```{r}
+#optimize_m function will generate summary stats on your 5 iterative runs
+#input can be full path to each file or just the file name if your working directory contains the files
+output<-optimize_m(m3="/Users/devder/Desktop/hipposideros/m_3.vcf",
+           m4="/Users/devder/Desktop/hipposideros/m_4.vcf",
+           m5="/Users/devder/Desktop/hipposideros/m_5.vcf",
+           m6="/Users/devder/Desktop/hipposideros/m_6.vcf",
+           m7="/Users/devder/Desktop/hipposideros/m_7.vcf")
+
+#visualize the effect of varying m on the depth of each sample
+vis_depth(output)
+
+```
+
+
+#optimize M
+output<-optimize_bigM(M1="M1.vcf",
+           M2="M2.vcf",
+           M3="M3.vcf",
+           M4="M4.vcf",
+           M5="M5.vcf",
+           M6="M6.vcf",
+           M7="M7.vcf",
+           M8="M8.vcf")
+
+#optimize n
+optimize_n(nequalsMminus1="n1.vcf",
+           nequalsM="n2.vcf",
+           nequalsMplus1="n3.vcf")
+
+```
+
