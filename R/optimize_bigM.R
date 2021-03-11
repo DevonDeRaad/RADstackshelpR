@@ -1,10 +1,10 @@
-#' Optimize the M parameter during denovo stacks assembly
+#' #' Optimize the M parameter during denovo stacks assembly
 #'
 #' This function requires the path to stacks vcf file(s) as input.
 #' There are slots for varying the M parameter from 1-8 (as recommended by Paris et al. 2017).
 #' After running stacks with each of the M options, plug the output vcf files into this
-#' function to visualize the effect of varying m on the number of SNPs and loci built to
-#' recognize which value optimizes the M parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
+#' function to calculate the effect of varying M on the number of SNPs/loci built. Plug the output of this function into
+#' vis_loci() to visualize the optimal the M parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 #'
 #' @param M1 Path to the input vcf file for a run when M=1
 #' @param M2 Path to the input vcf file for a run when M=2
@@ -14,13 +14,23 @@
 #' @param M6 Path to the input vcf file for a run when M=6
 #' @param M7 Path to the input vcf file for a run when M=7
 #' @param M8 Path to the input vcf file for a run when M=8
-#' @return A dataframe showing the number of SNPs and loci retained across filtering levels for each M value
+#' @return A list containing four summary dataframes,
+#' 'snp' showing the number of non-missing SNPs retained in each sample at each m value, 'loci' showing the
+#' number of non-missing loci retained in each sample at each m value, 'snp.R80' showing the total number of SNPs
+#' retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci
+#' retained at an 80% completeness cutoff.
 #' @export
 optimize_M <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M8=NULL){
-  #initialize empty M.df
-  M.df<- data.frame(M=character(), filt=as.numeric(), snps=numeric(), V4=character())
+  #initialize empty snp.df
+  snp.df<- data.frame(var=character(), snps=numeric())
+  #initialize empty loci.df
+  loci.df<- data.frame(var=character(), loci=numeric())
+  #initialize empty snp.80.df
+  snp.80.df<- data.frame(var=character(), snps.80=numeric())
+  #initialize empty loci.80.df
+  loci.80.df<- data.frame(var=character(), loci.80=numeric())
   #set vector of m identifiers
-  Ms<-c("M1","M2","M3","M4","M5","M6","M7","M8")
+  ms<-c("M1","M2","M3","M4","M5","M6","M7","M8")
   #start on first position in vector of m identifiers
   j=1
 
@@ -29,31 +39,34 @@ optimize_M <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M
     #open if else statement, if no m of given value, move j up to next m identifier, else calculate snps/loci retained
     if(is.null(x)){j=j+1} else{
       ##read in vcfR
-      vcf.r<- invisible(utils::capture.output(vcfR::read.vcfR(x))) #read in all data
-
+      invisible(utils::capture.output(vcf.r<- vcfR::read.vcfR(x))) #read in all data
       #initialize vectors to hold filt level, snps retained, poly loci retained
-      filt<- vector("numeric", length = 11)
-      snps<- vector("numeric", length = 11)
-      poly.loci<- vector("numeric", length = 11)
+      snps<- vector("numeric", length = ncol(vcf.r@gt)-1)
+      poly.loci<- vector("numeric", length = ncol(vcf.r@gt)-1)
+      ###rep m identifier, times = number of samples in the vcf
+      m<- rep(ms[j], times = ncol(vcf.r@gt)-1)
       ##run loop to fill up vectors with a value for each filter level
       k=1
-      for (i in c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1)){
-        #calculate the completeness cutoff for each snp to be retained
-        filt[k]<-i
-        #calculate the number of snps retained at this cutoff
-        snps[k]<-nrow(vcf.r@gt[(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i),])
-        #calculate number of polymorphic loci retained at this cutoff
-        poly.loci[k]<-length(unique(vcf.r@fix[,1][(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= 1-i)]))
+      for (i in 2:ncol(vcf.r@gt)){
+        #calculate the number of non-missing SNPs present in the given sample
+        snps[k]<-sum(is.na(vcf.r@gt[,i]) == FALSE)
+        #calculate number of polymorphic loci present in the given sample
+        poly.loci[k]<-length(unique(vcf.r@fix[,1][is.na(vcf.r@gt[,i]) == FALSE]))
         k=k+1
         #close for loop
       }
-      ##cbind these three vectors with m identifier and append it all to the m df
-      snpsubset<-as.data.frame(cbind(rep(Ms[j], times=11), filt, snps, rep("snp", times = 11)))
-      locisubset<-as.data.frame(cbind(rep(Ms[j], times=11), filt, poly.loci, rep("loci", times = 11)))
-      #match colnames so you can rbind these together in tidy format
-      colnames(locisubset)[3]<-"snps"
-      #append to existing df
-      M.df<- rbind(M.df, as.data.frame(rbind(snpsubset,locisubset)))
+      #append each to existing df
+      snp.df<- rbind(snp.df, as.data.frame(cbind(m, snps)))
+      loci.df<- rbind(loci.df, as.data.frame(cbind(m, poly.loci)))
+
+      #calculate the number of loci and SNPs retained in the 80% complete dataset for the given m value
+      snps.80<-nrow(vcf.r@gt[(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= .2),])
+      #calculate number of polymorphic loci retained at this cutoff
+      poly.loci.80<-length(unique(vcf.r@fix[,1][(rowSums(is.na(vcf.r@gt))/ncol(vcf.r@gt) <= .2)]))
+      #append each to existing df
+      snp.80.df<- rbind(snp.80.df, as.data.frame(cbind(ms[j], snps.80)))
+      loci.80.df<- rbind(loci.80.df, as.data.frame(cbind(ms[j], poly.loci.80)))
+
       #set j for the next m identifier for next time we go through this loop
       j=j+1
       #close if else statement
@@ -61,32 +74,19 @@ optimize_M <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M
     #close for loop
   }
 
-  print("Optimal M value returns the most polymorphic loci in the 80% complete matrix (Paris et al. 2017)")
-  #take m df output from all these possibilities
-  #plot number of SNPs retained colored by m at each filt level, as open circles
-  #plot the number of polymorphic loci retained colored by m at each filt level, as closed circles
-  #plot a vertical line at x=.8
-  #return a message as output telling the user to pick the m value with the most polyloci retained at r80 (.8)
-  #rename columns
-  colnames(M.df)<-c("M","filt","retained","snp.locus")
-  M.df$M<-as.character(M.df$M)
-  M.df$filt<-as.numeric(as.character(M.df$filt))
-  M.df$retained<-as.numeric(as.character(M.df$retained))
-  M.df$snp.locus<-as.character(M.df$snp.locus)
-  print(
-    ggplot2::ggplot(M.df, ggplot2::aes(x=filt, y=retained, col = M, shape=snp.locus))+
-      ggplot2::geom_point(alpha = .75, size=3)+
-      ggplot2::ggtitle("total SNPs and polymorphic loci retained by filtering scheme")+
-      ggplot2::xlab("fraction of non-missing genotypes required to retain each SNP (0-1)")+
-      ggplot2::ylab("# SNPs/loci")+
-      ggplot2::theme_light()+
-      ggplot2::geom_vline(xintercept=.8)+
-      ggplot2::labs(col = c("mismatches allowed\nbetween stacks\nwithin a locus"), shape="")
-  )
-
-  print("Correctly setting M requires a balance – set it too low and alleles from the same locus will not collapse, set it too high and paralogous or repetitive loci will incorrectly merge together. When alleles from the same locus are undermerged, the software will incorrectly consider them as independent loci. When loci are overmerged because they happen to be close in sequence space, an errant locus with false polymorphism will result. Therefore, M is particularly dataset‐specific because it depends on the natural levels of polymorphism in the species, as well as the amount of error generated during the preparation and sequencing of the RAD‐seq libraries.")
+  #fix colnames
+  colnames(snp.80.df)<-c("var","snps.80")
+  colnames(loci.80.df)<-c("var","poly.loci.80")
+  colnames(snp.df)<-c("var","snps")
+  colnames(loci.df)<-c("var","poly.loci")
 
   #return the depth and snp/loci dataframes in case you want to do your own visualizations
-  return(M.df)
-    #close function
+  out <- list()
+  out$snp<-snp.df
+  out$loci<-loci.df
+  out$snp.R80<-snp.80.df
+  out$loci.R80<-loci.80.df
+  return(out)
+  #close function
 }
+
