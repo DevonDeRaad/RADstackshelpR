@@ -76,7 +76,7 @@ done
 
 ### Iterate over potential values for the 'M' parameter in the ustacks module
 
-Then, you would repeat the process of iterating over different parameter values, this time varying the 'M' parameter from 1-8 within the 'ustacks' module, again using 15 threads, by running the following code in a terminal window:
+Then you would repeat the process of iterating over different parameter values, now using the previously determined optimal value for 'm', and this time varying the 'M' parameter from 1-8 within the 'ustacks' module. In this example, we again use 15 threads for each step. Execute the following code in a terminal window:
 
 ``` Shell
 # -M — Maximum distance (in nucleotides) allowed between stacks (default 2).
