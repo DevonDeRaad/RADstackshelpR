@@ -16,19 +16,19 @@ devtools::install_github("DevonDeRaad/RADstackshelpR")
 Usage
 -----
 
-RADstackshelpR packages a handful of useful wrapper functions together to streamline your RAD workflow.
+RADstackshelpR packages a handful of useful wrapper functions which lean heavily on the __ packages. These functions are designed to streamline the optimization of STACKS paramaters during denovo (without a reference genome) assembly of RAD loci. This workflow relies heavily on the program STACKS <https://catchenlab.life.illinois.edu/stacks/> which is designed to assemble loci and call variants from restriction-enzyme associated DNA sequence data (RADseq). The pipeline implemented here is based on the 2017 paper 'Lost in Parameter Space' <https://doi.org/10.1111/2041-210X.12775> which establishes clear recommendations for optimizing the parameters 'm', 'M', and 'n', during the process of assembling loci. Essentially, this pipeline involves iterating over a range of values for each paramter (m: 3-7, M: 1-8, and n: M-1,M,M+1) and choosing the optimum value for each parameter. 
 
-### The pipeline
+### Demultiplex
 
-This denovo workflow relies on the program STACKS <https://catchenlab.life.illinois.edu/stacks/> which is designed to assemble loci and call variants from restriction-enzyme associated DNA sequence data (RADseq). The pipeline implemented here is based on the 2017 paper 'Lost in Parameter Space' <https://doi.org/10.1111/2041-210X.12775> which establishes clear recommendations for optimizing the parameters 'm', 'M', and 'n', during the process of assembling loci. This pipeline involves iterating over a range of values for each paramter (m: 3-7, M: 1-8, and n: M-1,M,M+1) and choosing the optimum value for each parameter. The first step would be demultiplexing your sequence data using the 'process_radtags' function from STACKS, which might look something like this, if your raw sequence file is in your working directory, and you used the enzyme 'ndeI' as your cutter:
+The first step is demultiplexing your sequence data using the 'process_radtags' function from STACKS, which might look something like this, if your raw sequence file is in your working directory, and you used the enzyme 'ndeI' as your cutter:
 
 ``` Shell
 /home/d669d153/work/stacks-2.3b/process_radtags -p .  -o . -b plate.1.barcodes.txt -e ndeI -r -c -q
 ```
+
 More details on demultiplexing using process_radtags can be found at: <https://catchenlab.life.illinois.edu/stacks/comp/process_radtags.php>
 
-Optimize 'ustacks' module
------
+### Iterate over potential values for the 'm' parameter in the ustacks module
 
 Once you have an individual zipped fastq file for each sample, you would then run something like the following code in a terminal window, in order to iterate over the relevant values for 'm' within the 'ustacks' module: (here using 15 threads at each step to speed up computation)
 
@@ -70,11 +70,11 @@ done
 done
 ```
 
-Visualize the output of these 5 runs and determine the optimal value for 'm'.
------
+### Visualize the output of these 5 runs and determine the optimal value for 'm'.
 
 
 
+### Iterate over potential values for the 'M' parameter in the ustacks module
 
 Then, you would repeat the process of iterating over different parameter values, this time varying the 'M' parameter from 1-8 within the 'ustacks' module, again using 15 threads, by running the following code in a terminal window:
 
@@ -102,14 +102,12 @@ done
 done
 ```
 
-Visualize the output of these 8 runs and determine the optimal value for 'M'.
------
+### Visualize the output of these 8 runs and determine the optimal value for 'M'.
 
 
 
 
-Optimize 'cstacks' module
------
+### Iterate over potential values for the 'n' parameter in the cstacks module
 
 For the last optimization iteration, you would vary the 'n' parameter within the 'cstacks' module, using the previously optimized values for 'm' and 'M', by running the following code in a terminal window:
 
@@ -136,8 +134,7 @@ done
 done
 ```
 
-Visualize the output of these 3 runs and determine the optimal value for 'n'.
------
+### Visualize the output of these 3 runs and determine the optimal value for 'n'.
 
 
 
