@@ -8,7 +8,7 @@ RADstackshelpR is designed to streamline the process of parameter optimization f
 Installation
 ------------
 
-``` r
+```
 # Install development version from GitHub
 devtools::install_github("DevonDeRaad/RADstackshelpR")
 ```
