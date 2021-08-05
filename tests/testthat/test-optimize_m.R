@@ -12,8 +12,6 @@ test_that("optimize_m generates output of the appropriate class (list)", {
 
 
 test_that("optimize_m generates a list with length of 5", {
-  #find data in local directory
-  #opt.m<-optimize_m(m3 = "~/Desktop/RADstackshelpR/inst/extdata/populations.snps.vcf.gz")
   #find data in package using CRAN friendly syntax
   opt.m<- optimize_m(m3 = system.file("extdata", "populations.snps.vcf.gz", package = "RADstackshelpR"))
   #test that optimize_m returns an object of class "list"
@@ -22,10 +20,9 @@ test_that("optimize_m generates a list with length of 5", {
 
 
 test_that("optimize_m generates an error if run with a non-vcf file", {
-  #make a non-vcf file (vector of 100 random numbers in this example)
-  x <- rnorm(100)
   #expect error trying to read this vector as a vcf file
-  expect_error(optimize_m(m3 = x))
+  expect_error(optimize_m(m3 = system.file("extdata", "denovo.stacks.pipeline.sh", package = "RADstackshelpR"))
+)
 })
 
 
@@ -42,8 +39,6 @@ test_that("optimize_m generates a list with the appropriate names", {
 
 
 test_that("optimize_m generates a list with each object inside being a dataframe", {
-  #find data in local directory
-  #opt.m<-optimize_m(m3 = "~/Desktop/RADstackshelpR/inst/extdata/populations.snps.vcf.gz")
   #find data in package using CRAN friendly syntax
   opt.m<- optimize_m(m3 = system.file("extdata", "populations.snps.vcf.gz", package = "RADstackshelpR"))
   #test that optimize_m returns an object of class "list", with each object inside being a "data.frame" object

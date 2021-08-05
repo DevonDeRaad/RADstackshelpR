@@ -8,6 +8,8 @@
 #' @return A plot showing the number of polymorphic loci retained at each given parameter value
 #' @export
 vis_loci <- function(output=NULL, stacks_param=NULL){
+#bind these variable names to the function
+poly.loci <- var <- poly.loci.80 <- NULL
 
   #isolate SNP df
   loci.df<-output$loci

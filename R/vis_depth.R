@@ -7,6 +7,8 @@
 #' @return A plot showing the depth of each sample at each given m value
 #' @export
 vis_depth <- function(output=NULL){
+#bind these variable names to the function
+dep <- m <- NULL
 
 #take depth df output from all of these possibilities
 #plot hist of depth at each m value on same plot

@@ -1,14 +1,22 @@
 Package: RADstackshelpR
-Title: Optimize the denovo Stacks Pipeline via R
+Title: Optimize the De Novo Stacks Pipeline via R
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "Devon",
+Authors@R: person(given = "Devon",
            family = "DeRaad",
            role = c("aut", "cre"),
            email = "devonderaad@gmail.com",
            comment = c(ORCID = "0000-0003-3105-985X"))
-Description: What the package does (one paragraph).
-License: MIT
+Description: Offers a handful of useful wrapper functions which streamline
+    the reading, analyzing, and visualizing of variant call format (vcf) files in R.
+    This package was designed to facilitate an explicit pipeline for optimizing
+    Stacks (Rochette et al., 2019) (<doi:10.1111/mec.15253>)
+    parameters during de novo (without a reference genome) assembly and variant
+    calling of restriction-enzyme associated DNA sequence (RADseq) data. The
+    pipeline implemented here is based on the 2017 paper "Lost in Parameter Space"
+    (Paris et al., 2017) (<doi:10.1111/2041-210X.12775>) which
+    establishes clear recommendations for optimizing the parameters
+    'm', 'M', and 'n', during the process of assembling loci.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

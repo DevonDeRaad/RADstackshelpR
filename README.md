@@ -3,7 +3,7 @@
 RADstackshelpR <img src="man/figures/logo.png" align="right" alt="" width="120" />
 ==================================================================================
 
-RADstackshelpR offers a handful of useful wrapper functions which streamline the reading, analyzing, and visualizing of variant call format (vcf) files in R. The internal calls of each function rely heavily on the excellent R package [vcfR](https://knausb.github.io/vcfR_documentation/) to read in and analyze vcf files, and the widely renowned [ggplot2](https://ggplot2.tidyverse.org/) package to create elegant visualizations. This package was designed to facilitate an explicit pipeline for optimizing [STACKS](https://catchenlab.life.illinois.edu/stacks/) paramaters during de novo (without a reference genome) assembly and variant calling of restriction-enzyme associated DNA sequence (RADseq) data. STACKS is a relatively user-friendly, command-line program designed for assembling RADseq data into loci, and performing variant (SNP) calling. STACKS offers users flexibility in setting parameters during the assembly process, allowing custom parameter optimization for any input dataset. The pipeline implemented here is based on the 2017 paper [Lost in Parameter Space](%3Chttps://doi.org/10.1111/2041-210X.12775) which establishes clear recommendations for optimizing the parameters 'm', 'M', and 'n', during the process of assembling loci.
+RADstackshelpR offers a handful of useful wrapper functions which streamline the reading, analyzing, and visualizing of variant call format (vcf) files in R. The internal calls of each function rely heavily on the excellent R package [vcfR](https://knausb.github.io/vcfR_documentation/) to read in and analyze vcf files, and the widely renowned [ggplot2](https://ggplot2.tidyverse.org/) package to create elegant visualizations. This package was designed to facilitate an explicit pipeline for optimizing [STACKS](https://catchenlab.life.illinois.edu/stacks/) paramaters during de novo (without a reference genome) assembly and variant calling of restriction-enzyme associated DNA sequence (RADseq) data. STACKS is a relatively user-friendly, command-line program designed for assembling RADseq data into loci, and performing variant (SNP) calling. STACKS offers users flexibility in setting parameters during the assembly process, allowing custom parameter optimization for any input dataset. The pipeline implemented here is based on the 2017 paper [Lost in Parameter Space](https://doi.org/10.1111/2041-210X.12775) which establishes clear recommendations for optimizing the parameters 'm', 'M', and 'n', during the process of assembling loci.
 
 Despite these clear recommendations, the full range of parameter space suggested to explore in this paper is often left unexplored in empirical studies, due to the computational and logistical difficulty of executing and analyzing 16 separate runs through the entire STACKS pipeline. This package is designed to automate that logistical difficulty, leaving users with a clear set of steps to follow for thoroughly optimized, de novo RAD locus assembly and variant calling. For more details on RADstackshelpR please check out this [website](https://devonderaad.github.io/RADstackshelpR/index.html) built using [pkgdown](https://pkgdown.r-lib.org/). Otherwise, simply follow the steps below to run the optimized de novo assembly pipeline.
 
@@ -85,7 +85,10 @@ m.out<-optimize_m(m3="/Users/devder/Desktop/hipposideros/m_3.vcf",
            m5="/Users/devder/Desktop/hipposideros/m_5.vcf",
            m6="/Users/devder/Desktop/hipposideros/m_6.vcf",
            m7="/Users/devder/Desktop/hipposideros/m_7.vcf")
-#visualize the effect of varying m on the depth of each sample
+
+#Assigning the output of this function to the variable 'm.out' should generate a list containing five objects of class 'data.frame' with the following characteristics: 'depth' showing depth per sample for each m value, 'snp' showing the number of non-missing SNPs retained in each sample at each m value, 'loci' showing the number of non-missing loci retained in each sample at each m value, 'snp.R80' showing the total number of SNPs retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci retained at an 80% completeness cutoff.
+
+#Use this output list as input for this function, to visualize the effect of varying m on the depth of each sample
 vis_depth(output = m.out)
 #> [1] "Visualize how different values of m affect average depth in each sample"
 #> Picking joint bandwidth of 9.53
@@ -161,7 +164,10 @@ M.out<-optimize_bigM(M1="/Users/devder/Desktop/hipposideros/M1.vcf",
            M6="/Users/devder/Desktop/hipposideros/M6.vcf",
            M7="/Users/devder/Desktop/hipposideros/M7.vcf",
            M8="/Users/devder/Desktop/hipposideros/M8.vcf")
-#visualize the effect of varying 'M' on the number of SNPs retained
+
+#Assigning the output of this function to the variable 'M.out' should generate a list containing four objects of class 'data.frame' with the following characteristics: 'snp' showing the number of non-missing SNPs retained in each sample at each m value, 'loci' showing the number of non-missing loci retained in each sample at each m value, 'snp.R80' showing the total number of SNPs retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci retained at an 80% completeness cutoff.
+
+#use this function to visualize the effect of varying 'M' on the number of SNPs retained
 vis_snps(output = M.out, stacks_param = "M")
 #> Visualize how different values of M affect number of SNPs retained.
 #> Density plot shows the distribution of the number of SNPs retained in each sample,
@@ -221,6 +227,9 @@ done
 n.out<-optimize_n(nequalsMminus1="/Users/devder/Desktop/hipposideros/n1.vcf",
            nequalsM="/Users/devder/Desktop/hipposideros/n2.vcf",
            nequalsMplus1="/Users/devder/Desktop/hipposideros/n3.vcf")
+
+##Assigning the output of this function to the variable 'n.out' should generate a single object of class 'data.frame' showing the number of SNPs and loci retained across filtering levels for each value of n.
+
 #visualize the effect of varying n on the number of SNPs retained
 vis_snps(output = n.out, stacks_param = "n")
 #> Visualize how different values of n affect number of SNPs retained.

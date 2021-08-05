@@ -8,6 +8,8 @@
 #' @return A plot showing the number of SNPs retained at each given parameter value
 #' @export
 vis_snps <- function(output=NULL, stacks_param=NULL){
+#bind these variables to the function
+snps <- var <- snps.80 <- NULL
 
   #isolate SNP df
   snp.df<-output$snp
