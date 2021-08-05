@@ -136,7 +136,7 @@ mkdir stacks_bigM$i
 id=1
 for sample in $files
 do
-    /home/d669d153/work/stacks-2.41/ustacks -f ${sample}.fq.gz -o stacks_m$i -i $id -m 3 -M $i -p 15
+    /home/d669d153/work/stacks-2.41/ustacks -f ${sample}.fq.gz -o stacks_bigM$i -i $id -m 3 -M $i -p 15
     let "id+=1"
 done
 /home/path/to/stacks-2.41/cstacks -P stacks_bigM$i -M pipeline_popmap.txt -p 15
@@ -203,7 +203,7 @@ mkdir stacks_n$i
 id=1
 for sample in $files
 do
-    /home/d669d153/work/stacks-2.41/ustacks -f ${sample}.fq.gz -o stacks_m$i -i $id -m 3 -M 2 $i -p 15
+    /home/d669d153/work/stacks-2.41/ustacks -f ${sample}.fq.gz -o stacks_n$i -i $id -m 3 -M 2 $i -p 15
     let "id+=1"
 done
 /home/path/to/stacks-2.41/cstacks -n $i -P stacks_n$i -M pipeline_popmap.txt -p 15
@@ -297,7 +297,7 @@ grid.arrange(grobs = gl, widths = c(1,1,1,1,1,1),
 ``` r
 
 #Note: if you are an R whiz and prefer to make your own visualizations, the functions starting with 'optimize_' are designed
-#to be modular, and return to you a dataframe object which you can use to make your own custom visualizations.
+#to be modular, and return to you a list of 'data.frame' objects which you can use to make your own custom visualizations.
 ```
 
 You now have a de novo-assembled, parameter-optimized, unfiltered SNP dataset for your organism, and a single cohesive figure documenting the filtering process, which you can stick in your paper's supplement or host on your own repository. The next step is to filter this vcf file using the SNPfiltR package, which is specifically designed to pick up where this pipeline leaves off, or with any other variant filtering program of your choice.
