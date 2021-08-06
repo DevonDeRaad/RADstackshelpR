@@ -19,6 +19,8 @@
 #' number of non-missing loci retained in each sample at each m value, 'snp.R80' showing the total number of SNPs
 #' retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci
 #' retained at an 80% completeness cutoff.
+#' @example
+#' optimize_m(bigM1 = "path/to/bigM1.vcf)
 #' @export
 optimize_bigM <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M8=NULL){
   #initialize empty snp.df

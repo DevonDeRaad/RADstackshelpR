@@ -10,6 +10,8 @@
 #' @param nequalsM Path to the input vcf file for a run when n=M
 #' @param nequalsMplus1 Path to the input vcf file for a run when n=M+1
 #' @return A dataframe showing the number of SNPs and loci retained across filtering levels for each n value
+#' @example
+#' optimize_n(nequalsM = system.file("extdata", "nequalsM.vcf.gz", package = "RADstackshelpR"))
 #' @export
 optimize_n <- function(nequalsMminus1=NULL,nequalsM=NULL,nequalsMplus1=NULL){
   #initialize empty snp.df
