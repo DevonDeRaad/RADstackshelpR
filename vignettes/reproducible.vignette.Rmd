@@ -1,33 +1,22 @@
 ---
-output: github_document
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-```{r, echo = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/"
+  comment = "#>"
 )
 ```
 
-# RADstackshelpR <img src="man/figures/logo.png" align="right" alt="" width="120" />
-
-RADstackshelpR offers a handful of useful wrapper functions which streamline the reading, analyzing, and visualizing of variant call format (vcf) files in R. The internal calls of each function rely heavily on the excellent R package [vcfR](https://knausb.github.io/vcfR_documentation/) to read in and analyze vcf files, and the widely renowned [ggplot2](https://ggplot2.tidyverse.org/) package to create elegant visualizations. This package was designed to facilitate an explicit pipeline for optimizing [STACKS](https://catchenlab.life.illinois.edu/stacks/) paramaters during de novo (without a reference genome) assembly and variant calling of restriction-enzyme associated DNA sequence (RADseq) data. STACKS is a relatively user-friendly, command-line program designed for assembling RADseq data into loci, and performing variant (SNP) calling. STACKS offers users flexibility in setting parameters during the assembly process, allowing custom parameter optimization for any input dataset. The pipeline implemented here is based on the 2017 paper [Lost in Parameter Space](https://doi.org/10.1111/2041-210X.12775) which establishes clear recommendations for optimizing the parameters 'm', 'M', and 'n', during the process of assembling loci.  
-
-Despite these clear recommendations, the full range of parameter space suggested to explore in this paper is often left unexplored in empirical studies, due to the computational and logistical difficulty of executing and analyzing 16 separate runs through the entire STACKS pipeline. This package is designed to automate that logistical difficulty, leaving users with a clear set of steps to follow for thoroughly optimized, de novo RAD locus assembly and variant calling. For more details on RADstackshelpR please check out this [website](https://devonderaad.github.io/RADstackshelpR/index.html) built using [pkgdown](https://pkgdown.r-lib.org/). Otherwise, simply follow the steps below to run the optimized de novo assembly pipeline.
-
-## Installation
-
-```{r, eval = FALSE}
-# Install development version from GitHub
-devtools::install_github("DevonDeRaad/RADstackshelpR")
-```
-
-## Usage
-
-The first step is demultiplexing your sequence data using the 'process_radtags' function from STACKS, which could be executed by running something like this in a terminal window, if your raw sequence file is in your working directory, and you used the enzyme 'ndeI' as your cutter:
+###This vignette/article is designed to provide a fully reproducible example of how to use the RADstackshelpR package to optimize [STACKS](https://catchenlab.life.illinois.edu/stacks/) parameters. Each bash code chunk gives a generic example of code you could use to execute the STACKS pipeline. Each R code chunk uses extremely light (20 samples, ~200 SNPs), toy vcf files which are distributed with the package, in order to provide fully reproducible examples for end-users. These chunks should run successfully if you have successfully installed the package.
 
 ### Demultiplex
 
@@ -48,12 +37,10 @@ sample_2
 sample_3
 sample_4
 sample_5"
-
 # Build loci de novo in each sample for the single-end reads only.
 # -M — Maximum distance (in nucleotides) allowed between stacks (default 2).
 # -m — Minimum depth of coverage required to create a stack (default 3).
 #here, we will vary m from 3-7, and leave all other paramaters default
-
 for i in {3..7}
 do
 #create a directory to hold this unique iteration:
@@ -83,20 +70,17 @@ You should now have five directories, named: stacks_m3, stacks_m4, stacks_m5, st
 
 ### Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter 'm'.
 
-```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 4, fig.height = 3}
+```{r, fig.show='hold'}
 #load RADstackshelpR package
 library(RADstackshelpR)
-
 #optimize_m function will generate summary stats on your 5 iterative runs
 #input can be full path to each file, or just the file name if the vcf files are in your working directory
-m.out<-optimize_m(m3="/Users/devder/Desktop/hipposideros/m_3.vcf",
-           m4="/Users/devder/Desktop/hipposideros/m_4.vcf",
-           m5="/Users/devder/Desktop/hipposideros/m_5.vcf",
-           m6="/Users/devder/Desktop/hipposideros/m_6.vcf",
-           m7="/Users/devder/Desktop/hipposideros/m_7.vcf")
-
+m.out<-optimize_m(m3 = system.file("extdata", "m3.vcf.gz", package = "RADstackshelpR"),
+                     m4 = system.file("extdata", "m4.vcf.gz", package = "RADstackshelpR"),
+                     m5 = system.file("extdata", "m5.vcf.gz", package = "RADstackshelpR"),
+                     m6 = system.file("extdata", "m6.vcf.gz", package = "RADstackshelpR"),
+                     m7 = system.file("extdata", "m7.vcf.gz", package = "RADstackshelpR"))
 #Assigning the output of this function to the variable 'm.out' should generate a list containing five objects of class 'data.frame' with the following characteristics: 'depth' showing depth per sample for each m value, 'snp' showing the number of non-missing SNPs retained in each sample at each m value, 'loci' showing the number of non-missing loci retained in each sample at each m value, 'snp.R80' showing the total number of SNPs retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci retained at an 80% completeness cutoff.
-
 #Use this output list as input for this function, to visualize the effect of varying m on the depth of each sample
 vis_depth(output = m.out)
 #visualize the effect of varying m on the number of SNPs retained
@@ -114,7 +98,6 @@ Now that we know the optimal value for 'm' is 3, we will repeat the process of i
 # -M — Maximum distance (in nucleotides) allowed between stacks (default 2).
 # -m — Minimum depth of coverage required to create a stack (default 3).
 #here, vary M from 1-8, and set m to the optimized value based on prior visualizations (here 3)
-
 for i in {1..8}
 do
 #create a directory to hold this unique iteration:
@@ -138,24 +121,21 @@ You should now have eight directories, named: stacks_bigM1, stacks_bigM2, ... st
 
 ### Use RADstackshelpR to visualize the output of these 8 runs and determine the optimal value for the parameter 'M'.
 
-```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 4, fig.height = 3}
+```{r}
 #optimize_bigM function will generate summary stats on your 8 iterative runs
-M.out<-optimize_bigM(M1="/Users/devder/Desktop/hipposideros/M1.vcf",
-           M2="/Users/devder/Desktop/hipposideros/M2.vcf",
-           M3="/Users/devder/Desktop/hipposideros/M3.vcf",
-           M4="/Users/devder/Desktop/hipposideros/M4.vcf",
-           M5="/Users/devder/Desktop/hipposideros/M5.vcf",
-           M6="/Users/devder/Desktop/hipposideros/M6.vcf",
-           M7="/Users/devder/Desktop/hipposideros/M7.vcf",
-           M8="/Users/devder/Desktop/hipposideros/M8.vcf")
-
+M.out<-optimize_bigM(M1 = system.file("extdata", "bigM1.vcf.gz", package = "RADstackshelpR"),
+                     M2 = system.file("extdata", "bigM2.vcf.gz", package = "RADstackshelpR"),
+                     M3 = system.file("extdata", "bigM3.vcf.gz", package = "RADstackshelpR"),
+                     M4 = system.file("extdata", "bigM4.vcf.gz", package = "RADstackshelpR"),
+                     M5 = system.file("extdata", "bigM5.vcf.gz", package = "RADstackshelpR"),
+                     M6 = system.file("extdata", "bigM6.vcf.gz", package = "RADstackshelpR"),
+                     M7 = system.file("extdata", "bigM7.vcf.gz", package = "RADstackshelpR"),
+                     M8 = system.file("extdata", "bigM8.vcf.gz", package = "RADstackshelpR"))
 #Assigning the output of this function to the variable 'M.out' should generate a list containing four objects of class 'data.frame' with the following characteristics: 'snp' showing the number of non-missing SNPs retained in each sample at each m value, 'loci' showing the number of non-missing loci retained in each sample at each m value, 'snp.R80' showing the total number of SNPs retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci retained at an 80% completeness cutoff.
-
 #use this function to visualize the effect of varying 'M' on the number of SNPs retained
 vis_snps(output = M.out, stacks_param = "M")
 #visualize the effect of varying 'M' on the number of polymorphic loci retained
 vis_loci(output = M.out, stacks_param = "M")
-
 #optimal value for this dataset is M = 2
 ```
 
@@ -166,7 +146,6 @@ For the last optimization iteration, we will vary the 'n' parameter within the '
 ```{bash, eval = FALSE}
 # -n — Number of mismatches allowed between sample loci when build the catalog (default 1).
 #here, vary 'n' across M-1, M, and M+1 (because my optimized 'M' value = 2, I will iterate over 1, 2, and 3 here), with 'm' and 'M' set to the optimized value based on prior visualizations (here 'm' = 3, and 'M'=2).
-
 for i in {1..3}
 do
 #create a directory to hold this unique iteration:
@@ -186,16 +165,15 @@ done
 done
 ```
 
+
 ### Use RADstackshelpR to visualize the output of these 3 runs and determine the optimal value for 'n'.
 
-```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 4, fig.height = 3}
+```{r}
 #optimize n
-n.out<-optimize_n(nequalsMminus1="/Users/devder/Desktop/hipposideros/n1.vcf",
-           nequalsM="/Users/devder/Desktop/hipposideros/n2.vcf",
-           nequalsMplus1="/Users/devder/Desktop/hipposideros/n3.vcf")
-
+n.out<-optimize_n(nequalsMminus1 = system.file("extdata", "nequalsmminus1.vcf.gz", package = "RADstackshelpR"),
+                        nequalsM = system.file("extdata", "nequalsm.vcf.gz", package = "RADstackshelpR"),
+                        nequalsMplus1 = system.file("extdata", "nequalsmplus1.vcf.gz", package = "RADstackshelpR"))
 ##Assigning the output of this function to the variable 'n.out' should generate a single object of class 'data.frame' showing the number of SNPs and loci retained across filtering levels for each value of n.
-
 #visualize the effect of varying n on the number of SNPs retained
 vis_snps(output = n.out, stacks_param = "n")
 #visualize the effect of varying n on the number of polymorphic loci retained
@@ -204,10 +182,9 @@ vis_loci(output = n.out, stacks_param = "n")
 
 #### If you would like, you can make a single figure simultaneously illustrating the optimization process of all three key parameters
 
-```{r, dpi=150, out.width="100%",out.height="100%", fig.align = "center", fig.width = 6, fig.height = 4}
+```{r}
 #load gridExtra package to combine ggplot visualizations
 library(gridExtra)
-
 #combine all of these prior visulizations in a single list
 gl<-list()
 gl[[1]]<-vis_depth(output = m.out)
@@ -217,18 +194,16 @@ gl[[4]]<-vis_snps(output = M.out, stacks_param = "M")
 gl[[5]]<-vis_loci(output = M.out, stacks_param = "M")
 gl[[6]]<-vis_snps(output = n.out, stacks_param = "n")
 gl[[7]]<-vis_loci(output = n.out, stacks_param = "n")
-
 #visualize each item of the list as part of a single grid
 grid.arrange(grobs = gl, widths = c(1,1,1,1,1,1),
   layout_matrix = rbind(c(1,1,2,2,3,3),
                         c(4,4,4,5,5,5),
                         c(6,6,6,7,7,7))
 )
-
 #Note: if you are an R whiz and prefer to make your own visualizations, the functions starting with 'optimize_' are designed
 #to be modular, and return to you a list of 'data.frame' objects which you can use to make your own custom visualizations.
-
 ```
 
 You now have a de novo-assembled, parameter-optimized, unfiltered SNP dataset for your organism, and a single cohesive figure documenting the filtering process, which you can stick in your paper's supplement or host on your own repository. The next step is to filter this vcf file using the SNPfiltR package, which is specifically designed to pick up where this pipeline leaves off, or with any other variant filtering program of your choice.
+
 
