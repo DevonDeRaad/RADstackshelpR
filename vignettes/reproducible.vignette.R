@@ -4,7 +4,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## ---- fig.show='hold'---------------------------------------------------------
+## ---- fig.show='hold', dpi=150------------------------------------------------
 #load RADstackshelpR package
 library(RADstackshelpR)
 #optimize_m function will generate summary stats on your 5 iterative runs
@@ -23,7 +23,7 @@ vis_snps(output = m.out, stacks_param = "m")
 vis_loci(output = m.out, stacks_param = "m")
 #3 is the optimal m value, and will be used next to optimize M
 
-## -----------------------------------------------------------------------------
+## ---- dpi =150----------------------------------------------------------------
 #optimize_bigM function will generate summary stats on your 8 iterative runs
 M.out<-optimize_bigM(M1 = system.file("extdata", "bigM1.vcf.gz", package = "RADstackshelpR"),
                      M2 = system.file("extdata", "bigM2.vcf.gz", package = "RADstackshelpR"),
@@ -50,25 +50,4 @@ n.out<-optimize_n(nequalsMminus1 = system.file("extdata", "nequalsmminus1.vcf.gz
 vis_snps(output = n.out, stacks_param = "n")
 #visualize the effect of varying n on the number of polymorphic loci retained
 vis_loci(output = n.out, stacks_param = "n")
-
-## -----------------------------------------------------------------------------
-#load gridExtra package to combine ggplot visualizations
-library(gridExtra)
-#combine all of these prior visulizations in a single list
-gl<-list()
-gl[[1]]<-vis_depth(output = m.out)
-gl[[2]]<-vis_snps(output = m.out, stacks_param = "m")
-gl[[3]]<-vis_loci(output = m.out, stacks_param = "m")
-gl[[4]]<-vis_snps(output = M.out, stacks_param = "M")
-gl[[5]]<-vis_loci(output = M.out, stacks_param = "M")
-gl[[6]]<-vis_snps(output = n.out, stacks_param = "n")
-gl[[7]]<-vis_loci(output = n.out, stacks_param = "n")
-#visualize each item of the list as part of a single grid
-grid.arrange(grobs = gl, widths = c(1,1,1,1,1,1),
-  layout_matrix = rbind(c(1,1,2,2,3,3),
-                        c(4,4,4,5,5,5),
-                        c(6,6,6,7,7,7))
-)
-#Note: if you are an R whiz and prefer to make your own visualizations, the functions starting with 'optimize_' are designed
-#to be modular, and return to you a list of 'data.frame' objects which you can use to make your own custom visualizations.
 
