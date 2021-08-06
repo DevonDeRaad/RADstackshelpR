@@ -1,10 +1,11 @@
 ^RADstackshelpR\.Rproj$
 ^\.Rproj\.user$
 ^doc$
-^Meta$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
 ^\.github$
 ^LICENSE\.md$
 ^README.Rmd$
+^vignettes/optimize_denovo.Rmd$
+^man/figures$
