@@ -17,5 +17,5 @@ This function takes the list of dataframes output by optimize_m() as input.
 The function then uses ggplot2 to visualize the effect of m on depth.
 }
 \examples{
-vis_depth(output = optimize_m(m3 = system.file("extdata", "m3.vcf.gz", package = "RADstackshelpR")))
+vis_depth(output = readRDS(system.file("extdata", "optimize.m.output.RDS", package = "RADstackshelpR")))
 }

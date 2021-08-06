@@ -23,3 +23,6 @@ After running stacks with each of the n options, plug the output vcf files into 
 function to visualize the effect of varying m on number of SNPs and loci built to
 recognize which value optimizes the n parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 }
+\examples{
+optimize_n(nequalsM = system.file("extdata", "nequalsM.vcf.gz", package = "RADstackshelpR"))
+}

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>#' Optimize the M parameter during denovo stacks assembly — optimize_bigM • RADstackshelpR</title>
+<title>Optimize the M parameter during denovo stacks assembly — optimize_bigM • RADstackshelpR</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="#' Optimize the M parameter during denovo stacks assembly — optimize_bigM" />
+<meta property="og:title" content="Optimize the M parameter during denovo stacks assembly — optimize_bigM" />
 <meta property="og:description" content="This function requires the path to stacks vcf file(s) as input.
 There are slots for varying the M parameter from 1-8 (as recommended by Paris et al. 2017).
 After running stacks with each of the M options, plug the output vcf files into this
@@ -127,7 +127,7 @@ vis_loci() to visualize the optimal the M parameter for your dataset at the 'R80
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>#' Optimize the M parameter during denovo stacks assembly</h1>
+    <h1>Optimize the M parameter during denovo stacks assembly</h1>
     
     <div class="hidden name"><code>optimize_bigM.Rd</code></div>
     </div>
@@ -196,6 +196,60 @@ number of non-missing loci retained in each sample at each m value, 'snp.R80' sh
 retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci
 retained at an 80% completeness cutoff.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>optimize_bigM</span><span class='op'>(</span>M1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"bigM1.vcf.gz"</span>, package <span class='op'>=</span> <span class='st'>"RADstackshelpR"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $snp
+#&gt;    var snps
+#&gt; 1   M1   55
+#&gt; 2   M1   19
+#&gt; 3   M1   76
+#&gt; 4   M1   68
+#&gt; 5   M1   82
+#&gt; 6   M1   54
+#&gt; 7   M1   62
+#&gt; 8   M1   78
+#&gt; 9   M1   58
+#&gt; 10  M1    6
+#&gt; 11  M1   36
+#&gt; 12  M1   55
+#&gt; 13  M1   60
+#&gt; 14  M1   43
+#&gt; 15  M1   24
+#&gt; 16  M1   66
+#&gt; 17  M1   71
+#&gt; 18  M1    4
+#&gt; 19  M1   83
+#&gt; 
+#&gt; $loci
+#&gt;    var poly.loci
+#&gt; 1   M1        55
+#&gt; 2   M1        19
+#&gt; 3   M1        76
+#&gt; 4   M1        68
+#&gt; 5   M1        82
+#&gt; 6   M1        54
+#&gt; 7   M1        62
+#&gt; 8   M1        78
+#&gt; 9   M1        58
+#&gt; 10  M1         6
+#&gt; 11  M1        36
+#&gt; 12  M1        55
+#&gt; 13  M1        60
+#&gt; 14  M1        43
+#&gt; 15  M1        24
+#&gt; 16  M1        66
+#&gt; 17  M1        71
+#&gt; 18  M1         4
+#&gt; 19  M1        83
+#&gt; 
+#&gt; $snp.R80
+#&gt;   var snps.80
+#&gt; 1  M1      28
+#&gt; 
+#&gt; $loci.R80
+#&gt;   var poly.loci.80
+#&gt; 1  M1           28
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

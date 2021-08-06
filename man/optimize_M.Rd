@@ -31,3 +31,6 @@ After running stacks with each of the m options, plug the output vcf files into 
 function to calculate the effect of varying m on depth and number of SNPs/loci built. Plug the output of this function into
 vis_loci() to visualize the optimal the m parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 }
+\examples{
+optimize_m(m3 = system.file("extdata", "m3.vcf.gz", package = "RADstackshelpR"))
+}

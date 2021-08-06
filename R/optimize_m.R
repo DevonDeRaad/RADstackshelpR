@@ -16,7 +16,7 @@
 #' number of non-missing loci retained in each sample at each m value, 'snp.R80' showing the total number of SNPs
 #' retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci
 #' retained at an 80% completeness cutoff.
-#' @example
+#' @examples
 #' optimize_m(m3 = system.file("extdata", "m3.vcf.gz", package = "RADstackshelpR"))
 #' @export
 optimize_m <- function(m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL){

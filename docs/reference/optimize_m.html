@@ -175,6 +175,82 @@ number of non-missing loci retained in each sample at each m value, 'snp.R80' sh
 retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci
 retained at an 80% completeness cutoff.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>optimize_m</span><span class='op'>(</span>m3 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"m3.vcf.gz"</span>, package <span class='op'>=</span> <span class='st'>"RADstackshelpR"</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $depth
+#&gt;                               m              dep
+#&gt; 908108_H_diadema_Gatokae     m3 11.8653846153846
+#&gt; 908150_H_dinops_Guadalcanal  m3 6.77777777777778
+#&gt; 908151_H_diadema_Guadalcanal m3 60.8823529411765
+#&gt; 908152_H_diadema_Guadalcanal m3         31.28125
+#&gt; 908153a_H_dinops_Guadalcanal m3 138.835616438356
+#&gt; 908154_H_dinops_Guadalcanal  m3 11.9322033898305
+#&gt; 908155_H_dinops_Guadalcanal  m3 22.4920634920635
+#&gt; 908156_H_diadema_Guadalcanal m3 82.5072463768116
+#&gt; 908208_H_diadema_Guadalcanal m3 18.5254237288136
+#&gt; KVO150_H_diadema_Isabel      m3             4.75
+#&gt; KVO168_H_diadema_Isabel      m3 9.92682926829268
+#&gt; KVO169_H_diadema_Isabel      m3 14.6734693877551
+#&gt; KVO170_H_diadema_Isabel      m3 20.3728813559322
+#&gt; KVO171_H_diadema_Isabel      m3 8.63414634146342
+#&gt; KVO172_H_diadema_Isabel      m3             6.95
+#&gt; KVO242_H_dinops_Isabel       m3 29.0461538461538
+#&gt; KVO243_H_dinops_Isabel       m3 37.5507246376812
+#&gt; KVO244_H_dinops_Isabel       m3 72.2857142857143
+#&gt; KVO245_H_dinops_Isabel       m3 80.5070422535211
+#&gt; 
+#&gt; $snp
+#&gt;    var snps
+#&gt; 1   m3   52
+#&gt; 2   m3   18
+#&gt; 3   m3   68
+#&gt; 4   m3   64
+#&gt; 5   m3   73
+#&gt; 6   m3   59
+#&gt; 7   m3   63
+#&gt; 8   m3   69
+#&gt; 9   m3   59
+#&gt; 10  m3    8
+#&gt; 11  m3   41
+#&gt; 12  m3   49
+#&gt; 13  m3   59
+#&gt; 14  m3   41
+#&gt; 15  m3   20
+#&gt; 16  m3   65
+#&gt; 17  m3   69
+#&gt; 18  m3    7
+#&gt; 19  m3   71
+#&gt; 
+#&gt; $loci
+#&gt;    var poly.loci
+#&gt; 1   m3        52
+#&gt; 2   m3        18
+#&gt; 3   m3        68
+#&gt; 4   m3        64
+#&gt; 5   m3        73
+#&gt; 6   m3        59
+#&gt; 7   m3        63
+#&gt; 8   m3        69
+#&gt; 9   m3        59
+#&gt; 10  m3         8
+#&gt; 11  m3        41
+#&gt; 12  m3        49
+#&gt; 13  m3        59
+#&gt; 14  m3        41
+#&gt; 15  m3        20
+#&gt; 16  m3        65
+#&gt; 17  m3        69
+#&gt; 18  m3         7
+#&gt; 19  m3        71
+#&gt; 
+#&gt; $snp.R80
+#&gt;   var snps.80
+#&gt; 1  m3      28
+#&gt; 
+#&gt; $loci.R80
+#&gt;   var poly.loci.80
+#&gt; 1  m3           28
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

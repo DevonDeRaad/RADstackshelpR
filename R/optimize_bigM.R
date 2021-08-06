@@ -1,4 +1,4 @@
-#' #' Optimize the M parameter during denovo stacks assembly
+#' Optimize the M parameter during denovo stacks assembly
 #'
 #' This function requires the path to stacks vcf file(s) as input.
 #' There are slots for varying the M parameter from 1-8 (as recommended by Paris et al. 2017).
@@ -19,8 +19,8 @@
 #' number of non-missing loci retained in each sample at each m value, 'snp.R80' showing the total number of SNPs
 #' retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci
 #' retained at an 80% completeness cutoff.
-#' @example
-#' optimize_m(bigM1 = "path/to/bigM1.vcf)
+#' @examples
+#' optimize_bigM(M1 = system.file("extdata", "bigM1.vcf.gz", package = "RADstackshelpR"))
 #' @export
 optimize_bigM <- function(M1=NULL,M2=NULL,M3=NULL,M4=NULL,M5=NULL,M6=NULL,M7=NULL,M8=NULL){
   #initialize empty snp.df

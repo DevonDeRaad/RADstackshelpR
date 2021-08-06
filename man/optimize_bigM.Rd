@@ -2,7 +2,7 @@
 % Please edit documentation in R/optimize_bigM.R
 \name{optimize_bigM}
 \alias{optimize_bigM}
-\title{#' Optimize the M parameter during denovo stacks assembly}
+\title{Optimize the M parameter during denovo stacks assembly}
 \usage{
 optimize_bigM(
   M1 = NULL,
@@ -45,4 +45,7 @@ There are slots for varying the M parameter from 1-8 (as recommended by Paris et
 After running stacks with each of the M options, plug the output vcf files into this
 function to calculate the effect of varying M on the number of SNPs/loci built. Plug the output of this function into
 vis_loci() to visualize the optimal the M parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
+}
+\examples{
+optimize_bigM(M1 = system.file("extdata", "bigM1.vcf.gz", package = "RADstackshelpR"))
 }

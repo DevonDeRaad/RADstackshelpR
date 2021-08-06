@@ -18,3 +18,6 @@ A plot showing the number of SNPs retained at each given parameter value
 This function takes the list of dataframes output by optimize_m(), optimize_M(), or optimize_n() as input.
 The function then uses ggplot2 to visualize the effect of the given stacks on the number of SNPs retained.
 }
+\examples{
+vis_snps(output = readRDS(system.file("extdata", "optimize.m.output.RDS", package = "RADstackshelpR")), stacks_param = "m")
+}
