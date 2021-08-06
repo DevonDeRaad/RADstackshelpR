@@ -94,7 +94,7 @@ vis_depth(output = m.out)
 #> Picking joint bandwidth of 9.53
 ```
 
-<img src="man/figures/unnamed-chunk-5-1.png" width="100%" height="100%" style="display: block; margin: auto;" />
+<img src="man/figures/unnamed-chunk-5-1.png" width="65%" height="65%" style="display: block; margin: auto;" />
 
 ``` r
 #visualize the effect of varying m on the number of SNPs retained
@@ -105,7 +105,7 @@ vis_snps(output = m.out, stacks_param = "m")
 #> Picking joint bandwidth of 7190
 ```
 
-<img src="man/figures/unnamed-chunk-5-2.png" width="100%" height="100%" style="display: block; margin: auto;" />
+<img src="man/figures/unnamed-chunk-5-2.png" width="65%" height="65%" style="display: block; margin: auto;" />
 
 ``` r
 #visualize the effect of varying m on the number of loci retained
@@ -116,7 +116,7 @@ vis_loci(output = m.out, stacks_param = "m")
 #> Picking joint bandwidth of 3420
 ```
 
-<img src="man/figures/unnamed-chunk-5-3.png" width="100%" height="100%" style="display: block; margin: auto;" />
+<img src="man/figures/unnamed-chunk-5-3.png" width="65%" height="65%" style="display: block; margin: auto;" />
 
 ``` r
 #3 is the optimal m value, and will be used next to optimize M
@@ -175,7 +175,7 @@ vis_snps(output = M.out, stacks_param = "M")
 #> Picking joint bandwidth of 6090
 ```
 
-<img src="man/figures/unnamed-chunk-7-1.png" width="100%" height="100%" style="display: block; margin: auto;" />
+<img src="man/figures/unnamed-chunk-7-1.png" width="65%" height="65%" style="display: block; margin: auto;" />
 
 ``` r
 #visualize the effect of varying 'M' on the number of polymorphic loci retained
@@ -186,7 +186,7 @@ vis_loci(output = M.out, stacks_param = "M")
 #> Picking joint bandwidth of 2920
 ```
 
-<img src="man/figures/unnamed-chunk-7-2.png" width="100%" height="100%" style="display: block; margin: auto;" />
+<img src="man/figures/unnamed-chunk-7-2.png" width="65%" height="65%" style="display: block; margin: auto;" />
 
 ``` r
 
@@ -238,7 +238,7 @@ vis_snps(output = n.out, stacks_param = "n")
 #> Picking joint bandwidth of 7420
 ```
 
-<img src="man/figures/unnamed-chunk-9-1.png" width="100%" height="100%" style="display: block; margin: auto;" />
+<img src="man/figures/unnamed-chunk-9-1.png" width="65%" height="65%" style="display: block; margin: auto;" />
 
 ``` r
 #visualize the effect of varying n on the number of polymorphic loci retained
@@ -249,7 +249,7 @@ vis_loci(output = n.out, stacks_param = "n")
 #> Picking joint bandwidth of 3230
 ```
 
-<img src="man/figures/unnamed-chunk-9-2.png" width="100%" height="100%" style="display: block; margin: auto;" />
+<img src="man/figures/unnamed-chunk-9-2.png" width="65%" height="65%" style="display: block; margin: auto;" />
 
 #### If you would like, you can make a single figure simultaneously illustrating the optimization process of all three key parameters
 
@@ -301,7 +301,7 @@ grid.arrange(grobs = gl, widths = c(1,1,1,1,1,1),
 #> Picking joint bandwidth of 3230
 ```
 
-<img src="man/figures/unnamed-chunk-10-1.png" width="120%" height="120%" style="display: block; margin: auto;" />
+<img src="man/figures/unnamed-chunk-10-1.png" width="100%" height="100%" style="display: block; margin: auto;" />
 
 ``` r
 

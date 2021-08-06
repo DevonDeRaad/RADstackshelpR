@@ -19,5 +19,6 @@ This function takes the list of dataframes output by optimize_m(), optimize_M(),
 The function then uses ggplot2 to visualize the effect of the given stacks on the number of SNPs retained.
 }
 \examples{
-vis_snps(output = readRDS(system.file("extdata", "optimize.m.output.RDS", package = "RADstackshelpR")), stacks_param = "m")
+vis_snps(output=readRDS(system.file("extdata","optimize.m.output.RDS",package="RADstackshelpR")),
+         stacks_param = "m")
 }

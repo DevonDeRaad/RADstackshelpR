@@ -83,7 +83,7 @@ You should now have five directories, named: stacks_m3, stacks_m4, stacks_m5, st
 
 ### Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter 'm'.
 
-```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
+```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 4, fig.height = 3}
 #load RADstackshelpR package
 library(RADstackshelpR)
 
@@ -138,7 +138,7 @@ You should now have eight directories, named: stacks_bigM1, stacks_bigM2, ... st
 
 ### Use RADstackshelpR to visualize the output of these 8 runs and determine the optimal value for the parameter 'M'.
 
-```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
+```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 4, fig.height = 3}
 #optimize_bigM function will generate summary stats on your 8 iterative runs
 M.out<-optimize_bigM(M1="/Users/devder/Desktop/hipposideros/M1.vcf",
            M2="/Users/devder/Desktop/hipposideros/M2.vcf",
@@ -188,7 +188,7 @@ done
 
 ### Use RADstackshelpR to visualize the output of these 3 runs and determine the optimal value for 'n'.
 
-```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
+```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 4, fig.height = 3}
 #optimize n
 n.out<-optimize_n(nequalsMminus1="/Users/devder/Desktop/hipposideros/n1.vcf",
            nequalsM="/Users/devder/Desktop/hipposideros/n2.vcf",
@@ -204,7 +204,7 @@ vis_loci(output = n.out, stacks_param = "n")
 
 #### If you would like, you can make a single figure simultaneously illustrating the optimization process of all three key parameters
 
-```{r, dpi=300, out.width="120%",out.height="120%", fig.align = "center"}
+```{r, dpi=150, out.width="100%",out.height="100%", fig.align = "center", fig.width = 6, fig.height = 4}
 #load gridExtra package to combine ggplot visualizations
 library(gridExtra)
 
