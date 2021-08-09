@@ -83,7 +83,7 @@ You should now have five directories, named: stacks_m3, stacks_m4, stacks_m5, st
 
 ### Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter 'm'.
 
-```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 4, fig.height = 3}
+```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 3.5, fig.height = 2.5}
 #load RADstackshelpR package
 library(RADstackshelpR)
 
@@ -138,7 +138,7 @@ You should now have eight directories, named: stacks_bigM1, stacks_bigM2, ... st
 
 ### Use RADstackshelpR to visualize the output of these 8 runs and determine the optimal value for the parameter 'M'.
 
-```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 4, fig.height = 3}
+```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 3.5, fig.height = 2.5}
 #optimize_bigM function will generate summary stats on your 8 iterative runs
 M.out<-optimize_bigM(M1="/Users/devder/Desktop/hipposideros/M1.vcf",
            M2="/Users/devder/Desktop/hipposideros/M2.vcf",
@@ -188,7 +188,7 @@ done
 
 ### Use RADstackshelpR to visualize the output of these 3 runs and determine the optimal value for 'n'.
 
-```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 4, fig.height = 3}
+```{r, dpi=150, out.width="65%",out.height="65%", fig.align = "center", fig.width = 3.5, fig.height = 2.5}
 #optimize n
 n.out<-optimize_n(nequalsMminus1="/Users/devder/Desktop/hipposideros/n1.vcf",
            nequalsM="/Users/devder/Desktop/hipposideros/n2.vcf",
