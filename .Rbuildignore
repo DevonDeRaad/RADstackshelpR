@@ -8,3 +8,4 @@
 ^LICENSE\.md$
 ^README.Rmd$
 ^vignettes/optimize_denovo.Rmd$
+^Meta$
