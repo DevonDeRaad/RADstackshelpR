@@ -1,8 +1,8 @@
-pandoc: 1.19.2.1
+pandoc: '2.12'
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   optimize_denovo: optimize_denovo.html
   reproducible.vignette: reproducible.vignette.html
-last_built: 2021-08-09T23:42Z
+last_built: 2021-08-11T19:13Z
 
