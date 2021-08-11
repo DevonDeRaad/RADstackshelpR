@@ -70,7 +70,7 @@ done
 done
 ```
 
-You should now have five directories, named: stacks\_m3, stacks\_m4, stacks\_m5, stacks\_m6, & stacks\_m7, each of which contains an vcf file with all called SNPs for the given parameter settings (i.e., stacks\_m3 = the directory containing output from the iteration where 'm' was set to 3). Now we will use RADstackshelpR to determine which of these parameter settings (m = 3-7) is optimal for this dataset according to the 'R80' cutoff (see [Lost in Parameter Space](%3Chttps://doi.org/10.1111/2041-210X.12775)). I have now moved each vcf file into a local directory, and named it according to the parameter settings for the given run.
+You should now have five directories, named: stacks\_m3, stacks\_m4, stacks\_m5, stacks\_m6, & stacks\_m7, each of which contains an vcf file with all called SNPs for the given parameter settings (i.e., stacks\_m3 = the directory containing output from the iteration where 'm' was set to 3). Now we will use RADstackshelpR to determine which of these parameter settings (m = 3-7) is optimal for this dataset according to the 'R80' cutoff (see [Lost in Parameter Space](https://doi.org/10.1111/2041-210X.12775)). I have now moved each vcf file into a local directory, and named it according to the parameter settings for the given run.
 
 ### Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter 'm'.
 
