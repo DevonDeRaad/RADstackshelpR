@@ -7,7 +7,7 @@
 #' @param stacks_param A character string indicating the stacks parameter iterated over
 #' @return A plot showing the number of SNPs retained at each given parameter value
 #' @examples
-#' vis_snps(output=readRDS(system.file("extdata","optimize.m.output.RDS",package="RADstackshelpR")),
+#' vis_snps(output=readRDS(system.file("extdata","optimize.m.output.RDS",package="RADstackshelpR", mustWork=TRUE)),
 #'          stacks_param = "m")
 #' @export
 vis_snps <- function(output=NULL, stacks_param=NULL){

@@ -17,7 +17,7 @@
 #' retained at an 80% completeness cutoff, and 'loci.R80' showing the total number of polymorphic loci
 #' retained at an 80% completeness cutoff.
 #' @examples
-#' optimize_m(m3 = system.file("extdata", "m3.vcf.gz", package = "RADstackshelpR"))
+#' optimize_m(m3 = system.file("extdata", "m3.vcf.gz", package = "RADstackshelpR", mustWork=TRUE))
 #' @export
 optimize_m <- function(m3=NULL,m4=NULL,m5=NULL,m6=NULL,m7=NULL){
   #initialize empty depth.df
