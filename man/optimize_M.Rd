@@ -32,5 +32,5 @@ function to calculate the effect of varying m on depth and number of SNPs/loci b
 vis_loci() to visualize the optimal the m parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 }
 \examples{
-optimize_m(m3 = system.file("extdata", "m3.vcf.gz", package = "RADstackshelpR"))
+optimize_m(m3 = system.file("extdata", "m3.vcf.gz", package = "RADstackshelpR", mustWork=TRUE))
 }

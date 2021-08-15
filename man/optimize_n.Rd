@@ -24,5 +24,5 @@ function to visualize the effect of varying m on number of SNPs and loci built t
 recognize which value optimizes the n parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 }
 \examples{
-optimize_n(nequalsM = system.file("extdata", "nequalsM.vcf.gz", package = "RADstackshelpR"))
+optimize_n(nequalsM = system.file("inst", "extdata", "nequalsm.vcf.gz", package = "RADstackshelpR", mustWork=TRUE))
 }

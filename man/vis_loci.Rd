@@ -19,6 +19,6 @@ This function takes the list of dataframes output by optimize_m(), optimize_M(),
 The function then uses ggplot2 to visualize the effect of the given stacks on the number of polymorphic loci retained, reporting which value is optimal.
 }
 \examples{
-vis_loci(output=readRDS(system.file("extdata","optimize.m.output.RDS",package="RADstackshelpR")),
+vis_loci(output=readRDS(system.file("extdata","optimize.m.output.RDS",package="RADstackshelpR", mustWork=TRUE)),
          stacks_param = "m")
 }
