@@ -47,5 +47,5 @@ function to calculate the effect of varying M on the number of SNPs/loci built. 
 vis_loci() to visualize the optimal the M parameter for your dataset at the 'R80' cutoff (Paris et al. 2017).
 }
 \examples{
-optimize_bigM(M1 = system.file("extdata", "bigM1.vcf.gz", package = "RADstackshelpR", mustWork=TRUE))
+optimize_bigM(M1=system.file("extdata","bigM1.vcf.gz",package="RADstackshelpR",mustWork=TRUE))
 }

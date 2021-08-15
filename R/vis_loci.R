@@ -7,7 +7,8 @@
 #' @param stacks_param A character string indicating the stacks parameter iterated over
 #' @return A plot showing the number of polymorphic loci retained at each given parameter value
 #' @examples
-#' vis_loci(output=readRDS(system.file("extdata","optimize.m.output.RDS",package="RADstackshelpR", mustWork=TRUE)),
+#' vis_loci(output =
+#' readRDS(system.file("extdata","optimize.m.output.RDS",package="RADstackshelpR",mustWork=TRUE)),
 #'          stacks_param = "m")
 #' @export
 vis_loci <- function(output=NULL, stacks_param=NULL){
