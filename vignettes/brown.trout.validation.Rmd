@@ -1,13 +1,14 @@
 ---
-title: "Optimize denovo STACKS pipeline for Hipposideros bats"
+title: "Penguin Vignette"
+author: "Devon DeRaad"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
-fig_width: 6 
-fig_height: 4
 vignette: >
-  %\VignetteIndexEntry{Optimize denovo STACKS pipeline}
+  %\VignetteIndexEntry{Vignette Title}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -17,7 +18,7 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(dev = "png")
 ```
 
-##### This is a real example of using the RADstackshelpR package to facilitate parameter optimization on an empirical dataset. Bash code used to run the [STACKS](https://catchenlab.life.illinois.edu/stacks/) pipeline was executed via submit script on the KU high-performance computing cluster.
+##### This is an example showing the usefulness of the RADstackshelpR package in reproducing the results from the paper [Lost in Parameter Space](https://doi.org/10.1111/2041-210X.12775). Here, I have downloaded the 16 raw, reduced-representation sequencing files for the brown trout dataset used in this paper, from SRA [SRR3177636-SRR317765](https://www.ncbi.nlm.nih.gov/biosample?LinkName=bioproject_biosample_all&from_uid=379215). The code below takes us step by step through the process of optimizing the de novo assembly parameters for this dataset, validating that the optimal parameters based on an 'R80' cutoff are: m = 3, M = 5, and n = 4. Bash code used to run the [STACKS](https://catchenlab.life.illinois.edu/stacks/) pipeline was executed via submit script on the KU high-performance computing cluster.
 
 ```{r}
 #load packages
@@ -25,61 +26,51 @@ library(RADstackshelpR)
 library(gridExtra)
 ```
 
-## Step 1: Demultiplex each sample using 'process_radtags'.
 
-```{bash, eval = FALSE}
-/home/path/to/stacks-2.41/process_radtags -p .  -o . -b plate.1.barcodes.txt -e ndeI -r -c -q
-```
-
-## Step 2: Samples with a demultiplexed file size of < 2 megabytes simply don't have enough information to be relevant downstream, and can be removed right away. (Note: this will help ensure that there are enough loci retained at an 80% completeness cutoff to make informed optimization decisions)
-
-## Step 3: Iterate over values of 'm' ranging from 3-7, while leaving all other parameters at default values.
+## Step 1: Download each of the files as '.fastq.gz' from the sequence read archive (SRA)
 ###Bash code to execute this:
 ```{bash, eval = FALSE}
 #!/bin/sh
 #
-#SBATCH --job-name=denovo.rad.hippo              # Job Name
+#SBATCH --job-name=denovo.brown.trout              # Job Name
 #SBATCH --nodes=1             # nodes
 #SBATCH --cpus-per-task=15               # CPU allocation per Task
 #SBATCH --partition=bi            # Name of the Slurm partition used
-#SBATCH --chdir=/home/d669d153/scratch/diadema.dinops	# Set working d$
+#SBATCH --chdir=/home/d669d153/work/brown.trout	# Set working d$
 #SBATCH --mem-per-cpu=1gb            # memory requested
 #SBATCH --time=10000
 
-files="908108_H_diadema_Gatokae
-908150_H_dinops_Guadalcanal
-908151_H_diadema_Guadalcanal
-908152_H_diadema_Guadalcanal
-908153a_H_dinops_Guadalcanal
-908154_H_dinops_Guadalcanal
-908155_H_dinops_Guadalcanal
-908156_H_diadema_Guadalcanal
-908208_H_diadema_Guadalcanal
-KVO150_H_diadema_Isabel
-KVO168_H_diadema_Isabel
-KVO169_H_diadema_Isabel
-KVO170_H_diadema_Isabel
-KVO171_H_diadema_Isabel
-KVO172_H_diadema_Isabel
-KVO242_H_dinops_Isabel
-KVO243_H_dinops_Isabel
-KVO244_H_dinops_Isabel
-KVO245_H_dinops_Isabel
-KVO246_H_dinops_Isabel
-KVO248_H_dinops_Isabel
-THL1156_H_demissus_Makira
-THL1172_H_dinops_Guadalcanal
-THL1173_H_dinops_Guadalcanal
-THL17193_H_diadema_Ngella
-THL17194_H_diadema_Ngell
-THL17195_H_diadema_Ngella
-THL17197_H_diadema_Ngella
-THL17198_H_diadema_Ngella
-THL17199_H_diadema_Ngell
-WD1705_H_diadema_E_New_Britain
-WD2047_H_diadema_Simbu_Prov
-WD2074_H_diadema_Gulf_Prov"
+files="SRR5344602
+SRR5344603
+SRR5344604
+SRR5344605
+SRR5344606
+SRR5344607
+SRR5344608
+SRR5344609
+SRR5344610
+SRR5344611
+SRR5344612
+SRR5344613
+SRR5344614
+SRR5344615
+SRR5344616
+SRR5344617"
 
+#Must have the SRAtoolkit installed and in your path, or in my case loaded through conda
+module load sratoolkit
+
+#download each file
+for sample in files
+do
+fastq-dump $sample
+done
+
+```
+
+## Step 3: Iterate over values of 'm' ranging from 3-7, while leaving all other parameters at default values.
+###Bash code to execute this:
+```{bash, eval = FALSE}
 # Build loci de novo in each sample for the single-end reads only.
 # -M — Maximum distance (in nucleotides) allowed between stacks (default 2).
 # -m — Minimum depth of coverage required to create a stack (default 3).
@@ -93,7 +84,7 @@ mkdir stacks_m$i
 id=1
 for sample in $files
 do
-    /home/d669d153/work/stacks-2.41/ustacks -f ${sample}.fq.gz -o stacks_m$i -i $id -m $i -p 15
+    /home/d669d153/work/stacks-2.41/ustacks -f fastq/${sample}.fq.gz -o stacks_m$i -i $id -m $i -p 15
     let "id+=1"
 done
 ## Run cstacks to compile stacks between samples. Popmap is a file in working directory called 'pipeline_popmap.txt'
@@ -109,15 +100,16 @@ done
 /home/d669d153/work/stacks-2.41/populations -P stacks_m$i -M pipeline_popmap.txt --vcf -t 15
 done
 ```
+
 ## Step 4: Visualize the output of these 5 runs and determine the optimal value for m.
 ```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
 #optimize_m function will generate summary stats on your 5 iterative runs
 #input can be full path to each file or just the file name if your working directory contains the files
-m.out<-optimize_m(m3="/Users/devder/Desktop/hipposideros/m_3.vcf",
-           m4="/Users/devder/Desktop/hipposideros/m_4.vcf",
-           m5="/Users/devder/Desktop/hipposideros/m_5.vcf",
-           m6="/Users/devder/Desktop/hipposideros/m_6.vcf",
-           m7="/Users/devder/Desktop/hipposideros/m_7.vcf")
+m.out<-optimize_m(m3="/Users/devder/Desktop/brown.trout/m3.vcf",
+           m4="/Users/devder/Desktop/brown.trout/m4.vcf",
+           m5="/Users/devder/Desktop/brown.trout/m5.vcf",
+           m6="/Users/devder/Desktop/brown.trout/m6.vcf",
+           m7="/Users/devder/Desktop/brown.trout/m7.vcf")
 
 #visualize the effect of varying m on the depth of each sample
 vis_depth(output = m.out)
@@ -128,6 +120,10 @@ vis_snps(output = m.out, stacks_param = "m")
 vis_loci(output = m.out, stacks_param = "m")
 
 #3 is the optimal m value, and will be used next to optimize M
+
+knitr::include_graphics("~/Desktop/Screen Shot 2021-08-16 at 10.26.29 AM.png")
+
+
 ```
 
 ## Step 5: Iterate over values of M ranging from 1-8, setting m to the optimal value (here 3).
@@ -144,7 +140,7 @@ mkdir stacks_bigM$i
 id=1
 for sample in $files
 do
-    /home/d669d153/work/stacks-2.41/ustacks -f ${sample}.fq.gz -o stacks_bigM$i -i $id -m 3 -M $i -p 15
+    /home/d669d153/work/stacks-2.41/ustacks -f fastq/${sample}.fq.gz -o stacks_bigM$i -i $id -m 3 -M $i -p 15
     let "id+=1"
 done
 /home/d669d153/work/stacks-2.41/cstacks -P stacks_bigM$i -M pipeline_popmap.txt -p 15
@@ -158,14 +154,14 @@ done
 ## Step 6: Visualize the output of these 8 runs and determine the optimal value for M.
 ```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
 #optimize M
-M.out<-optimize_bigM(M1="/Users/devder/Desktop/hipposideros/M1.vcf",
-           M2="/Users/devder/Desktop/hipposideros/M2.vcf",
-           M3="/Users/devder/Desktop/hipposideros/M3.vcf",
-           M4="/Users/devder/Desktop/hipposideros/M4.vcf",
-           M5="/Users/devder/Desktop/hipposideros/M5.vcf",
-           M6="/Users/devder/Desktop/hipposideros/M6.vcf",
-           M7="/Users/devder/Desktop/hipposideros/M7.vcf",
-           M8="/Users/devder/Desktop/hipposideros/M8.vcf")
+M.out<-optimize_bigM(M1="/Users/devder/Desktop/brown.trout/M1.vcf",
+           M2="/Users/devder/Desktop/brown.trout/M2.vcf",
+           M3="/Users/devder/Desktop/brown.trout/M3.vcf",
+           M4="/Users/devder/Desktop/brown.trout/M4.vcf",
+           M5="/Users/devder/Desktop/brown.trout/M5.vcf",
+           M6="/Users/devder/Desktop/brown.trout/M6.vcf",
+           M7="/Users/devder/Desktop/brown.trout/M7.vcf",
+           M8="/Users/devder/Desktop/brown.trout/M8.vcf")
 
 #visualize the effect of varying M on the number of SNPs retained
 vis_snps(output = M.out, stacks_param = "M")
@@ -201,16 +197,15 @@ done
 ## Step 8: Visualize the output of these 3 runs and determine the optimal value for n.
 ```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
 #optimize n
-n.out<-optimize_n(nequalsMminus1="/Users/devder/Desktop/hipposideros/n1.vcf",
-           nequalsM="/Users/devder/Desktop/hipposideros/n2.vcf",
-           nequalsMplus1="/Users/devder/Desktop/hipposideros/n3.vcf")
+n.out<-optimize_n(nequalsMminus1="/Users/devder/Desktop/brown.trout/n1.vcf",
+           nequalsM="/Users/devder/Desktop/brown.trout/n2.vcf",
+           nequalsMplus1="/Users/devder/Desktop/brown.trout/n3.vcf")
 
 #visualize the effect of varying n on the number of SNPs retained
 vis_snps(output = n.out, stacks_param = "n")
 
 #visualize the effect of varying n on the number of polymorphic loci retained
 vis_loci(output = n.out, stacks_param = "n")
-
 ```
 
 # Finally, make a single figure showing the optimization process of all three parameters

@@ -89,7 +89,7 @@ The function then uses ggplot2 to visualize the effect of the given stacks on th
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,6 +103,9 @@ The function then uses ggplot2 to visualize the effect of the given stacks on th
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/brown.trout.validation.html">Penguin Vignette</a>
+    </li>
     <li>
       <a href="../articles/optimize_denovo.html">Optimize denovo STACKS pipeline for Hipposideros bats</a>
     </li>
@@ -157,7 +160,8 @@ The function then uses ggplot2 to visualize the effect of the given stacks on th
     <p>A plot showing the number of polymorphic loci retained at each given parameter value</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>vis_loci</span><span class='op'>(</span>output<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>,<span class='st'>"optimize.m.output.RDS"</span>,package<span class='op'>=</span><span class='st'>"RADstackshelpR"</span><span class='op'>)</span><span class='op'>)</span>,
+    <pre class="examples"><div class='input'><span class='fu'>vis_loci</span><span class='op'>(</span>output <span class='op'>=</span>
+<span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>,<span class='st'>"optimize.m.output.RDS"</span>,package<span class='op'>=</span><span class='st'>"RADstackshelpR"</span>,mustWork<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>,
          stacks_param <span class='op'>=</span> <span class='st'>"m"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Visualize how different values of m affect number of polymorphic loci retained.
 #&gt; Density plot shows the distribution of the number of loci retained in each sample,

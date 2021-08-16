@@ -55,7 +55,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -70,6 +70,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/brown.trout.validation.html">Penguin Vignette</a>
+    </li>
+    <li>
       <a href="articles/optimize_denovo.html">Optimize denovo STACKS pipeline for Hipposideros bats</a>
     </li>
     <li>
@@ -90,16 +93,16 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="radstackshelpr-" class="section level1">
+<div id="radstackshelpr" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#radstackshelpr-" class="anchor"></a>RADstackshelpR <img src="reference/figures/logo.png" align="right" alt="" width="120">
+<a href="#radstackshelpr" class="anchor"></a>RADstackshelpR <img src="reference/figures/logo.png" align="right" alt="" width="120">
 </h1></div>
 <p>RADstackshelpR offers a handful of useful wrapper functions which streamline the reading, analyzing, and visualizing of variant call format (vcf) files in R. The internal calls of each function rely heavily on the excellent R package <a href="https://knausb.github.io/vcfR_documentation/">vcfR</a> to read in and analyze vcf files, and the widely renowned <a href="https://ggplot2.tidyverse.org/">ggplot2</a> package to create elegant visualizations. This package was designed to facilitate an explicit pipeline for optimizing <a href="https://catchenlab.life.illinois.edu/stacks/">STACKS</a> paramaters during de novo (without a reference genome) assembly and variant calling of restriction-enzyme associated DNA sequence (RADseq) data. STACKS is a relatively user-friendly, command-line program designed for assembling RADseq data into loci, and performing variant (SNP) calling. STACKS offers users flexibility in setting parameters during the assembly process, allowing custom parameter optimization for any input dataset. The pipeline implemented here is based on the 2017 paper <a href="https://doi.org/10.1111/2041-210X.12775">Lost in Parameter Space</a> which establishes clear recommendations for optimizing the parameters ‘m’, ‘M’, and ‘n’, during the process of assembling loci.</p>
 <p>Despite these clear recommendations, the full range of parameter space suggested to explore in this paper is often left unexplored in empirical studies, due to the computational and logistical difficulty of executing and analyzing 16 separate runs through the entire STACKS pipeline. This package is designed to automate that logistical difficulty, leaving users with a clear set of steps to follow for thoroughly optimized, de novo RAD locus assembly and variant calling. For more details on RADstackshelpR please check out this <a href="https://devonderaad.github.io/RADstackshelpR/index.html">website</a> built using <a href="https://pkgdown.r-lib.org/">pkgdown</a>. Otherwise, simply follow the steps below to run the optimized de novo assembly pipeline.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Install development version from GitHub</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"DevonDeRaad/RADstackshelpR"</span><span class="op">)</span></code></pre></div>
 </div>
@@ -110,54 +113,54 @@
 <div id="demultiplex" class="section level3">
 <h3 class="hasAnchor">
 <a href="#demultiplex" class="anchor"></a>Demultiplex</h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/process_radtags</span> <span class="at">-p</span> .  <span class="at">-o</span> . <span class="at">-b</span> plate.1.barcodes.txt <span class="at">-e</span> ndeI <span class="at">-r</span> <span class="at">-c</span> <span class="at">-q</span></span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">/home/path/to/stacks-2.41/process_radtags</span> -p .  -o . -b plate.1.barcodes.txt -e ndeI -r -c -q</code></pre></div>
 <p>More details on demultiplexing using process_radtags can be found <a href="https://catchenlab.life.illinois.edu/stacks/comp/process_radtags.php">here</a></p>
 </div>
 <div id="iterate-over-potential-values-for-the-m-parameter-in-the-ustacks-module" class="section level3">
 <h3 class="hasAnchor">
 <a href="#iterate-over-potential-values-for-the-m-parameter-in-the-ustacks-module" class="anchor"></a>Iterate over potential values for the ‘m’ parameter in the ‘ustacks’ module</h3>
 <p>Once you have an individual zipped fastq file for each sample, we need to iterate over the relevant values for ‘m’ within the ‘ustacks’ module (here using 15 threads at each step to speed up computation). Running the following code in a terminal window will perform five separate iterations of the entire STACKS pipeline, each with a different parameter setting for ‘m’ (3-7), and save the results as an unfiltered vcf file in a specified directory.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#designate all sample ID's to a single variable called 'files', each sample should be in the directory, and the filename should match this designation except for the extension, e.g., 'sample_2' = 'sample_2.fq.gz'</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="va">files</span><span class="op">=</span><span class="st">"sample_1</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">sample_2</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">sample_3</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">sample_4</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">sample_5"</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Build loci de novo in each sample for the single-end reads only.</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># -M — Maximum distance (in nucleotides) allowed between stacks (default 2).</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># -m — Minimum depth of coverage required to create a stack (default 3).</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#here, we will vary m from 3-7, and leave all other paramaters default</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="dt">{</span><span class="dv">3</span><span class="dt">..</span><span class="dv">7</span><span class="dt">}</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#create a directory to hold this unique iteration:</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> stacks_m<span class="va">$i</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#run ustacks with m equal to the current iteration (3-7) for each sample</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="va">id</span><span class="op">=</span>1</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sample <span class="kw">in</span> <span class="va">$files</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/home/path/to/stacks-2.41/ustacks</span> <span class="at">-f</span> <span class="va">${sample}</span>.fq.gz <span class="at">-o</span> stacks_m<span class="va">$i</span> <span class="at">-i</span> <span class="va">$id</span> <span class="at">-m</span> <span class="va">$i</span> <span class="at">-p</span> 15</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="bu">let</span> <span class="st">"id+=1"</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">## Run cstacks to compile stacks between samples. Popmap is a file in working directory called 'pipeline_popmap.txt'</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/cstacks</span> <span class="at">-P</span> stacks_m<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-p</span> 15</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">## Run sstacks. Match all samples supplied in the population map against the catalog.</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/sstacks</span> <span class="at">-P</span> stacks_m<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-p</span> 15</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">## Run tsv2bam to transpose the data so it is stored by locus, instead of by sample.</span></span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/tsv2bam</span> <span class="at">-P</span> stacks_m<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-t</span> 15</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">## Run gstacks: build a paired-end contig from the metapopulation data (if paired-reads provided),</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">## align reads per sample, call variant sites in the population, genotypes in each individual.</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/gstacks</span> <span class="at">-P</span> stacks_m<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-t</span> 15</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">## Run populations completely unfiltered and output unfiltered vcf, for input to the RADstackshelpR package</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/populations</span> <span class="at">-P</span> stacks_m<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">--vcf</span> <span class="at">-t</span> 15</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
-<p>You should now have five directories, named: stacks_m3, stacks_m4, stacks_m5, stacks_m6, &amp; stacks_m7, each of which contains an vcf file with all called SNPs for the given parameter settings (i.e., stacks_m3 = the directory containing output from the iteration where ‘m’ was set to 3). Now we will use RADstackshelpR to determine which of these parameter settings (m = 3-7) is optimal for this dataset according to the ‘R80’ cutoff (see <a href="%3Chttps://doi.org/10.1111/2041-210X.12775">Lost in Parameter Space</a>). I have now moved each vcf file into a local directory, and named it according to the parameter settings for the given run.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#designate all sample ID's to a single variable called 'files', each sample should be in the directory, and the filename should match this designation except for the extension, e.g., 'sample_2' = 'sample_2.fq.gz'</span>
+<span class="va">files=</span><span class="st">"sample_1</span>
+<span class="st">sample_2</span>
+<span class="st">sample_3</span>
+<span class="st">sample_4</span>
+<span class="st">sample_5"</span>
+
+<span class="co"># Build loci de novo in each sample for the single-end reads only.</span>
+<span class="co"># -M — Maximum distance (in nucleotides) allowed between stacks (default 2).</span>
+<span class="co"># -m — Minimum depth of coverage required to create a stack (default 3).</span>
+<span class="co">#here, we will vary m from 3-7, and leave all other paramaters default</span>
+
+<span class="kw">for</span> <span class="ex">i</span> in <span class="dt">{3..7}</span>
+<span class="kw">do</span>
+<span class="co">#create a directory to hold this unique iteration:</span>
+<span class="fu">mkdir</span> stacks_m<span class="va">$i</span>
+<span class="co">#run ustacks with m equal to the current iteration (3-7) for each sample</span>
+<span class="va">id=</span>1
+<span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$files</span>
+<span class="kw">do</span>
+    <span class="ex">/home/path/to/stacks-2.41/ustacks</span> -f <span class="va">${sample}</span>.fq.gz -o stacks_m<span class="va">$i</span> -i <span class="va">$id</span> -m <span class="va">$i</span> -p 15
+    <span class="bu">let</span> <span class="st">"id+=1"</span>
+<span class="kw">done</span>
+<span class="co">## Run cstacks to compile stacks between samples. Popmap is a file in working directory called 'pipeline_popmap.txt'</span>
+<span class="ex">/home/path/to/stacks-2.41/cstacks</span> -P stacks_m<span class="va">$i</span> -M pipeline_popmap.txt -p 15
+<span class="co">## Run sstacks. Match all samples supplied in the population map against the catalog.</span>
+<span class="ex">/home/path/to/stacks-2.41/sstacks</span> -P stacks_m<span class="va">$i</span> -M pipeline_popmap.txt -p 15
+<span class="co">## Run tsv2bam to transpose the data so it is stored by locus, instead of by sample.</span>
+<span class="ex">/home/path/to/stacks-2.41/tsv2bam</span> -P stacks_m<span class="va">$i</span> -M pipeline_popmap.txt -t 15
+<span class="co">## Run gstacks: build a paired-end contig from the metapopulation data (if paired-reads provided),</span>
+<span class="co">## align reads per sample, call variant sites in the population, genotypes in each individual.</span>
+<span class="ex">/home/path/to/stacks-2.41/gstacks</span> -P stacks_m<span class="va">$i</span> -M pipeline_popmap.txt -t 15
+<span class="co">## Run populations completely unfiltered and output unfiltered vcf, for input to the RADstackshelpR package</span>
+<span class="ex">/home/path/to/stacks-2.41/populations</span> -P stacks_m<span class="va">$i</span> -M pipeline_popmap.txt --vcf -t 15
+<span class="kw">done</span></code></pre></div>
+<p>You should now have five directories, named: stacks_m3, stacks_m4, stacks_m5, stacks_m6, &amp; stacks_m7, each of which contains an vcf file with all called SNPs for the given parameter settings (i.e., stacks_m3 = the directory containing output from the iteration where ‘m’ was set to 3). Now we will use RADstackshelpR to determine which of these parameter settings (m = 3-7) is optimal for this dataset according to the ‘R80’ cutoff (see <a href="https://doi.org/10.1111/2041-210X.12775">Lost in Parameter Space</a>). I have now moved each vcf file into a local directory, and named it according to the parameter settings for the given run.</p>
 </div>
-<div id="use-radstackshelpr-to-visualize-the-output-of-these-5-runs-and-determine-the-optimal-value-for-the-parameter-m" class="section level3">
+<div id="use-radstackshelpr-to-visualize-the-output-of-these-5-runs-and-determine-the-optimal-value-for-the-parameter-m-" class="section level3">
 <h3 class="hasAnchor">
-<a href="#use-radstackshelpr-to-visualize-the-output-of-these-5-runs-and-determine-the-optimal-value-for-the-parameter-m" class="anchor"></a>Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter ‘m’.</h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<a href="#use-radstackshelpr-to-visualize-the-output-of-these-5-runs-and-determine-the-optimal-value-for-the-parameter-m-" class="anchor"></a>Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter ‘m’.</h3>
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#load RADstackshelpR package</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RADstackshelpR</span><span class="op">)</span>
 
@@ -176,7 +179,7 @@
 <span class="co">#&gt; [1] "Visualize how different values of m affect average depth in each sample"</span>
 <span class="co">#&gt; Picking joint bandwidth of 9.53</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-5-1.png" width="65%" height="65%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#visualize the effect of varying m on the number of SNPs retained</span>
 <span class="fu"><a href="reference/vis_snps.html">vis_snps</a></span><span class="op">(</span>output <span class="op">=</span> <span class="va">m.out</span>, stacks_param <span class="op">=</span> <span class="st">"m"</span><span class="op">)</span>
 <span class="co">#&gt; Visualize how different values of m affect number of SNPs retained.</span>
@@ -184,7 +187,7 @@
 <span class="co">#&gt; while the asterisk denotes the total number of SNPs retained at an 80% completeness cutoff.</span>
 <span class="co">#&gt; Picking joint bandwidth of 7190</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-5-2.png" width="65%" height="65%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#visualize the effect of varying m on the number of loci retained</span>
 <span class="fu"><a href="reference/vis_loci.html">vis_loci</a></span><span class="op">(</span>output <span class="op">=</span> <span class="va">m.out</span>, stacks_param <span class="op">=</span> <span class="st">"m"</span><span class="op">)</span>
 <span class="co">#&gt; Visualize how different values of m affect number of polymorphic loci retained.</span>
@@ -192,40 +195,40 @@
 <span class="co">#&gt; while the asterisk denotes the total number of loci retained at an 80% completeness cutoff. The optimal value is denoted by red color.</span>
 <span class="co">#&gt; Picking joint bandwidth of 3420</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-5-3.png" width="65%" height="65%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#3 is the optimal m value, and will be used next to optimize M</span></code></pre></div>
 </div>
 <div id="iterate-over-potential-values-for-the-m-parameter-in-the-ustacks-module-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#iterate-over-potential-values-for-the-m-parameter-in-the-ustacks-module-1" class="anchor"></a>Iterate over potential values for the ‘M’ parameter in the ‘ustacks’ module</h3>
 <p>Now that we know the optimal value for ‘m’ is 3, we will repeat the process of iterating over parameter values in STACKS, this time varying the ‘M’ parameter from 1-8 within the ‘ustacks’ module. In this example, we again use 15 threads to speed up each step. Execute the following code in a terminal window:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># -M — Maximum distance (in nucleotides) allowed between stacks (default 2).</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># -m — Minimum depth of coverage required to create a stack (default 3).</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#here, vary M from 1-8, and set m to the optimized value based on prior visualizations (here 3)</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="dt">{</span><span class="dv">1</span><span class="dt">..</span><span class="dv">8</span><span class="dt">}</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#create a directory to hold this unique iteration:</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> stacks_bigM<span class="va">$i</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#run ustacks with M equal to the current iteration (1-8) for each sample, and m set to the optimized value (here, m=3)</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="va">id</span><span class="op">=</span>1</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sample <span class="kw">in</span> <span class="va">$files</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/home/path/to/stacks-2.41/ustacks</span> <span class="at">-f</span> <span class="va">${sample}</span>.fq.gz <span class="at">-o</span> stacks_bigM<span class="va">$i</span> <span class="at">-i</span> <span class="va">$id</span> <span class="at">-m</span> 3 <span class="at">-M</span> <span class="va">$i</span> <span class="at">-p</span> 15</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="bu">let</span> <span class="st">"id+=1"</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/cstacks</span> <span class="at">-P</span> stacks_bigM<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-p</span> 15</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/sstacks</span> <span class="at">-P</span> stacks_bigM<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-p</span> 15</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/tsv2bam</span> <span class="at">-P</span> stacks_bigM<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-t</span> 15</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/gstacks</span> <span class="at">-P</span> stacks_bigM<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-t</span> 15</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/populations</span> <span class="at">-P</span> stacks_bigM<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">--vcf</span> <span class="at">-t</span> 15</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># -M — Maximum distance (in nucleotides) allowed between stacks (default 2).</span>
+<span class="co"># -m — Minimum depth of coverage required to create a stack (default 3).</span>
+<span class="co">#here, vary M from 1-8, and set m to the optimized value based on prior visualizations (here 3)</span>
+
+<span class="kw">for</span> <span class="ex">i</span> in <span class="dt">{1..8}</span>
+<span class="kw">do</span>
+<span class="co">#create a directory to hold this unique iteration:</span>
+<span class="fu">mkdir</span> stacks_bigM<span class="va">$i</span>
+<span class="co">#run ustacks with M equal to the current iteration (1-8) for each sample, and m set to the optimized value (here, m=3)</span>
+<span class="va">id=</span>1
+<span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$files</span>
+<span class="kw">do</span>
+    <span class="ex">/home/path/to/stacks-2.41/ustacks</span> -f <span class="va">${sample}</span>.fq.gz -o stacks_bigM<span class="va">$i</span> -i <span class="va">$id</span> -m 3 -M <span class="va">$i</span> -p 15
+    <span class="bu">let</span> <span class="st">"id+=1"</span>
+<span class="kw">done</span>
+<span class="ex">/home/path/to/stacks-2.41/cstacks</span> -P stacks_bigM<span class="va">$i</span> -M pipeline_popmap.txt -p 15
+<span class="ex">/home/path/to/stacks-2.41/sstacks</span> -P stacks_bigM<span class="va">$i</span> -M pipeline_popmap.txt -p 15
+<span class="ex">/home/path/to/stacks-2.41/tsv2bam</span> -P stacks_bigM<span class="va">$i</span> -M pipeline_popmap.txt -t 15
+<span class="ex">/home/path/to/stacks-2.41/gstacks</span> -P stacks_bigM<span class="va">$i</span> -M pipeline_popmap.txt -t 15
+<span class="ex">/home/path/to/stacks-2.41/populations</span> -P stacks_bigM<span class="va">$i</span> -M pipeline_popmap.txt --vcf -t 15
+<span class="kw">done</span></code></pre></div>
 <p>You should now have eight directories, named: stacks_bigM1, stacks_bigM2, … stacks_bigM8,, each of which contains an vcf file with all called SNPs for the given parameter settings. I have again moved each vcf file into a local directory, and named it according to the parameter settings for the given run.</p>
 </div>
-<div id="use-radstackshelpr-to-visualize-the-output-of-these-8-runs-and-determine-the-optimal-value-for-the-parameter-m" class="section level3">
+<div id="use-radstackshelpr-to-visualize-the-output-of-these-8-runs-and-determine-the-optimal-value-for-the-parameter-m-" class="section level3">
 <h3 class="hasAnchor">
-<a href="#use-radstackshelpr-to-visualize-the-output-of-these-8-runs-and-determine-the-optimal-value-for-the-parameter-m" class="anchor"></a>Use RADstackshelpR to visualize the output of these 8 runs and determine the optimal value for the parameter ‘M’.</h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<a href="#use-radstackshelpr-to-visualize-the-output-of-these-8-runs-and-determine-the-optimal-value-for-the-parameter-m-" class="anchor"></a>Use RADstackshelpR to visualize the output of these 8 runs and determine the optimal value for the parameter ‘M’.</h3>
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#optimize_bigM function will generate summary stats on your 8 iterative runs</span>
 <span class="va">M.out</span><span class="op">&lt;-</span><span class="fu"><a href="reference/optimize_bigM.html">optimize_bigM</a></span><span class="op">(</span>M1<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M1.vcf"</span>,
            M2<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M2.vcf"</span>,
@@ -245,7 +248,7 @@
 <span class="co">#&gt; while the asterisk denotes the total number of SNPs retained at an 80% completeness cutoff.</span>
 <span class="co">#&gt; Picking joint bandwidth of 6090</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-7-1.png" width="65%" height="65%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#visualize the effect of varying 'M' on the number of polymorphic loci retained</span>
 <span class="fu"><a href="reference/vis_loci.html">vis_loci</a></span><span class="op">(</span>output <span class="op">=</span> <span class="va">M.out</span>, stacks_param <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span>
 <span class="co">#&gt; Visualize how different values of M affect number of polymorphic loci retained.</span>
@@ -253,7 +256,7 @@
 <span class="co">#&gt; while the asterisk denotes the total number of loci retained at an 80% completeness cutoff. The optimal value is denoted by red color.</span>
 <span class="co">#&gt; Picking joint bandwidth of 2920</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-7-2.png" width="65%" height="65%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">#optimal value for this dataset is M = 2</span></code></pre></div>
 </div>
@@ -261,31 +264,31 @@
 <h3 class="hasAnchor">
 <a href="#iterate-over-potential-values-for-the-n-parameter-in-the-cstacks-module" class="anchor"></a>Iterate over potential values for the ‘n’ parameter in the ‘cstacks’ module</h3>
 <p>For the last optimization iteration, we will vary the ‘n’ parameter within the ‘cstacks’ module, using the previously optimized values for ‘m’ and ‘M’, by running the following code in a terminal window:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># -n — Number of mismatches allowed between sample loci when build the catalog (default 1).</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#here, vary 'n' across M-1, M, and M+1 (because my optimized 'M' value = 2, I will iterate over 1, 2, and 3 here), with 'm' and 'M' set to the optimized value based on prior visualizations (here 'm' = 3, and 'M'=2).</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="dt">{</span><span class="dv">1</span><span class="dt">..</span><span class="dv">3</span><span class="dt">}</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#create a directory to hold this unique iteration:</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> stacks_n<span class="va">$i</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#run ustacks with n equal to the current iteration (1-3) for each sample, m = 3, and M=2</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="va">id</span><span class="op">=</span>1</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sample <span class="kw">in</span> <span class="va">$files</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">/home/path/to/stacks-2.41/ustacks</span> <span class="at">-f</span> <span class="va">${sample}</span>.fq.gz <span class="at">-o</span> stacks_n<span class="va">$i</span> <span class="at">-i</span> <span class="va">$id</span> <span class="at">-m</span> 3 <span class="at">-M</span> 2 <span class="at">-p</span> 15</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">let</span> <span class="st">"id+=1"</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/cstacks</span> <span class="at">-n</span> <span class="va">$i</span> <span class="at">-P</span> stacks_n<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-p</span> 15</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/sstacks</span> <span class="at">-P</span> stacks_n<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-p</span> 15</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/tsv2bam</span> <span class="at">-P</span> stacks_n<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-t</span> 15</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/gstacks</span> <span class="at">-P</span> stacks_n<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">-t</span> 15</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="ex">/home/path/to/stacks-2.41/populations</span> <span class="at">-P</span> stacks_n<span class="va">$i</span> <span class="at">-M</span> pipeline_popmap.txt <span class="at">--vcf</span> <span class="at">-t</span> 15</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># -n — Number of mismatches allowed between sample loci when build the catalog (default 1).</span>
+<span class="co">#here, vary 'n' across M-1, M, and M+1 (because my optimized 'M' value = 2, I will iterate over 1, 2, and 3 here), with 'm' and 'M' set to the optimized value based on prior visualizations (here 'm' = 3, and 'M'=2).</span>
+
+<span class="kw">for</span> <span class="ex">i</span> in <span class="dt">{1..3}</span>
+<span class="kw">do</span>
+<span class="co">#create a directory to hold this unique iteration:</span>
+<span class="fu">mkdir</span> stacks_n<span class="va">$i</span>
+<span class="co">#run ustacks with n equal to the current iteration (1-3) for each sample, m = 3, and M=2</span>
+<span class="va">id=</span>1
+<span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$files</span>
+<span class="kw">do</span>
+    <span class="ex">/home/path/to/stacks-2.41/ustacks</span> -f <span class="va">${sample}</span>.fq.gz -o stacks_n<span class="va">$i</span> -i <span class="va">$id</span> -m 3 -M 2 -p 15
+    <span class="bu">let</span> <span class="st">"id+=1"</span>
+<span class="kw">done</span>
+<span class="ex">/home/path/to/stacks-2.41/cstacks</span> -n <span class="va">$i</span> -P stacks_n<span class="va">$i</span> -M pipeline_popmap.txt -p 15
+<span class="ex">/home/path/to/stacks-2.41/sstacks</span> -P stacks_n<span class="va">$i</span> -M pipeline_popmap.txt -p 15
+<span class="ex">/home/path/to/stacks-2.41/tsv2bam</span> -P stacks_n<span class="va">$i</span> -M pipeline_popmap.txt -t 15
+<span class="ex">/home/path/to/stacks-2.41/gstacks</span> -P stacks_n<span class="va">$i</span> -M pipeline_popmap.txt -t 15
+<span class="ex">/home/path/to/stacks-2.41/populations</span> -P stacks_n<span class="va">$i</span> -M pipeline_popmap.txt --vcf -t 15
+<span class="kw">done</span></code></pre></div>
 </div>
-<div id="use-radstackshelpr-to-visualize-the-output-of-these-3-runs-and-determine-the-optimal-value-for-n" class="section level3">
+<div id="use-radstackshelpr-to-visualize-the-output-of-these-3-runs-and-determine-the-optimal-value-for-n-" class="section level3">
 <h3 class="hasAnchor">
-<a href="#use-radstackshelpr-to-visualize-the-output-of-these-3-runs-and-determine-the-optimal-value-for-n" class="anchor"></a>Use RADstackshelpR to visualize the output of these 3 runs and determine the optimal value for ‘n’.</h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<a href="#use-radstackshelpr-to-visualize-the-output-of-these-3-runs-and-determine-the-optimal-value-for-n-" class="anchor"></a>Use RADstackshelpR to visualize the output of these 3 runs and determine the optimal value for ‘n’.</h3>
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#optimize n</span>
 <span class="va">n.out</span><span class="op">&lt;-</span><span class="fu"><a href="reference/optimize_n.html">optimize_n</a></span><span class="op">(</span>nequalsMminus1<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/n1.vcf"</span>,
            nequalsM<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/n2.vcf"</span>,
@@ -300,7 +303,7 @@
 <span class="co">#&gt; while the asterisk denotes the total number of SNPs retained at an 80% completeness cutoff.</span>
 <span class="co">#&gt; Picking joint bandwidth of 7420</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-9-1.png" width="65%" height="65%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#visualize the effect of varying n on the number of polymorphic loci retained</span>
 <span class="fu"><a href="reference/vis_loci.html">vis_loci</a></span><span class="op">(</span>output <span class="op">=</span> <span class="va">n.out</span>, stacks_param <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span>
 <span class="co">#&gt; Visualize how different values of n affect number of polymorphic loci retained.</span>
@@ -311,7 +314,7 @@
 <div id="if-you-would-like-you-can-make-a-single-figure-simultaneously-illustrating-the-optimization-process-of-all-three-key-parameters" class="section level4">
 <h4 class="hasAnchor">
 <a href="#if-you-would-like-you-can-make-a-single-figure-simultaneously-illustrating-the-optimization-process-of-all-three-key-parameters" class="anchor"></a>If you would like, you can make a single figure simultaneously illustrating the optimization process of all three key parameters</h4>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#load gridExtra package to combine ggplot visualizations</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span>
 
@@ -358,7 +361,7 @@
 <span class="co">#&gt; Picking joint bandwidth of 7420</span>
 <span class="co">#&gt; Picking joint bandwidth of 3230</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-10-1.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">#Note: if you are an R whiz and prefer to make your own visualizations, the functions starting with 'optimize_' are designed</span>
 <span class="co">#to be modular, and return to you a list of 'data.frame' objects which you can use to make your own custom visualizations.</span></code></pre></div>

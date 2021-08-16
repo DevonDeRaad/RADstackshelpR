@@ -89,7 +89,7 @@ The function then uses ggplot2 to visualize the effect of m on depth." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,6 +103,9 @@ The function then uses ggplot2 to visualize the effect of m on depth." />
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/brown.trout.validation.html">Penguin Vignette</a>
+    </li>
     <li>
       <a href="../articles/optimize_denovo.html">Optimize denovo STACKS pipeline for Hipposideros bats</a>
     </li>
@@ -153,7 +156,8 @@ The function then uses ggplot2 to visualize the effect of m on depth.</p>
     <p>A plot showing the depth of each sample at each given m value</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>vis_depth</span><span class='op'>(</span>output<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>,<span class='st'>"optimize.m.output.RDS"</span>,package<span class='op'>=</span><span class='st'>"RADstackshelpR"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='fu'>vis_depth</span><span class='op'>(</span>output <span class='op'>=</span>
+<span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>,<span class='st'>"optimize.m.output.RDS"</span>,package<span class='op'>=</span><span class='st'>"RADstackshelpR"</span>,mustWork<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; [1] "Visualize how different values of m affect average depth in each sample"</div><div class='output co'>#&gt; <span class='message'>Picking joint bandwidth of 11.9</span></div><div class='img'><img src='vis_depth-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

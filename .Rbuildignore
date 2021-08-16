@@ -1,6 +1,7 @@
 ^RADstackshelpR\.Rproj$
 ^\.Rproj\.user$
 ^doc$
+^paper$
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
@@ -8,4 +9,6 @@
 ^LICENSE\.md$
 ^README.Rmd$
 ^vignettes/optimize_denovo.Rmd$
+^vignettes/brown.trout.validation.Rmd$
 ^Meta$
+^cran-comments\.md$
