@@ -120,11 +120,15 @@ vis_snps(output = m.out, stacks_param = "m")
 vis_loci(output = m.out, stacks_param = "m")
 
 #3 is the optimal m value, and will be used next to optimize M
-
-knitr::include_graphics("~/Desktop/Screen Shot 2021-08-16 at 10.26.29 AM.png")
-
-
 ```
+
+### Here we can see the results from Paris et al. (2017) optimizing the 'm' parameter for this same dataset.
+
+```{r}
+knitr::include_graphics("~/Desktop/Screen Shot 2021-08-16 at 10.26.29 AM.png")
+```
+
+### We can see that the numbers of SNPs and polymorphic loci recovered using each scheme are not exactly the same as the numbers that we recovered here. This is likely because I am using Stacks v2.41 and this paper used Stacks v1.42. Nonetheless, we see the same pattern (a decreasing number of polymorphic loci at an 'R80' cutoff going iteratively from m=3 -> m=7).
 
 ## Step 5: Iterate over values of M ranging from 1-8, setting m to the optimal value (here 3).
 ### This code follows the bash chunk above, utilizing the same variable $files
@@ -169,6 +173,14 @@ vis_snps(output = M.out, stacks_param = "M")
 #visualize the effect of varying M on the number of polymorphic loci retained
 vis_loci(output = M.out, stacks_param = "M")
 ```
+
+### Here we can see the results from Paris et al. (2017) optimizing the 'M' parameter for this same dataset.
+
+```{r}
+knitr::include_graphics("~/Desktop/Screen Shot 2021-08-16 at 10.26.29 AM.png")
+```
+
+### We can see that the numbers of SNPs and polymorphic loci recovered using each scheme are not exactly the same as the numbers that we recovered here. This is likely because I am using Stacks v2.41 and this paper used Stacks v1.42. Nonetheless, we see the same pattern (a decreasing number of polymorphic loci at an 'R80' cutoff going iteratively from m=3 -> m=7).
 
 ## Step 7: Iterate over values of n ranging from M-1, M, M+1, setting m and M to the optimal values (here 3 and 2, respectively).
 ### This code chunk runs the last three Stacks iterations, again re-using the variable $files
