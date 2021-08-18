@@ -125,7 +125,7 @@ vis_loci(output = m.out, stacks_param = "m")
 ### Here we can see the results from Paris et al. (2017) optimizing the 'm' parameter for this same dataset.
 
 ```{r}
-knitr::include_graphics("/Users/devder/Desktop/Screen Shot 2021-08-16 at 10.26.29 AM.png")
+knitr::include_graphics("trt.m.png")
 ```
 
 ### The green dots here are the 80% completeness threshold (R80), and we can see that the numbers of SNPs and polymorphic loci recovered using each scheme are not exactly the same as the numbers that we recovered here. This is likely because I am using Stacks v2.41 and this paper used Stacks v1.42. Nonetheless, we see the same pattern (a decreasing number of polymorphic loci at an 'R80' cutoff going iteratively from m=3 -> m=7).
@@ -177,7 +177,7 @@ vis_loci(output = M.out, stacks_param = "M")
 ### Here we can see the results from Paris et al. (2017) optimizing the 'M' parameter for this same dataset.
 
 ```{r}
-knitr::include_graphics(system.file("articles","brown.trout.validation_files", "trt.bigM.png", package="RADstackshelpR",mustWork=TRUE))
+knitr::include_graphics("trt.bigM.png")
 ```
 
 ### Again, the green dots here are the R80 cutoff. These iterations using Stacks v1.42 do not show the same steep drop-off in the number of polymorphic loci retained at higher 'M' values that we see using Stacks v2.41. This result highlights the necessity of optimizing parameters according to the optimal output for the specific dataset and specific software being used. 

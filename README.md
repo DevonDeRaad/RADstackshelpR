@@ -1,24 +1,55 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-RADstackshelpR <img src="man/figures/logo.png" align="right" alt="" width="120" />
-==================================================================================
 
-RADstackshelpR offers a handful of useful wrapper functions which streamline the reading, analyzing, and visualizing of variant call format (vcf) files in R. The internal calls of each function rely heavily on the excellent R package [vcfR](https://knausb.github.io/vcfR_documentation/) to read in and analyze vcf files, and the widely renowned [ggplot2](https://ggplot2.tidyverse.org/) package to create elegant visualizations. This package was designed to facilitate an explicit pipeline for optimizing [STACKS](https://catchenlab.life.illinois.edu/stacks/) paramaters during de novo (without a reference genome) assembly and variant calling of restriction-enzyme associated DNA sequence (RADseq) data. STACKS is a relatively user-friendly, command-line program designed for assembling RADseq data into loci, and performing variant (SNP) calling. STACKS offers users flexibility in setting parameters during the assembly process, allowing custom parameter optimization for any input dataset. The pipeline implemented here is based on the 2017 paper [Lost in Parameter Space](https://doi.org/10.1111/2041-210X.12775) which establishes clear recommendations for optimizing the parameters 'm', 'M', and 'n', during the process of assembling loci.
+# RADstackshelpR <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
-Despite these clear recommendations, the full range of parameter space suggested to explore in this paper is often left unexplored in empirical studies, due to the computational and logistical difficulty of executing and analyzing 16 separate runs through the entire STACKS pipeline. This package is designed to automate that logistical difficulty, leaving users with a clear set of steps to follow for thoroughly optimized, de novo RAD locus assembly and variant calling. For more details on RADstackshelpR please check out this [website](https://devonderaad.github.io/RADstackshelpR/index.html) built using [pkgdown](https://pkgdown.r-lib.org/). Otherwise, simply follow the steps below to run the optimized de novo assembly pipeline.
+RADstackshelpR offers a handful of useful wrapper functions which
+streamline the reading, analyzing, and visualizing of variant call
+format (vcf) files in R. The internal calls of each function rely
+heavily on the excellent R package
+[vcfR](https://knausb.github.io/vcfR_documentation/) to read in and
+analyze vcf files, and the widely renowned
+[ggplot2](https://ggplot2.tidyverse.org/) package to create elegant
+visualizations. This package was designed to facilitate an explicit
+pipeline for optimizing
+[STACKS](https://catchenlab.life.illinois.edu/stacks/) paramaters during
+de novo (without a reference genome) assembly and variant calling of
+restriction-enzyme associated DNA sequence (RADseq) data. STACKS is a
+relatively user-friendly, command-line program designed for assembling
+RADseq data into loci, and performing variant (SNP) calling. STACKS
+offers users flexibility in setting parameters during the assembly
+process, allowing custom parameter optimization for any input dataset.
+The pipeline implemented here is based on the 2017 paper [Lost in
+Parameter Space](https://doi.org/10.1111/2041-210X.12775) which
+establishes clear recommendations for optimizing the parameters ‘m’,
+‘M’, and ‘n’, during the process of assembling loci.
 
-Installation
-------------
+Despite these clear recommendations, the full range of parameter space
+suggested to explore in this paper is often left unexplored in empirical
+studies, due to the computational and logistical difficulty of executing
+and analyzing 16 separate runs through the entire STACKS pipeline. This
+package is designed to automate that logistical difficulty, leaving
+users with a clear set of steps to follow for thoroughly optimized, de
+novo RAD locus assembly and variant calling. For more details on
+RADstackshelpR please check out this
+[website](https://devonderaad.github.io/RADstackshelpR/index.html) built
+using [pkgdown](https://pkgdown.r-lib.org/). Otherwise, simply follow
+the steps below to run the optimized de novo assembly pipeline.
+
+## Installation
 
 ``` r
 # Install development version from GitHub
 devtools::install_github("DevonDeRaad/RADstackshelpR")
 ```
 
-Usage
------
+## Usage
 
-The first step is demultiplexing your sequence data using the 'process\_radtags' function from STACKS, which could be executed by running something like this in a terminal window, if your raw sequence file is in your working directory, and you used the enzyme 'ndeI' as your cutter:
+The first step is demultiplexing your sequence data using the
+‘process\_radtags’ function from STACKS, which could be executed by
+running something like this in a terminal window, if your raw sequence
+file is in your working directory, and you used the enzyme ‘ndeI’ as
+your cutter:
 
 ### Demultiplex
 
@@ -26,11 +57,18 @@ The first step is demultiplexing your sequence data using the 'process\_radtags'
 /home/path/to/stacks-2.41/process_radtags -p .  -o . -b plate.1.barcodes.txt -e ndeI -r -c -q
 ```
 
-More details on demultiplexing using process\_radtags can be found [here](https://catchenlab.life.illinois.edu/stacks/comp/process_radtags.php)
+More details on demultiplexing using process\_radtags can be found
+[here](https://catchenlab.life.illinois.edu/stacks/comp/process_radtags.php)
 
-### Iterate over potential values for the 'm' parameter in the 'ustacks' module
+### Iterate over potential values for the ‘m’ parameter in the ‘ustacks’ module
 
-Once you have an individual zipped fastq file for each sample, we need to iterate over the relevant values for 'm' within the 'ustacks' module (here using 15 threads at each step to speed up computation). Running the following code in a terminal window will perform five separate iterations of the entire STACKS pipeline, each with a different parameter setting for 'm' (3-7), and save the results as an unfiltered vcf file in a specified directory.
+Once you have an individual zipped fastq file for each sample, we need
+to iterate over the relevant values for ‘m’ within the ‘ustacks’ module
+(here using 15 threads at each step to speed up computation). Running
+the following code in a terminal window will perform five separate
+iterations of the entire STACKS pipeline, each with a different
+parameter setting for ‘m’ (3-7), and save the results as an unfiltered
+vcf file in a specified directory.
 
 ``` bash
 #designate all sample ID's to a single variable called 'files', each sample should be in the directory, and the filename should match this designation except for the extension, e.g., 'sample_2' = 'sample_2.fq.gz'
@@ -70,9 +108,18 @@ done
 done
 ```
 
-You should now have five directories, named: stacks\_m3, stacks\_m4, stacks\_m5, stacks\_m6, & stacks\_m7, each of which contains an vcf file with all called SNPs for the given parameter settings (i.e., stacks\_m3 = the directory containing output from the iteration where 'm' was set to 3). Now we will use RADstackshelpR to determine which of these parameter settings (m = 3-7) is optimal for this dataset according to the 'R80' cutoff (see [Lost in Parameter Space](https://doi.org/10.1111/2041-210X.12775)). I have now moved each vcf file into a local directory, and named it according to the parameter settings for the given run.
+You should now have five directories, named: stacks\_m3, stacks\_m4,
+stacks\_m5, stacks\_m6, & stacks\_m7, each of which contains an vcf file
+with all called SNPs for the given parameter settings (i.e., stacks\_m3
+= the directory containing output from the iteration where ‘m’ was set
+to 3). Now we will use RADstackshelpR to determine which of these
+parameter settings (m = 3-7) is optimal for this dataset according to
+the ‘R80’ cutoff (see [Lost in Parameter
+Space](https://doi.org/10.1111/2041-210X.12775)). I have now moved each
+vcf file into a local directory, and named it according to the parameter
+settings for the given run.
 
-### Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter 'm'.
+### Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter ‘m’.
 
 ``` r
 #load RADstackshelpR package
@@ -122,9 +169,13 @@ vis_loci(output = m.out, stacks_param = "m")
 #3 is the optimal m value, and will be used next to optimize M
 ```
 
-### Iterate over potential values for the 'M' parameter in the 'ustacks' module
+### Iterate over potential values for the ‘M’ parameter in the ‘ustacks’ module
 
-Now that we know the optimal value for 'm' is 3, we will repeat the process of iterating over parameter values in STACKS, this time varying the 'M' parameter from 1-8 within the 'ustacks' module. In this example, we again use 15 threads to speed up each step. Execute the following code in a terminal window:
+Now that we know the optimal value for ‘m’ is 3, we will repeat the
+process of iterating over parameter values in STACKS, this time varying
+the ‘M’ parameter from 1-8 within the ‘ustacks’ module. In this example,
+we again use 15 threads to speed up each step. Execute the following
+code in a terminal window:
 
 ``` bash
 # -M — Maximum distance (in nucleotides) allowed between stacks (default 2).
@@ -150,9 +201,13 @@ done
 done
 ```
 
-You should now have eight directories, named: stacks\_bigM1, stacks\_bigM2, ... stacks\_bigM8,, each of which contains an vcf file with all called SNPs for the given parameter settings. I have again moved each vcf file into a local directory, and named it according to the parameter settings for the given run.
+You should now have eight directories, named: stacks\_bigM1,
+stacks\_bigM2, … stacks\_bigM8,, each of which contains an vcf file with
+all called SNPs for the given parameter settings. I have again moved
+each vcf file into a local directory, and named it according to the
+parameter settings for the given run.
 
-### Use RADstackshelpR to visualize the output of these 8 runs and determine the optimal value for the parameter 'M'.
+### Use RADstackshelpR to visualize the output of these 8 runs and determine the optimal value for the parameter ‘M’.
 
 ``` r
 #optimize_bigM function will generate summary stats on your 8 iterative runs
@@ -189,13 +244,14 @@ vis_loci(output = M.out, stacks_param = "M")
 <img src="man/figures/unnamed-chunk-7-2.png" width="65%" height="65%" style="display: block; margin: auto;" />
 
 ``` r
-
 #optimal value for this dataset is M = 2
 ```
 
-### Iterate over potential values for the 'n' parameter in the 'cstacks' module
+### Iterate over potential values for the ‘n’ parameter in the ‘cstacks’ module
 
-For the last optimization iteration, we will vary the 'n' parameter within the 'cstacks' module, using the previously optimized values for 'm' and 'M', by running the following code in a terminal window:
+For the last optimization iteration, we will vary the ‘n’ parameter
+within the ‘cstacks’ module, using the previously optimized values for
+‘m’ and ‘M’, by running the following code in a terminal window:
 
 ``` bash
 # -n — Number of mismatches allowed between sample loci when build the catalog (default 1).
@@ -220,7 +276,7 @@ done
 done
 ```
 
-### Use RADstackshelpR to visualize the output of these 3 runs and determine the optimal value for 'n'.
+### Use RADstackshelpR to visualize the output of these 3 runs and determine the optimal value for ‘n’.
 
 ``` r
 #optimize n
@@ -304,9 +360,14 @@ grid.arrange(grobs = gl, widths = c(1,1,1,1,1,1),
 <img src="man/figures/unnamed-chunk-10-1.png" width="100%" height="100%" style="display: block; margin: auto;" />
 
 ``` r
-
 #Note: if you are an R whiz and prefer to make your own visualizations, the functions starting with 'optimize_' are designed
 #to be modular, and return to you a list of 'data.frame' objects which you can use to make your own custom visualizations.
 ```
 
-You now have a de novo-assembled, parameter-optimized, unfiltered SNP dataset for your organism, and a single cohesive figure documenting the filtering process, which you can stick in your paper's supplement or host on your own repository. The next step is to filter this vcf file using the SNPfiltR package, which is specifically designed to pick up where this pipeline leaves off, or with any other variant filtering program of your choice.
+You now have a de novo-assembled, parameter-optimized, unfiltered SNP
+dataset for your organism, and a single cohesive figure documenting the
+filtering process, which you can stick in your paper’s supplement or
+host on your own repository. The next step is to filter this vcf file
+using the SNPfiltR package, which is specifically designed to pick up
+where this pipeline leaves off, or with any other variant filtering
+program of your choice.

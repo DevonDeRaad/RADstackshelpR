@@ -10,5 +10,7 @@
 ^README.Rmd$
 ^vignettes/optimize_denovo.Rmd$
 ^vignettes/brown.trout.validation.Rmd$
+^vignettes/trt.m.png$
+^vignettes/trt.bigm.png$
 ^Meta$
 ^cran-comments\.md$
