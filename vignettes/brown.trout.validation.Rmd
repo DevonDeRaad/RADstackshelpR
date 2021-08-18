@@ -1,5 +1,5 @@
 ---
-title: "Penguin Vignette"
+title: "Brown Trout Validation"
 author: "Devon DeRaad"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(dev = "png")
 ```
 
-##### This is an example showing the usefulness of the RADstackshelpR package in reproducing the results from the paper [Lost in Parameter Space](https://doi.org/10.1111/2041-210X.12775). Here, I have downloaded the 16 raw, reduced-representation sequencing files for the brown trout dataset used in this paper, from SRA [SRR3177636-SRR317765](https://www.ncbi.nlm.nih.gov/biosample?LinkName=bioproject_biosample_all&from_uid=379215). The code below takes us step by step through the process of optimizing the de novo assembly parameters for this dataset, validating that the optimal parameters based on an 'R80' cutoff are: m = 3, M = 5, and n = 4. Bash code used to run the [STACKS](https://catchenlab.life.illinois.edu/stacks/) pipeline was executed via submit script on the KU high-performance computing cluster.
+##### This is an example showing the usefulness of the RADstackshelpR package in reproducing the results from the paper [Lost in Parameter Space](https://doi.org/10.1111/2041-210X.12775). Here, I have downloaded the 16 raw, reduced-representation sequencing files for the brown trout dataset used in this paper, from SRA [SRR3177636-SRR317765](https://www.ncbi.nlm.nih.gov/biosample?LinkName=bioproject_biosample_all&from_uid=379215). The code below takes us step by step through the process of optimizing the de novo assembly parameters for this dataset, to ask whether the optimal parameters based on an 'R80' cutoff using Stacks v2.41 match the optimal parameters (m = 3, M = 5, and n = 4) identified in the original paper using Stacks v1.42. Bash code used to run the [STACKS](https://catchenlab.life.illinois.edu/stacks/) pipeline was executed via submit script on the KU high-performance computing cluster.
 
 ```{r}
 #load packages
@@ -125,10 +125,10 @@ vis_loci(output = m.out, stacks_param = "m")
 ### Here we can see the results from Paris et al. (2017) optimizing the 'm' parameter for this same dataset.
 
 ```{r}
-knitr::include_graphics("~/Desktop/Screen Shot 2021-08-16 at 10.26.29 AM.png")
+knitr::include_graphics("/Users/devder/Desktop/Screen Shot 2021-08-16 at 10.26.29 AM.png")
 ```
 
-### We can see that the numbers of SNPs and polymorphic loci recovered using each scheme are not exactly the same as the numbers that we recovered here. This is likely because I am using Stacks v2.41 and this paper used Stacks v1.42. Nonetheless, we see the same pattern (a decreasing number of polymorphic loci at an 'R80' cutoff going iteratively from m=3 -> m=7).
+### The green dots here are the 80% completeness threshold (R80), and we can see that the numbers of SNPs and polymorphic loci recovered using each scheme are not exactly the same as the numbers that we recovered here. This is likely because I am using Stacks v2.41 and this paper used Stacks v1.42. Nonetheless, we see the same pattern (a decreasing number of polymorphic loci at an 'R80' cutoff going iteratively from m=3 -> m=7).
 
 ## Step 5: Iterate over values of M ranging from 1-8, setting m to the optimal value (here 3).
 ### This code follows the bash chunk above, utilizing the same variable $files
@@ -158,14 +158,14 @@ done
 ## Step 6: Visualize the output of these 8 runs and determine the optimal value for M.
 ```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
 #optimize M
-M.out<-optimize_bigM(M1="/Users/devder/Desktop/brown.trout/M1.vcf",
-           M2="/Users/devder/Desktop/brown.trout/M2.vcf",
-           M3="/Users/devder/Desktop/brown.trout/M3.vcf",
-           M4="/Users/devder/Desktop/brown.trout/M4.vcf",
-           M5="/Users/devder/Desktop/brown.trout/M5.vcf",
-           M6="/Users/devder/Desktop/brown.trout/M6.vcf",
-           M7="/Users/devder/Desktop/brown.trout/M7.vcf",
-           M8="/Users/devder/Desktop/brown.trout/M8.vcf")
+M.out<-optimize_bigM(M1="/Users/devder/Desktop/brown.trout/bigM1.vcf",
+           M2="/Users/devder/Desktop/brown.trout/bigM2.vcf",
+           M3="/Users/devder/Desktop/brown.trout/bigM3.vcf",
+           M4="/Users/devder/Desktop/brown.trout/bigM4.vcf",
+           M5="/Users/devder/Desktop/brown.trout/bigM5.vcf",
+           M6="/Users/devder/Desktop/brown.trout/bigM6.vcf",
+           M7="/Users/devder/Desktop/brown.trout/bigM7.vcf",
+           M8="/Users/devder/Desktop/brown.trout/bigM8.vcf")
 
 #visualize the effect of varying M on the number of SNPs retained
 vis_snps(output = M.out, stacks_param = "M")
@@ -177,10 +177,10 @@ vis_loci(output = M.out, stacks_param = "M")
 ### Here we can see the results from Paris et al. (2017) optimizing the 'M' parameter for this same dataset.
 
 ```{r}
-knitr::include_graphics("~/Desktop/Screen Shot 2021-08-16 at 10.26.29 AM.png")
+knitr::include_graphics(system.file("articles","brown.trout.validation_files", "trt.bigM.png", package="RADstackshelpR",mustWork=TRUE))
 ```
 
-### We can see that the numbers of SNPs and polymorphic loci recovered using each scheme are not exactly the same as the numbers that we recovered here. This is likely because I am using Stacks v2.41 and this paper used Stacks v1.42. Nonetheless, we see the same pattern (a decreasing number of polymorphic loci at an 'R80' cutoff going iteratively from m=3 -> m=7).
+### Again, the green dots here are the R80 cutoff. These iterations using Stacks v1.42 do not show the same steep drop-off in the number of polymorphic loci retained at higher 'M' values that we see using Stacks v2.41. This result highlights the necessity of optimizing parameters according to the optimal output for the specific dataset and specific software being used. 
 
 ## Step 7: Iterate over values of n ranging from M-1, M, M+1, setting m and M to the optimal values (here 3 and 2, respectively).
 ### This code chunk runs the last three Stacks iterations, again re-using the variable $files
@@ -195,7 +195,7 @@ mkdir stacks_n$i
 id=1
 for sample in $files
 do
-    /home/d669d153/work/stacks-2.41/ustacks -f ${sample}.fq.gz -o stacks_n$i -i $id -m 3 -M 2 -p 15
+    /home/d669d153/work/stacks-2.41/ustacks -f fastq/${sample}.fq.gz -o stacks_n$i -i $id -m 3 -M 2 -p 15
     let "id+=1"
 done
 /home/d669d153/work/stacks-2.41/cstacks -n $i -P stacks_n$i -M pipeline_popmap.txt -p 15
@@ -238,7 +238,6 @@ grid.arrange(
                         c(4,4,4,5,5,5),
                         c(6,6,6,7,7,7))
 )
-
 ```
 
 ##### I now have a vcf file containing unfiltered SNPs for all samples, built with the optimal parameters for this dataset, 'm' = 3, 'M' = 2, and 'n'=3.

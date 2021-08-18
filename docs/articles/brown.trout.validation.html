@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Optimize denovo STACKS pipeline for Hipposideros bats • RADstackshelpR</title>
+<title>Brown Trout Validation • RADstackshelpR</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Optimize denovo STACKS pipeline for Hipposideros bats">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Brown Trout Validation">
 <meta property="og:description" content="RADstackshelpR">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -85,84 +85,76 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Optimize denovo STACKS pipeline for Hipposideros bats</h1>
+      <h1 data-toc-skip>Brown Trout Validation</h1>
+                        <h4 class="author">Devon DeRaad</h4>
             
+            <h4 class="date">2021-08-18</h4>
       
       
-      <div class="hidden name"><code>optimize_denovo.Rmd</code></div>
+      <div class="hidden name"><code>brown.trout.validation.Rmd</code></div>
 
     </div>
 
     
     
-<div id="this-is-a-real-example-of-using-the-radstackshelpr-package-to-facilitate-parameter-optimization-on-an-empirical-dataset--bash-code-used-to-run-the-stacks-pipeline-was-executed-via-submit-script-on-the-ku-high-performance-computing-cluster-" class="section level5">
+<div id="this-is-an-example-showing-the-usefulness-of-the-radstackshelpr-package-in-reproducing-the-results-from-the-paper-lost-in-parameter-space--here-i-have-downloaded-the-16-raw-reduced-representation-sequencing-files-for-the-brown-trout-dataset-used-in-this-paper-from-sra-srr3177636-srr317765--the-code-below-takes-us-step-by-step-through-the-process-of-optimizing-the-de-novo-assembly-parameters-for-this-dataset-to-ask-whether-the-optimal-parameters-based-on-an-r80-cutoff-using-stacks-v2-41-match-the-optimal-parameters-m-3-m-5-and-n-4-identified-in-the-original-paper-using-stacks-v1-42--bash-code-used-to-run-the-stacks-pipeline-was-executed-via-submit-script-on-the-ku-high-performance-computing-cluster-" class="section level5">
 <h5 class="hasAnchor">
-<a href="#this-is-a-real-example-of-using-the-radstackshelpr-package-to-facilitate-parameter-optimization-on-an-empirical-dataset--bash-code-used-to-run-the-stacks-pipeline-was-executed-via-submit-script-on-the-ku-high-performance-computing-cluster-" class="anchor"></a>This is a real example of using the RADstackshelpR package to facilitate parameter optimization on an empirical dataset. Bash code used to run the <a href="https://catchenlab.life.illinois.edu/stacks/">STACKS</a> pipeline was executed via submit script on the KU high-performance computing cluster.</h5>
+<a href="#this-is-an-example-showing-the-usefulness-of-the-radstackshelpr-package-in-reproducing-the-results-from-the-paper-lost-in-parameter-space--here-i-have-downloaded-the-16-raw-reduced-representation-sequencing-files-for-the-brown-trout-dataset-used-in-this-paper-from-sra-srr3177636-srr317765--the-code-below-takes-us-step-by-step-through-the-process-of-optimizing-the-de-novo-assembly-parameters-for-this-dataset-to-ask-whether-the-optimal-parameters-based-on-an-r80-cutoff-using-stacks-v2-41-match-the-optimal-parameters-m-3-m-5-and-n-4-identified-in-the-original-paper-using-stacks-v1-42--bash-code-used-to-run-the-stacks-pipeline-was-executed-via-submit-script-on-the-ku-high-performance-computing-cluster-" class="anchor"></a>This is an example showing the usefulness of the RADstackshelpR package in reproducing the results from the paper <a href="https://doi.org/10.1111/2041-210X.12775">Lost in Parameter Space</a>. Here, I have downloaded the 16 raw, reduced-representation sequencing files for the brown trout dataset used in this paper, from SRA <a href="https://www.ncbi.nlm.nih.gov/biosample?LinkName=bioproject_biosample_all&amp;from_uid=379215">SRR3177636-SRR317765</a>. The code below takes us step by step through the process of optimizing the de novo assembly parameters for this dataset, to ask whether the optimal parameters based on an 'R80' cutoff using Stacks v2.41 match the optimal parameters (m = 3, M = 5, and n = 4) identified in the original paper using Stacks v1.42. Bash code used to run the <a href="https://catchenlab.life.illinois.edu/stacks/">STACKS</a> pipeline was executed via submit script on the KU high-performance computing cluster.</h5>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#load packages</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">RADstackshelpR</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="step-1-demultiplex-each-sample-using-process_radtags-" class="section level2">
+<div id="step-1-download-each-of-the-files-as--fastq-gz-from-the-sequence-read-archive-sra" class="section level2">
 <h2 class="hasAnchor">
-<a href="#step-1-demultiplex-each-sample-using-process_radtags-" class="anchor"></a>Step 1: Demultiplex each sample using 'process_radtags'.</h2>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">/home/path/to/stacks-2.41/process_radtags</span> -p .  -o . -b plate.1.barcodes.txt -e ndeI -r -c -q</code></pre></div>
-</div>
-<div id="step-2-samples-with-a-demultiplexed-file-size-of-2-megabytes-simply-dont-have-enough-information-to-be-relevant-downstream-and-can-be-removed-right-away--note-this-will-help-ensure-that-there-are-enough-loci-retained-at-an-80-completeness-cutoff-to-make-informed-optimization-decisions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#step-2-samples-with-a-demultiplexed-file-size-of-2-megabytes-simply-dont-have-enough-information-to-be-relevant-downstream-and-can-be-removed-right-away--note-this-will-help-ensure-that-there-are-enough-loci-retained-at-an-80-completeness-cutoff-to-make-informed-optimization-decisions" class="anchor"></a>Step 2: Samples with a demultiplexed file size of &lt; 2 megabytes simply don't have enough information to be relevant downstream, and can be removed right away. (Note: this will help ensure that there are enough loci retained at an 80% completeness cutoff to make informed optimization decisions)</h2>
-</div>
-<div id="step-3-iterate-over-values-of-m-ranging-from-3-7-while-leaving-all-other-parameters-at-default-values-" class="section level2">
-<h2 class="hasAnchor">
-<a href="#step-3-iterate-over-values-of-m-ranging-from-3-7-while-leaving-all-other-parameters-at-default-values-" class="anchor"></a>Step 3: Iterate over values of 'm' ranging from 3-7, while leaving all other parameters at default values.</h2>
+<a href="#step-1-download-each-of-the-files-as--fastq-gz-from-the-sequence-read-archive-sra" class="anchor"></a>Step 1: Download each of the files as '.fastq.gz' from the sequence read archive (SRA)</h2>
 <div id="bash-code-to-execute-this" class="section level3">
 <h3 class="hasAnchor">
 <a href="#bash-code-to-execute-this" class="anchor"></a>Bash code to execute this:</h3>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/sh</span>
 <span class="co">#</span>
-<span class="co">#SBATCH --job-name=denovo.rad.hippo              # Job Name</span>
+<span class="co">#SBATCH --job-name=denovo.brown.trout              # Job Name</span>
 <span class="co">#SBATCH --nodes=1             # nodes</span>
 <span class="co">#SBATCH --cpus-per-task=15               # CPU allocation per Task</span>
 <span class="co">#SBATCH --partition=bi            # Name of the Slurm partition used</span>
-<span class="co">#SBATCH --chdir=/home/d669d153/scratch/diadema.dinops   # Set working d$</span>
+<span class="co">#SBATCH --chdir=/home/d669d153/work/brown.trout # Set working d$</span>
 <span class="co">#SBATCH --mem-per-cpu=1gb            # memory requested</span>
 <span class="co">#SBATCH --time=10000</span>
 
-<span class="va">files=</span><span class="st">"908108_H_diadema_Gatokae</span>
-<span class="st">908150_H_dinops_Guadalcanal</span>
-<span class="st">908151_H_diadema_Guadalcanal</span>
-<span class="st">908152_H_diadema_Guadalcanal</span>
-<span class="st">908153a_H_dinops_Guadalcanal</span>
-<span class="st">908154_H_dinops_Guadalcanal</span>
-<span class="st">908155_H_dinops_Guadalcanal</span>
-<span class="st">908156_H_diadema_Guadalcanal</span>
-<span class="st">908208_H_diadema_Guadalcanal</span>
-<span class="st">KVO150_H_diadema_Isabel</span>
-<span class="st">KVO168_H_diadema_Isabel</span>
-<span class="st">KVO169_H_diadema_Isabel</span>
-<span class="st">KVO170_H_diadema_Isabel</span>
-<span class="st">KVO171_H_diadema_Isabel</span>
-<span class="st">KVO172_H_diadema_Isabel</span>
-<span class="st">KVO242_H_dinops_Isabel</span>
-<span class="st">KVO243_H_dinops_Isabel</span>
-<span class="st">KVO244_H_dinops_Isabel</span>
-<span class="st">KVO245_H_dinops_Isabel</span>
-<span class="st">KVO246_H_dinops_Isabel</span>
-<span class="st">KVO248_H_dinops_Isabel</span>
-<span class="st">THL1156_H_demissus_Makira</span>
-<span class="st">THL1172_H_dinops_Guadalcanal</span>
-<span class="st">THL1173_H_dinops_Guadalcanal</span>
-<span class="st">THL17193_H_diadema_Ngella</span>
-<span class="st">THL17194_H_diadema_Ngell</span>
-<span class="st">THL17195_H_diadema_Ngella</span>
-<span class="st">THL17197_H_diadema_Ngella</span>
-<span class="st">THL17198_H_diadema_Ngella</span>
-<span class="st">THL17199_H_diadema_Ngell</span>
-<span class="st">WD1705_H_diadema_E_New_Britain</span>
-<span class="st">WD2047_H_diadema_Simbu_Prov</span>
-<span class="st">WD2074_H_diadema_Gulf_Prov"</span>
+<span class="va">files=</span><span class="st">"SRR5344602</span>
+<span class="st">SRR5344603</span>
+<span class="st">SRR5344604</span>
+<span class="st">SRR5344605</span>
+<span class="st">SRR5344606</span>
+<span class="st">SRR5344607</span>
+<span class="st">SRR5344608</span>
+<span class="st">SRR5344609</span>
+<span class="st">SRR5344610</span>
+<span class="st">SRR5344611</span>
+<span class="st">SRR5344612</span>
+<span class="st">SRR5344613</span>
+<span class="st">SRR5344614</span>
+<span class="st">SRR5344615</span>
+<span class="st">SRR5344616</span>
+<span class="st">SRR5344617"</span>
 
-<span class="co"># Build loci de novo in each sample for the single-end reads only.</span>
+<span class="co">#Must have the SRAtoolkit installed and in your path, or in my case loaded through conda</span>
+<span class="ex">module</span> load sratoolkit
+
+<span class="co">#download each file</span>
+<span class="kw">for</span> <span class="ex">sample</span> in files
+<span class="kw">do</span>
+<span class="ex">fastq-dump</span> <span class="va">$sample</span>
+<span class="kw">done</span></code></pre></div>
+</div>
+</div>
+<div id="step-3-iterate-over-values-of-m-ranging-from-3-7-while-leaving-all-other-parameters-at-default-values-" class="section level2">
+<h2 class="hasAnchor">
+<a href="#step-3-iterate-over-values-of-m-ranging-from-3-7-while-leaving-all-other-parameters-at-default-values-" class="anchor"></a>Step 3: Iterate over values of 'm' ranging from 3-7, while leaving all other parameters at default values.</h2>
+<div id="bash-code-to-execute-this-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#bash-code-to-execute-this-1" class="anchor"></a>Bash code to execute this:</h3>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co"># Build loci de novo in each sample for the single-end reads only.</span>
 <span class="co"># -M — Maximum distance (in nucleotides) allowed between stacks (default 2).</span>
 <span class="co"># -m — Minimum depth of coverage required to create a stack (default 3).</span>
 <span class="co">#here, we will vary m from 3-7, and leave all other paramaters default</span>
@@ -175,7 +167,7 @@
 <span class="va">id=</span>1
 <span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$files</span>
 <span class="kw">do</span>
-    <span class="ex">/home/d669d153/work/stacks-2.41/ustacks</span> -f <span class="va">${sample}</span>.fq.gz -o stacks_m<span class="va">$i</span> -i <span class="va">$id</span> -m <span class="va">$i</span> -p 15
+    <span class="ex">/home/d669d153/work/stacks-2.41/ustacks</span> -f fastq/<span class="va">${sample}</span>.fq.gz -o stacks_m<span class="va">$i</span> -i <span class="va">$id</span> -m <span class="va">$i</span> -p 15
     <span class="bu">let</span> <span class="st">"id+=1"</span>
 <span class="kw">done</span>
 <span class="co">## Run cstacks to compile stacks between samples. Popmap is a file in working directory called 'pipeline_popmap.txt'</span>
@@ -198,25 +190,25 @@
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#optimize_m function will generate summary stats on your 5 iterative runs</span>
 <span class="co">#input can be full path to each file or just the file name if your working directory contains the files</span>
-<span class="va">m.out</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/optimize_m.html">optimize_m</a></span><span class="op">(</span>m3<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/m_3.vcf"</span>,
-           m4<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/m_4.vcf"</span>,
-           m5<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/m_5.vcf"</span>,
-           m6<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/m_6.vcf"</span>,
-           m7<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/m_7.vcf"</span><span class="op">)</span>
+<span class="va">m.out</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/optimize_m.html">optimize_m</a></span><span class="op">(</span>m3<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/m3.vcf"</span>,
+           m4<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/m4.vcf"</span>,
+           m5<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/m5.vcf"</span>,
+           m6<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/m6.vcf"</span>,
+           m7<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/m7.vcf"</span><span class="op">)</span>
 
 <span class="co">#visualize the effect of varying m on the depth of each sample</span>
 <span class="fu"><a href="../reference/vis_depth.html">vis_depth</a></span><span class="op">(</span>output <span class="op">=</span> <span class="va">m.out</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Visualize how different values of m affect average depth in each sample"</span>
-<span class="co">#&gt; Picking joint bandwidth of 9.53</span></code></pre></div>
-<p><img src="optimize_denovo_files/figure-html/unnamed-chunk-5-1.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
+<span class="co">#&gt; Picking joint bandwidth of 3.06</span></code></pre></div>
+<p><img src="brown.trout.validation_files/figure-html/unnamed-chunk-5-1.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#visualize the effect of varying m on the number of SNPs retained</span>
 <span class="fu"><a href="../reference/vis_snps.html">vis_snps</a></span><span class="op">(</span>output <span class="op">=</span> <span class="va">m.out</span>, stacks_param <span class="op">=</span> <span class="st">"m"</span><span class="op">)</span>
 <span class="co">#&gt; Visualize how different values of m affect number of SNPs retained.</span>
 <span class="co">#&gt; Density plot shows the distribution of the number of SNPs retained in each sample,</span>
 <span class="co">#&gt; while the asterisk denotes the total number of SNPs retained at an 80% completeness cutoff.</span>
-<span class="co">#&gt; Picking joint bandwidth of 7190</span></code></pre></div>
-<p><img src="optimize_denovo_files/figure-html/unnamed-chunk-5-2.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
+<span class="co">#&gt; Picking joint bandwidth of 850</span></code></pre></div>
+<p><img src="brown.trout.validation_files/figure-html/unnamed-chunk-5-2.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">#visualize the effect of varying m on the number of loci retained</span>
@@ -224,11 +216,22 @@
 <span class="co">#&gt; Visualize how different values of m affect number of polymorphic loci retained.</span>
 <span class="co">#&gt; Density plot shows the distribution of the number of loci retained in each sample,</span>
 <span class="co">#&gt; while the asterisk denotes the total number of loci retained at an 80% completeness cutoff. The optimal value is denoted by red color.</span>
-<span class="co">#&gt; Picking joint bandwidth of 3420</span></code></pre></div>
-<p><img src="optimize_denovo_files/figure-html/unnamed-chunk-5-3.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
+<span class="co">#&gt; Picking joint bandwidth of 592</span></code></pre></div>
+<p><img src="brown.trout.validation_files/figure-html/unnamed-chunk-5-3.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">#3 is the optimal m value, and will be used next to optimize M</span></code></pre></div>
+<div id="here-we-can-see-the-results-from-paris-et-al--2017-optimizing-the-m-parameter-for-this-same-dataset-" class="section level3">
+<h3 class="hasAnchor">
+<a href="#here-we-can-see-the-results-from-paris-et-al--2017-optimizing-the-m-parameter-for-this-same-dataset-" class="anchor"></a>Here we can see the results from Paris et al. (2017) optimizing the 'm' parameter for this same dataset.</h3>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"/Users/devder/Desktop/Screen Shot 2021-08-16 at 10.26.29 AM.png"</span><span class="op">)</span></code></pre></div>
+<p><img src="../../Screen%20Shot%202021-08-16%20at%2010.26.29%20AM.png"><!-- --></p>
+</div>
+<div id="the-green-dots-here-are-the-80-completeness-threshold-r80-and-we-can-see-that-the-numbers-of-snps-and-polymorphic-loci-recovered-using-each-scheme-are-not-exactly-the-same-as-the-numbers-that-we-recovered-here--this-is-likely-because-i-am-using-stacks-v2-41-and-this-paper-used-stacks-v1-42--nonetheless-we-see-the-same-pattern-a-decreasing-number-of-polymorphic-loci-at-an-r80-cutoff-going-iteratively-from-m3---m7-" class="section level3">
+<h3 class="hasAnchor">
+<a href="#the-green-dots-here-are-the-80-completeness-threshold-r80-and-we-can-see-that-the-numbers-of-snps-and-polymorphic-loci-recovered-using-each-scheme-are-not-exactly-the-same-as-the-numbers-that-we-recovered-here--this-is-likely-because-i-am-using-stacks-v2-41-and-this-paper-used-stacks-v1-42--nonetheless-we-see-the-same-pattern-a-decreasing-number-of-polymorphic-loci-at-an-r80-cutoff-going-iteratively-from-m3---m7-" class="anchor"></a>The green dots here are the 80% completeness threshold (R80), and we can see that the numbers of SNPs and polymorphic loci recovered using each scheme are not exactly the same as the numbers that we recovered here. This is likely because I am using Stacks v2.41 and this paper used Stacks v1.42. Nonetheless, we see the same pattern (a decreasing number of polymorphic loci at an 'R80' cutoff going iteratively from m=3 -&gt; m=7).</h3>
+</div>
 </div>
 <div id="step-5-iterate-over-values-of-m-ranging-from-1-8-setting-m-to-the-optimal-value-here-3-" class="section level2">
 <h2 class="hasAnchor">
@@ -247,7 +250,7 @@
 <span class="va">id=</span>1
 <span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$files</span>
 <span class="kw">do</span>
-    <span class="ex">/home/d669d153/work/stacks-2.41/ustacks</span> -f <span class="va">${sample}</span>.fq.gz -o stacks_bigM<span class="va">$i</span> -i <span class="va">$id</span> -m 3 -M <span class="va">$i</span> -p 15
+    <span class="ex">/home/d669d153/work/stacks-2.41/ustacks</span> -f fastq/<span class="va">${sample}</span>.fq.gz -o stacks_bigM<span class="va">$i</span> -i <span class="va">$id</span> -m 3 -M <span class="va">$i</span> -p 15
     <span class="bu">let</span> <span class="st">"id+=1"</span>
 <span class="kw">done</span>
 <span class="ex">/home/d669d153/work/stacks-2.41/cstacks</span> -P stacks_bigM<span class="va">$i</span> -M pipeline_popmap.txt -p 15
@@ -263,22 +266,22 @@
 <a href="#step-6-visualize-the-output-of-these-8-runs-and-determine-the-optimal-value-for-m-" class="anchor"></a>Step 6: Visualize the output of these 8 runs and determine the optimal value for M.</h2>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#optimize M</span>
-<span class="va">M.out</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/optimize_bigM.html">optimize_bigM</a></span><span class="op">(</span>M1<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M1.vcf"</span>,
-           M2<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M2.vcf"</span>,
-           M3<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M3.vcf"</span>,
-           M4<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M4.vcf"</span>,
-           M5<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M5.vcf"</span>,
-           M6<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M6.vcf"</span>,
-           M7<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M7.vcf"</span>,
-           M8<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/M8.vcf"</span><span class="op">)</span>
+<span class="va">M.out</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/optimize_bigM.html">optimize_bigM</a></span><span class="op">(</span>M1<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/bigM1.vcf"</span>,
+           M2<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/bigM2.vcf"</span>,
+           M3<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/bigM3.vcf"</span>,
+           M4<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/bigM4.vcf"</span>,
+           M5<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/bigM5.vcf"</span>,
+           M6<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/bigM6.vcf"</span>,
+           M7<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/bigM7.vcf"</span>,
+           M8<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/bigM8.vcf"</span><span class="op">)</span>
 
 <span class="co">#visualize the effect of varying M on the number of SNPs retained</span>
 <span class="fu"><a href="../reference/vis_snps.html">vis_snps</a></span><span class="op">(</span>output <span class="op">=</span> <span class="va">M.out</span>, stacks_param <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span>
 <span class="co">#&gt; Visualize how different values of M affect number of SNPs retained.</span>
 <span class="co">#&gt; Density plot shows the distribution of the number of SNPs retained in each sample,</span>
 <span class="co">#&gt; while the asterisk denotes the total number of SNPs retained at an 80% completeness cutoff.</span>
-<span class="co">#&gt; Picking joint bandwidth of 6090</span></code></pre></div>
-<p><img src="optimize_denovo_files/figure-html/unnamed-chunk-7-1.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
+<span class="co">#&gt; Picking joint bandwidth of 474</span></code></pre></div>
+<p><img src="brown.trout.validation_files/figure-html/unnamed-chunk-8-1.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">#visualize the effect of varying M on the number of polymorphic loci retained</span>
@@ -286,8 +289,19 @@
 <span class="co">#&gt; Visualize how different values of M affect number of polymorphic loci retained.</span>
 <span class="co">#&gt; Density plot shows the distribution of the number of loci retained in each sample,</span>
 <span class="co">#&gt; while the asterisk denotes the total number of loci retained at an 80% completeness cutoff. The optimal value is denoted by red color.</span>
-<span class="co">#&gt; Picking joint bandwidth of 2920</span></code></pre></div>
-<p><img src="optimize_denovo_files/figure-html/unnamed-chunk-7-2.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
+<span class="co">#&gt; Picking joint bandwidth of 343</span></code></pre></div>
+<p><img src="brown.trout.validation_files/figure-html/unnamed-chunk-8-2.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
+<div id="here-we-can-see-the-results-from-paris-et-al--2017-optimizing-the-m-parameter-for-this-same-dataset--1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#here-we-can-see-the-results-from-paris-et-al--2017-optimizing-the-m-parameter-for-this-same-dataset--1" class="anchor"></a>Here we can see the results from Paris et al. (2017) optimizing the 'M' parameter for this same dataset.</h3>
+<div class="sourceCode"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html">include_graphics</a></span><span class="op">(</span><span class="st">"/Users/devder/Desktop/Screen Shot 2021-08-17 at 5.43.45 PM.png"</span><span class="op">)</span></code></pre></div>
+<p><img src="../../Screen%20Shot%202021-08-17%20at%205.43.45%20PM.png"><!-- --></p>
+</div>
+<div id="again-the-green-dots-here-are-the-r80-cutoff--these-iterations-using-stacks-v1-42-do-not-show-the-same-steep-drop-off-in-the-number-of-polymorphic-loci-retained-at-higher-m-values-that-we-see-using-stacks-v2-41--this-result-highlights-the-necessity-of-optimizing-parameters-according-to-the-optimal-output-for-the-specific-dataset-and-specific-software-being-used-" class="section level3">
+<h3 class="hasAnchor">
+<a href="#again-the-green-dots-here-are-the-r80-cutoff--these-iterations-using-stacks-v1-42-do-not-show-the-same-steep-drop-off-in-the-number-of-polymorphic-loci-retained-at-higher-m-values-that-we-see-using-stacks-v2-41--this-result-highlights-the-necessity-of-optimizing-parameters-according-to-the-optimal-output-for-the-specific-dataset-and-specific-software-being-used-" class="anchor"></a>Again, the green dots here are the R80 cutoff. These iterations using Stacks v1.42 do not show the same steep drop-off in the number of polymorphic loci retained at higher 'M' values that we see using Stacks v2.41. This result highlights the necessity of optimizing parameters according to the optimal output for the specific dataset and specific software being used.</h3>
+</div>
 </div>
 <div id="step-7-iterate-over-values-of-n-ranging-from-m-1-m-m1-setting-m-and-m-to-the-optimal-values-here-3-and-2-respectively-" class="section level2">
 <h2 class="hasAnchor">
@@ -305,7 +319,7 @@
 <span class="va">id=</span>1
 <span class="kw">for</span> <span class="ex">sample</span> in <span class="va">$files</span>
 <span class="kw">do</span>
-    <span class="ex">/home/d669d153/work/stacks-2.41/ustacks</span> -f <span class="va">${sample}</span>.fq.gz -o stacks_n<span class="va">$i</span> -i <span class="va">$id</span> -m 3 -M 2 -p 15
+    <span class="ex">/home/d669d153/work/stacks-2.41/ustacks</span> -f fastq/<span class="va">${sample}</span>.fq.gz -o stacks_n<span class="va">$i</span> -i <span class="va">$id</span> -m 3 -M 2 -p 15
     <span class="bu">let</span> <span class="st">"id+=1"</span>
 <span class="kw">done</span>
 <span class="ex">/home/d669d153/work/stacks-2.41/cstacks</span> -n <span class="va">$i</span> -P stacks_n<span class="va">$i</span> -M pipeline_popmap.txt -p 15
@@ -321,17 +335,17 @@
 <a href="#step-8-visualize-the-output-of-these-3-runs-and-determine-the-optimal-value-for-n-" class="anchor"></a>Step 8: Visualize the output of these 3 runs and determine the optimal value for n.</h2>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">#optimize n</span>
-<span class="va">n.out</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/optimize_n.html">optimize_n</a></span><span class="op">(</span>nequalsMminus1<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/n1.vcf"</span>,
-           nequalsM<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/n2.vcf"</span>,
-           nequalsMplus1<span class="op">=</span><span class="st">"/Users/devder/Desktop/hipposideros/n3.vcf"</span><span class="op">)</span>
+<span class="va">n.out</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/optimize_n.html">optimize_n</a></span><span class="op">(</span>nequalsMminus1<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/n1.vcf"</span>,
+           nequalsM<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/n2.vcf"</span>,
+           nequalsMplus1<span class="op">=</span><span class="st">"/Users/devder/Desktop/brown.trout/n3.vcf"</span><span class="op">)</span>
 
 <span class="co">#visualize the effect of varying n on the number of SNPs retained</span>
 <span class="fu"><a href="../reference/vis_snps.html">vis_snps</a></span><span class="op">(</span>output <span class="op">=</span> <span class="va">n.out</span>, stacks_param <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span>
 <span class="co">#&gt; Visualize how different values of n affect number of SNPs retained.</span>
 <span class="co">#&gt; Density plot shows the distribution of the number of SNPs retained in each sample,</span>
 <span class="co">#&gt; while the asterisk denotes the total number of SNPs retained at an 80% completeness cutoff.</span>
-<span class="co">#&gt; Picking joint bandwidth of 7420</span></code></pre></div>
-<p><img src="optimize_denovo_files/figure-html/unnamed-chunk-9-1.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
+<span class="co">#&gt; Picking joint bandwidth of 622</span></code></pre></div>
+<p><img src="brown.trout.validation_files/figure-html/unnamed-chunk-11-1.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
 <div class="sourceCode"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co">#visualize the effect of varying n on the number of polymorphic loci retained</span>
@@ -339,8 +353,8 @@
 <span class="co">#&gt; Visualize how different values of n affect number of polymorphic loci retained.</span>
 <span class="co">#&gt; Density plot shows the distribution of the number of loci retained in each sample,</span>
 <span class="co">#&gt; while the asterisk denotes the total number of loci retained at an 80% completeness cutoff. The optimal value is denoted by red color.</span>
-<span class="co">#&gt; Picking joint bandwidth of 3230</span></code></pre></div>
-<p><img src="optimize_denovo_files/figure-html/unnamed-chunk-9-2.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
+<span class="co">#&gt; Picking joint bandwidth of 445</span></code></pre></div>
+<p><img src="brown.trout.validation_files/figure-html/unnamed-chunk-11-2.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
 </div>
 <div id="finally-make-a-single-figure-showing-the-optimization-process-of-all-three-parameters" class="section level1">
 <h1 class="hasAnchor">
@@ -381,14 +395,14 @@
                         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">5</span>,<span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>,
                         <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span>,<span class="fl">6</span>,<span class="fl">6</span>,<span class="fl">7</span>,<span class="fl">7</span>,<span class="fl">7</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
-<span class="co">#&gt; Picking joint bandwidth of 9.53</span>
-<span class="co">#&gt; Picking joint bandwidth of 7190</span>
-<span class="co">#&gt; Picking joint bandwidth of 3420</span>
-<span class="co">#&gt; Picking joint bandwidth of 6090</span>
-<span class="co">#&gt; Picking joint bandwidth of 2920</span>
-<span class="co">#&gt; Picking joint bandwidth of 7420</span>
-<span class="co">#&gt; Picking joint bandwidth of 3230</span></code></pre></div>
-<p><img src="optimize_denovo_files/figure-html/unnamed-chunk-10-1.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
+<span class="co">#&gt; Picking joint bandwidth of 3.06</span>
+<span class="co">#&gt; Picking joint bandwidth of 850</span>
+<span class="co">#&gt; Picking joint bandwidth of 592</span>
+<span class="co">#&gt; Picking joint bandwidth of 474</span>
+<span class="co">#&gt; Picking joint bandwidth of 343</span>
+<span class="co">#&gt; Picking joint bandwidth of 622</span>
+<span class="co">#&gt; Picking joint bandwidth of 445</span></code></pre></div>
+<p><img src="brown.trout.validation_files/figure-html/unnamed-chunk-12-1.png" width="100%" height="100%" style="display: block; margin: auto;"></p>
 <div id="i-now-have-a-vcf-file-containing-unfiltered-snps-for-all-samples-built-with-the-optimal-parameters-for-this-dataset-m-3-m-2-and-n3-" class="section level5">
 <h5 class="hasAnchor">
 <a href="#i-now-have-a-vcf-file-containing-unfiltered-snps-for-all-samples-built-with-the-optimal-parameters-for-this-dataset-m-3-m-2-and-n3-" class="anchor"></a>I now have a vcf file containing unfiltered SNPs for all samples, built with the optimal parameters for this dataset, 'm' = 3, 'M' = 2, and 'n'=3.</h5>
