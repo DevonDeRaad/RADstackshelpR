@@ -12,6 +12,7 @@ authors:
     affiliation: 1
 affiliations:
  - name: Department of Ecology & Evolutionary Biology and Biodiversity Institute, University of Kansas, Lawrence, Kansas, USA
+   index: 1
 date: 16 August 2021
 bibliography: paper.bib
 ---
