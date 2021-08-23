@@ -14,6 +14,12 @@ knitr::opts_chunk$set(
 
 # RADstackshelpR <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/RADstackshelpR)](https://cran.r-project.org/package=RADstackshelpR)
+<!-- badges: end -->
+
+## Overview
+
 RADstackshelpR offers a handful of useful wrapper functions which streamline the reading, analyzing, and visualizing of variant call format (vcf) files in R. The internal calls of each function rely heavily on the excellent R package [vcfR](https://knausb.github.io/vcfR_documentation/) to read in and analyze vcf files, and the widely renowned [ggplot2](https://ggplot2.tidyverse.org/) package to create elegant visualizations. This package was designed to facilitate an explicit pipeline for optimizing [STACKS](https://catchenlab.life.illinois.edu/stacks/) paramaters during de novo (without a reference genome) assembly and variant calling of restriction-enzyme associated DNA sequence (RADseq) data. STACKS is a relatively user-friendly, command-line program designed for assembling RADseq data into loci, and performing variant (SNP) calling. STACKS offers users flexibility in setting parameters during the assembly process, allowing custom parameter optimization for any input dataset. The pipeline implemented here is based on the 2017 paper [Lost in Parameter Space](https://doi.org/10.1111/2041-210X.12775) which establishes clear recommendations for optimizing the parameters 'm', 'M', and 'n', during the process of assembling loci.  
 
 Despite these clear recommendations, the full range of parameter space suggested to explore in this paper is often left unexplored in empirical studies, due to the computational and logistical difficulty of executing and analyzing 16 separate runs through the entire STACKS pipeline. This package is designed to automate that logistical difficulty, leaving users with a clear set of steps to follow for thoroughly optimized, de novo RAD locus assembly and variant calling. For more details on RADstackshelpR please check out this [website](https://devonderaad.github.io/RADstackshelpR/index.html) built using [pkgdown](https://pkgdown.r-lib.org/). Otherwise, simply follow the steps below to run the optimized de novo assembly pipeline.

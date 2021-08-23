@@ -3,6 +3,14 @@
 
 # RADstackshelpR <img src="man/figures/logo.png" align="right" alt="" width="120" />
 
+<!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/RADstackshelpR)](https://cran.r-project.org/package=RADstackshelpR)
+<!-- badges: end -->
+
+## Overview
+
 RADstackshelpR offers a handful of useful wrapper functions which
 streamline the reading, analyzing, and visualizing of variant call
 format (vcf) files in R. The internal calls of each function rely
