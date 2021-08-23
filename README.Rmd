@@ -27,7 +27,10 @@ Despite these clear recommendations, the full range of parameter space suggested
 ## Installation
 
 ```{r, eval = FALSE}
-# Install development version from GitHub
+#Install current release from CRAN (recommended)
+install.packages("RADstackshelpR")
+
+#or: install development version from GitHub
 devtools::install_github("DevonDeRaad/RADstackshelpR")
 ```
 

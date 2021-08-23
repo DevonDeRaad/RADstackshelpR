@@ -47,7 +47,10 @@ the steps below to run the optimized de novo assembly pipeline.
 ## Installation
 
 ``` r
-# Install development version from GitHub
+#Install current release from CRAN (recommended)
+install.packages("RADstackshelpR")
+
+#or: install development version from GitHub
 devtools::install_github("DevonDeRaad/RADstackshelpR")
 ```
 
