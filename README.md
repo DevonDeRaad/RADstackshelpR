@@ -10,6 +10,13 @@
 ![License](https://img.shields.io/badge/licence-MIT-red.svg)
 <!-- badges: end -->
 
+## Installation
+
+``` r
+#Install current release from CRAN
+install.packages("RADstackshelpR")
+```
+
 ## Overview
 
 RADstackshelpR offers a handful of useful wrapper functions which
@@ -44,16 +51,6 @@ RADstackshelpR please check out this
 [website](https://devonderaad.github.io/RADstackshelpR/index.html) built
 using [pkgdown](https://pkgdown.r-lib.org/). Otherwise, simply follow
 the steps below to run the optimized de novo assembly pipeline.
-
-## Installation
-
-``` r
-#Install current release from CRAN (recommended)
-install.packages("RADstackshelpR")
-
-#or: install development version from GitHub
-devtools::install_github("DevonDeRaad/RADstackshelpR")
-```
 
 ## Usage
 
