@@ -5,8 +5,9 @@
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/RADstackshelpR)](https://cran.r-project.org/package=RADstackshelpR)
+![CRAN-status](https://www.r-pkg.org/badges/version-last-release/RADstackshelpR)
+![CRAN-Downloads](https://cranlogs.r-pkg.org/badges/grand-total/RADstackshelpR)
+![License](https://img.shields.io/badge/licence-MIT-red.svg)
 <!-- badges: end -->
 
 ## Overview
