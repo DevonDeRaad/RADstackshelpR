@@ -1,0 +1,19 @@
+template:
+  bootstrap: 4
+  params:
+    ganalytics: G-TB39NWWF3X
+    
+reference:
+- title: Evaluate Stacks runs
+  desc:  Calculate 'R80' and associated statistics for each performed Stacks run.
+  contents:
+  - optimize_m
+  - optimize_bigM
+  - optimize_n
+
+- title: Visualize optimal values
+  desc:  Use the stats from your Stacks runs to determine optimal parameter settings.
+  contents:
+  - vis_depth
+  - vis_snps
+  - vis_loci
