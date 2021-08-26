@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 ![CRAN-status](https://www.r-pkg.org/badges/version-last-release/RADstackshelpR)
 ![CRAN-Downloads](https://cranlogs.r-pkg.org/badges/grand-total/RADstackshelpR)
-![License](https://img.shields.io/badge/licence-MIT-red.svg)
+![License](https://img.shields.io/badge/license-MIT-red.svg)
 <!-- badges: end -->
 
 ## Installation
@@ -26,6 +26,14 @@ knitr::opts_chunk$set(
 #Install current release from CRAN
 install.packages("RADstackshelpR")
 ```
+
+## Citation
+
+Permanent DOI to come.
+
+## Full documentation
+
+To see full documentation of all functions and three detailed vignettes illustrating use cases, please check out the [pkgdown](https://pkgdown.r-lib.org/) [site](https://devonderaad.github.io/RADstackshelpR/index.html) for RADstackshelpR.
 
 ## Overview
 
