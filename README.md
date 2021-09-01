@@ -24,10 +24,9 @@ Permanent DOI to come.
 ## Full documentation
 
 To see full documentation of all functions and three detailed vignettes
-illustrating use cases, please check out the
-[pkgdown](https://pkgdown.r-lib.org/)
-[site](https://devonderaad.github.io/RADstackshelpR/index.html) for
-RADstackshelpR.
+illustrating use cases, please check out the [pkgdown
+site](https://devonderaad.github.io/RADstackshelpR/index.html) for
+RADstackshelpR. For a quick start, simply follow the directions below:
 
 ## Overview
 
