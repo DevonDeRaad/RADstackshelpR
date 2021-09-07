@@ -90,6 +90,8 @@ iterations of the entire STACKS pipeline, each with a different
 parameter setting for ‘m’ (3-7), and save the results as an unfiltered
 vcf file in a specified directory.
 
+#### Note: If too many of your samples contain low-data, it may be difficult to determine an appropriate ‘R80’ cutoff, as there will be very few (even 0) SNPs shared at an 80% completeness threshold. Personally, I remove samples with demultiplexed .fast.gz file sizes below 2Mb, before starting my Stacks runs, because these samples do not have enough data to be usable downstream, and can make setting an ‘R80’ cutoff impossible. If you receive an errors saying “‘names’ attribute \[2\] must be the same length as the vector \[1\]”, or “Rbind issue”, you likely have too many low-data samples to compare the number of SNPs between runs at high filtering thresholds, and re-running stacks without including samples with very small file sizes should alleviate this issue.
+
 ``` bash
 #designate all sample ID's to a single variable called 'files', each sample should be in the directory, and the filename should match this designation except for the extension, e.g., 'sample_2' = 'sample_2.fq.gz'
 files="sample_1
@@ -138,6 +140,8 @@ the ‘R80’ cutoff (see [Lost in Parameter
 Space](https://doi.org/10.1111/2041-210X.12775)). I have now moved each
 vcf file into a local directory, and named it according to the parameter
 settings for the given run.
+
+#### Note: The vcf file output by Stacks containing only variant site information for each sample will be called ‘populations.snps.vcf’, unless you renamed it yourself by setting the -o flag in populations. This is the vcf file that you want to use for input to RADstackshelpR functions.
 
 ### Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter ‘m’.
 
@@ -198,6 +202,13 @@ we again use 15 threads to speed up each step. Execute the following
 code in a terminal window:
 
 ``` bash
+#designate all sample ID's to a single variable called 'files', each sample should be in the directory, and the filename should match this designation except for the extension, e.g., 'sample_2' = 'sample_2.fq.gz'
+files="sample_1
+sample_2
+sample_3
+sample_4
+sample_5"
+
 # -M — Maximum distance (in nucleotides) allowed between stacks (default 2).
 # -m — Minimum depth of coverage required to create a stack (default 3).
 #here, vary M from 1-8, and set m to the optimized value based on prior visualizations (here 3)
@@ -274,6 +285,13 @@ within the ‘cstacks’ module, using the previously optimized values for
 ‘m’ and ‘M’, by running the following code in a terminal window:
 
 ``` bash
+#designate all sample ID's to a single variable called 'files', each sample should be in the directory, and the filename should match this designation except for the extension, e.g., 'sample_2' = 'sample_2.fq.gz'
+files="sample_1
+sample_2
+sample_3
+sample_4
+sample_5"
+
 # -n — Number of mismatches allowed between sample loci when build the catalog (default 1).
 #here, vary 'n' across M-1, M, and M+1 (because my optimized 'M' value = 2, I will iterate over 1, 2, and 3 here), with 'm' and 'M' set to the optimized value based on prior visualizations (here 'm' = 3, and 'M'=2).
 

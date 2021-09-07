@@ -109,6 +109,9 @@ done
 /home/d669d153/work/stacks-2.41/populations -P stacks_m$i -M pipeline_popmap.txt --vcf -t 15
 done
 ```
+
+#### Note: The vcf file output by Stacks containing only variant site information for each sample will be called 'populations.snps.vcf', unless you renamed it yourself by setting the -o flag in populations. This is the vcf file that you want to use for input to RADstackshelpR functions.
+
 ## Step 4: Visualize the output of these 5 runs and determine the optimal value for m.
 ```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
 #optimize_m function will generate summary stats on your 5 iterative runs

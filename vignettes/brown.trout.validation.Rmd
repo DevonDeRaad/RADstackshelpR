@@ -68,7 +68,9 @@ done
 
 ```
 
-## Step 3: Iterate over values of 'm' ranging from 3-7, while leaving all other parameters at default values.
+#### Note: If too many of your samples contain low-data, it may be difficult to determine an appropriate 'R80' cutoff, as there will be very few (even 0) SNPs shared at an 80% completeness threshold. Personally, I remove samples with demultiplexed .fast.gz file sizes below 2Mb, before starting my Stacks runs, because these samples do not have enough data to be usable downstream, and can make setting an 'R80' cutoff impossible. If you receive an errors saying "'names' attribute [2] must be the same length as the vector [1]", or "Rbind issue", you likely have too many low-data samples to compare the number of SNPs between runs at high filtering thresholds, and re-running stacks without including samples with very small file sizes should alleviate this issue. Here, all samples are high-quality, and will be retained.
+
+## Step 2: Iterate over values of 'm' ranging from 3-7, while leaving all other parameters at default values.
 ###Bash code to execute this:
 ```{bash, eval = FALSE}
 # Build loci de novo in each sample for the single-end reads only.
@@ -101,7 +103,9 @@ done
 done
 ```
 
-## Step 4: Visualize the output of these 5 runs and determine the optimal value for m.
+#### Note: The vcf file output by Stacks containing only variant site information for each sample will be called 'populations.snps.vcf', unless you renamed it yourself by setting the -o flag in populations. This is the vcf file that you want to use for input to RADstackshelpR functions.
+
+## Step 3: Visualize the output of these 5 runs and determine the optimal value for m.
 ```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
 #optimize_m function will generate summary stats on your 5 iterative runs
 #input can be full path to each file or just the file name if your working directory contains the files
@@ -130,7 +134,7 @@ knitr::include_graphics("trt.m.png")
 
 ### The green dots here are the 80% completeness threshold (R80), and we can see that the numbers of SNPs and polymorphic loci recovered using each scheme are not exactly the same as the numbers that we recovered here. This is likely because I am using Stacks v2.41 and this paper used Stacks v1.42. Nonetheless, we see the same pattern (a decreasing number of polymorphic loci at an 'R80' cutoff going iteratively from m=3 -> m=7).
 
-## Step 5: Iterate over values of M ranging from 1-8, setting m to the optimal value (here 3).
+## Step 4: Iterate over values of M ranging from 1-8, setting m to the optimal value (here 3).
 ### This code follows the bash chunk above, utilizing the same variable $files
 ```{bash, eval = FALSE}
 # -M — Maximum distance (in nucleotides) allowed between stacks (default 2).
@@ -155,7 +159,7 @@ done
 done
 ```
 
-## Step 6: Visualize the output of these 8 runs and determine the optimal value for M.
+## Step 5: Visualize the output of these 8 runs and determine the optimal value for M.
 ```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
 #optimize M
 M.out<-optimize_bigM(M1="/Users/devder/Desktop/brown.trout/bigM1.vcf",
@@ -182,7 +186,7 @@ knitr::include_graphics("trt.bigM.png")
 
 ### Again, the green dots here are the R80 cutoff. These iterations using Stacks v1.42 do not show the same steep drop-off in the number of polymorphic loci retained at higher 'M' values that we see using Stacks v2.41. This result highlights the necessity of optimizing parameters according to the optimal output for the specific dataset and specific software being used. 
 
-## Step 7: Iterate over values of n ranging from M-1, M, M+1, setting m and M to the optimal values (here 3 and 2, respectively).
+## Step 6: Iterate over values of n ranging from M-1, M, M+1, setting m and M to the optimal values (here 3 and 2, respectively).
 ### This code chunk runs the last three Stacks iterations, again re-using the variable $files
 ```{bash, eval = FALSE}
 # -n — Number of mismatches allowed between sample loci when build the catalog (default 1).
@@ -206,7 +210,7 @@ done
 done
 ```
 
-## Step 8: Visualize the output of these 3 runs and determine the optimal value for n.
+## Step 7: Visualize the output of these 3 runs and determine the optimal value for n.
 ```{r, dpi=300, out.width="100%",out.height="100%", fig.align = "center"}
 #optimize n
 n.out<-optimize_n(nequalsMminus1="/Users/devder/Desktop/brown.trout/n1.vcf",
