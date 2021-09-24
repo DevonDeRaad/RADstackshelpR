@@ -109,6 +109,10 @@ for this script is the path to the folder containing the input .fastq.gz
 files and the path to your desired output folder. An example report
 generated using this script can be seen
 [here](https://devonderaad.github.io/RADstackshelpR/articles/quality.control.vignette.html).
+Because the fastq.gz files for your experiment may be large and handled
+remotely, an example bash script for executing this RMarkdown file as a
+job on a high performance computing cluster is available
+[here](https://github.com/DevonDeRaad/RADstackshelpR/blob/master/inst/extdata/RMarkdown.qc.submit.script.sh).
 
 ### Iterate over potential values for the ‘m’ parameter in the ‘ustacks’ module
 
