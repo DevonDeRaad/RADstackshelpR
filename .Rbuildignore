@@ -12,5 +12,6 @@
 ^vignettes/brown.trout.validation.Rmd$
 ^vignettes/trt.m.png$
 ^vignettes/trt.bigm.png$
+^vignettes/quality.control.vignette.Rmd$
 ^Meta$
 ^cran-comments\.md$

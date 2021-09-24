@@ -26,11 +26,15 @@ knitr::opts_chunk$set(
 
 More details on demultiplexing using process_radtags can be found [here](https://catchenlab.life.illinois.edu/stacks/comp/process_radtags.php)
 
+### Quality control
+
+Once each sample has been demultiplexed into an individual file with the extension '.fastq.gz', it is now possible to assess the quality of each sequenced sample. Samples which receive very little sequencing will not contain enough reads to assemble shared loci, and should be dropped right away, so that they do not bias the downstream optimization of assembly parameters. I have written an [RMarkdown script](https://github.com/DevonDeRaad/RADstackshelpR/blob/master/inst/extdata/fastqcr.Rmd) that uses the R package [fastqcr](https://github.com/kassambara/fastqcr) to generate a report visualizing the quality and quantity of sequencing for each sample, and recommending a subset of samples to be immediately dropped before parameter optimization. The only modification necessary for this script is the path to the folder containing the input .fastq.gz files and the path to your desired output folder. An example report generated using this script can be seen [here](https://devonderaad.github.io/RADstackshelpR/articles/quality.control.vignette.html).
+
 ### Iterate over potential values for the 'm' parameter in the 'ustacks' module
 
-Once you have an individual zipped fastq file for each sample, we need to iterate over the relevant values for 'm' within the 'ustacks' module (here using 15 threads at each step to speed up computation). Running the following code in a terminal window will perform five separate iterations of the entire STACKS pipeline, each with a different parameter setting for 'm' (3-7), and save the results as an unfiltered vcf file in a specified directory.
+Now that we have run quality control, we have a reasonable set of samples for which to perform parameter optimization for de novo assembly. To begin, we need to iterate over the relevant values for 'm' within the 'ustacks' module (here using 15 threads at each step to speed up computation). Running the following code in a terminal window will perform five separate iterations of the entire STACKS pipeline, each with a different parameter setting for 'm' (3-7), and save the results as an unfiltered vcf file in a specified directory.
 
-#### Note: If too many of your samples contain low-data, it may be difficult to determine an appropriate 'R80' cutoff, as there will be very few (even 0) SNPs shared at an 80% completeness threshold. Personally, I remove samples with demultiplexed .fast.gz file sizes below 2Mb, before starting my Stacks runs, because these samples do not have enough data to be usable downstream, and can make setting an 'R80' cutoff impossible. If you receive an errors saying "'names' attribute [2] must be the same length as the vector [1]", or "Rbind issue", you likely have too many low-data samples to compare the number of SNPs between runs at high filtering thresholds, and re-running stacks without including samples with very small file sizes should alleviate this issue.
+####Note: An example bash script for performing all 16 optimization runs is available [here](https://github.com/DevonDeRaad/RADstackshelpR/blob/master/inst/extdata/denovo.stacks.pipeline.sh).
 
 ```{bash, eval = FALSE}
 #designate all sample ID's to a single variable called 'files', each sample should be in the directory, and the filename should match this designation except for the extension, e.g., 'sample_2' = 'sample_2.fq.gz'
@@ -93,6 +97,8 @@ vis_snps(output = m.out, stacks_param = "m")
 vis_loci(output = m.out, stacks_param = "m")
 #3 is the optimal m value, and will be used next to optimize M
 ```
+
+#### Note: If you receive an error saying "'names' attribute [2] must be the same length as the vector [1]", or "Rbind issue", you likely have too many low-data samples to compare the number of SNPs between runs at high filtering thresholds, as there will be very few (even 0) SNPs shared at an 80% completeness threshold. Following the quality control suggestions above, and re-running Stacks without extreme low-data samples, should alleviate this issue.
 
 ### Iterate over potential values for the 'M' parameter in the 'ustacks' module
 

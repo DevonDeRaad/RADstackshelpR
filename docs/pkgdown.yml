@@ -4,6 +4,7 @@ pkgdown_sha: ~
 articles:
   brown.trout.validation: brown.trout.validation.html
   optimize_denovo: optimize_denovo.html
+  quality.control.vignette: quality.control.vignette.html
   reproducible.vignette: reproducible.vignette.html
-last_built: 2021-09-07T22:53Z
+last_built: 2021-09-24T16:09Z
 

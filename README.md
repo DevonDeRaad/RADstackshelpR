@@ -19,7 +19,19 @@ install.packages("RADstackshelpR")
 
 ## Citation
 
-Permanent DOI to come.
+If you are using RADStackshelpR in your pipeline for RAD analyses, I
+recommend citing both RADStackshelpR and the R package vcfR (which is
+used heavily inside of RADStackshelpR functions) e.g., “We used the R
+packages *RADStackhelpR* (DeRaad, 2021) and *vcfR* (Knaus and Grunwald,
+2017) to calculate summary statistics from *Stacks* output vcf files and
+determine the optimal parameters for assembling RAD loci de novo.”
+
+DeRaad, Devon A. 2021. Permanent DOI for RADStackshelpR to come.
+
+Knaus, Brian J., and Niklaus J. Grunwald. 2017. VCFR: a package to
+manipulate and visualize variant call format data in R. Molecular
+Ecology Resources 17(1):44-53.
+<http://dx.doi.org/10.1111/1755-0998.12549>.
 
 ## Full documentation
 
@@ -30,7 +42,7 @@ RADstackshelpR. For a quick start, simply follow the directions below:
 
 ## Overview
 
-RADstackshelpR offers a handful of useful wrapper functions which
+*RADstackshelpR* offers a handful of useful wrapper functions which
 streamline the reading, analyzing, and visualizing of variant call
 format (vcf) files in R. The internal calls of each function rely
 heavily on the excellent R package
@@ -39,11 +51,11 @@ analyze vcf files, and the widely renowned
 [ggplot2](https://ggplot2.tidyverse.org/) package to create elegant
 visualizations. This package was designed to facilitate an explicit
 pipeline for optimizing
-[STACKS](https://catchenlab.life.illinois.edu/stacks/) paramaters during
+[Stacks](https://catchenlab.life.illinois.edu/stacks/) paramaters during
 de novo (without a reference genome) assembly and variant calling of
-restriction-enzyme associated DNA sequence (RADseq) data. STACKS is a
+restriction-enzyme associated DNA sequence (RADseq) data. *Stacks* is a
 relatively user-friendly, command-line program designed for assembling
-RADseq data into loci, and performing variant (SNP) calling. STACKS
+RADseq data into loci, and performing variant (SNP) calling. *Stacks*
 offers users flexibility in setting parameters during the assembly
 process, allowing custom parameter optimization for any input dataset.
 The pipeline implemented here is based on the 2017 paper [Lost in
@@ -54,11 +66,11 @@ establishes clear recommendations for optimizing the parameters ‘m’,
 Despite these clear recommendations, the full range of parameter space
 suggested to explore in this paper is often left unexplored in empirical
 studies, due to the computational and logistical difficulty of executing
-and analyzing 16 separate runs through the entire STACKS pipeline. This
-package is designed to automate that logistical difficulty, leaving
+and analyzing 16 separate runs through the entire *Stacks* pipeline.
+This package is designed to automate that logistical difficulty, leaving
 users with a clear set of steps to follow for thoroughly optimized, de
 novo RAD locus assembly and variant calling. For more details on
-RADstackshelpR please check out this
+*RADstackshelpR* please check out this
 [website](https://devonderaad.github.io/RADstackshelpR/index.html) built
 using [pkgdown](https://pkgdown.r-lib.org/). Otherwise, simply follow
 the steps below to run the optimized de novo assembly pipeline.
@@ -66,7 +78,7 @@ the steps below to run the optimized de novo assembly pipeline.
 ## Usage
 
 The first step is demultiplexing your sequence data using the
-‘process\_radtags’ function from STACKS, which could be executed by
+‘process\_radtags’ function from *Stacks*, which could be executed by
 running something like this in a terminal window, if your raw sequence
 file is in your working directory, and you used the enzyme ‘ndeI’ as
 your cutter:
@@ -80,17 +92,38 @@ your cutter:
 More details on demultiplexing using process\_radtags can be found
 [here](https://catchenlab.life.illinois.edu/stacks/comp/process_radtags.php)
 
+### Quality control
+
+Once each sample has been demultiplexed into an individual file with the
+extension ‘.fastq.gz’, it is now possible to assess the quality of each
+sequenced sample. Samples which receive very little sequencing will not
+contain enough reads to assemble shared loci, and should be dropped
+right away, so that they do not bias the downstream optimization of
+assembly parameters. I have written an [RMarkdown
+script](https://github.com/DevonDeRaad/RADstackshelpR/blob/master/inst/extdata/fastqcr.Rmd)
+that uses the R package [fastqcr](https://github.com/kassambara/fastqcr)
+to generate a report visualizing the quality and quantity of sequencing
+for each sample, and recommending a subset of samples to be immediately
+dropped before parameter optimization. The only modification necessary
+for this script is the path to the folder containing the input .fastq.gz
+files and the path to your desired output folder. An example report
+generated using this script can be seen
+[here](https://devonderaad.github.io/RADstackshelpR/articles/quality.control.vignette.html).
+
 ### Iterate over potential values for the ‘m’ parameter in the ‘ustacks’ module
 
-Once you have an individual zipped fastq file for each sample, we need
-to iterate over the relevant values for ‘m’ within the ‘ustacks’ module
-(here using 15 threads at each step to speed up computation). Running
-the following code in a terminal window will perform five separate
-iterations of the entire STACKS pipeline, each with a different
-parameter setting for ‘m’ (3-7), and save the results as an unfiltered
-vcf file in a specified directory.
+Now that we have run quality control, we have a reasonable set of
+samples for which to perform parameter optimization for de novo
+assembly. To begin, we need to iterate over the relevant values for ‘m’
+within the ‘ustacks’ module (here using 15 threads at each step to speed
+up computation). Running the following code in a terminal window will
+perform five separate iterations of the entire STACKS pipeline, each
+with a different parameter setting for ‘m’ (3-7), and save the results
+as an unfiltered vcf file in a specified directory.
 
-#### Note: If too many of your samples contain low-data, it may be difficult to determine an appropriate ‘R80’ cutoff, as there will be very few (even 0) SNPs shared at an 80% completeness threshold. Personally, I remove samples with demultiplexed .fast.gz file sizes below 2Mb, before starting my Stacks runs, because these samples do not have enough data to be usable downstream, and can make setting an ‘R80’ cutoff impossible. If you receive an errors saying “‘names’ attribute \[2\] must be the same length as the vector \[1\]”, or “Rbind issue”, you likely have too many low-data samples to compare the number of SNPs between runs at high filtering thresholds, and re-running stacks without including samples with very small file sizes should alleviate this issue.
+\#\#\#\#Note: An example bash script for performing all 16 optimization
+runs is available
+[here](https://github.com/DevonDeRaad/RADstackshelpR/blob/master/inst/extdata/denovo.stacks.pipeline.sh).
 
 ``` bash
 #designate all sample ID's to a single variable called 'files', each sample should be in the directory, and the filename should match this designation except for the extension, e.g., 'sample_2' = 'sample_2.fq.gz'
@@ -141,7 +174,7 @@ Space](https://doi.org/10.1111/2041-210X.12775)). I have now moved each
 vcf file into a local directory, and named it according to the parameter
 settings for the given run.
 
-#### Note: The vcf file output by Stacks containing only variant site information for each sample will be called ‘populations.snps.vcf’, unless you renamed it yourself by setting the -o flag in populations. This is the vcf file that you want to use for input to RADstackshelpR functions.
+#### Note: The variant sites only vcf file output by Stacks will be called ‘populations.snps.vcf’ unless you renamed it yourself by setting the -o flag in populations. This is the vcf file that you want to use for input to RADstackshelpR functions.
 
 ### Use RADstackshelpR to visualize the output of these 5 runs and determine the optimal value for the parameter ‘m’.
 
@@ -192,6 +225,8 @@ vis_loci(output = m.out, stacks_param = "m")
 ``` r
 #3 is the optimal m value, and will be used next to optimize M
 ```
+
+#### Note: If you receive an error saying “‘names’ attribute \[2\] must be the same length as the vector \[1\]”, or “Rbind issue”, you likely have too many low-data samples to compare the number of SNPs between runs at high filtering thresholds, as there will be very few (even 0) SNPs shared at an 80% completeness threshold. Following the quality control suggestions above, and re-running Stacks without extreme low-data samples, should alleviate this issue.
 
 ### Iterate over potential values for the ‘M’ parameter in the ‘ustacks’ module
 
