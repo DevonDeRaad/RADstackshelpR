@@ -10,39 +10,39 @@
 
 src=/home/d669d153/scratch/diadema.dinops #directory that contains a folder with sample data in fasta format
 
-files="908108_H_diadema_Gatokae        diadema
-908150_H_dinops_Guadalcanal     dinops
-908151_H_diadema_Guadalcanal    diadema
-908152_H_diadema_Guadalcanal    diadema
-908153a_H_dinops_Guadalcanal    dinops
-908154_H_dinops_Guadalcanal     dinops
-908155_H_dinops_Guadalcanal     dinops
-908156_H_diadema_Guadalcanal    diadema
-908208_H_diadema_Guadalcanal    diadema
-KVO150_H_diadema_Isabel diadema
-KVO168_H_diadema_Isabel diadema
-KVO169_H_diadema_Isabel diadema
-KVO170_H_diadema_Isabel diadema
-KVO171_H_diadema_Isabel diadema
-KVO172_H_diadema_Isabel diadema
-KVO242_H_dinops_Isabel  dinops
-KVO243_H_dinops_Isabel  dinops
-KVO244_H_dinops_Isabel  dinops
-KVO245_H_dinops_Isabel  dinops
-KVO246_H_dinops_Isabel  dinops
-KVO248_H_dinops_Isabel  dinops
-THL1156_H_demissus_Makira       demissus
-THL1172_H_dinops_Guadalcanal    dinops
-THL1173_H_dinops_Guadalcanal    dinops
-THL17193_H_diadema_Ngella       diadema
-THL17194_H_diadema_Ngella       diadema
-THL17195_H_diadema_Ngella       diadema
-THL17197_H_diadema_Ngella       diadema
-THL17198_H_diadema_Ngella       diadema
-THL17199_H_diadema_Ngella       diadema
-WD1705_H_diadema_E_New_Britain  diadema
-WD2047_H_diadema_Simbu_Prov     diadema
-WD2074_H_diadema_Gulf_Prov      diadema"
+files="908108_H_diadema_Gatokae
+908150_H_dinops_Guadalcanal
+908151_H_diadema_Guadalcanal
+908152_H_diadema_Guadalcanal
+908153a_H_dinops_Guadalcanal
+908154_H_dinops_Guadalcanal
+908155_H_dinops_Guadalcanal
+908156_H_diadema_Guadalcanal
+908208_H_diadema_Guadalcanal
+KVO150_H_diadema_Isabel
+KVO168_H_diadema_Isabel
+KVO169_H_diadema_Isabel
+KVO170_H_diadema_Isabel
+KVO171_H_diadema_Isabel
+KVO172_H_diadema_Isabel
+KVO242_H_dinops_Isabel
+KVO243_H_dinops_Isabel
+KVO244_H_dinops_Isabel
+KVO245_H_dinops_Isabel
+KVO246_H_dinops_Isabel
+KVO248_H_dinops_Isabel
+THL1156_H_demissus_Makira
+THL1172_H_dinops_Guadalcanal
+THL1173_H_dinops_Guadalcanal
+THL17193_H_diadema_Ngella
+THL17194_H_diadema_Ngella
+THL17195_H_diadema_Ngella
+THL17197_H_diadema_Ngella
+THL17198_H_diadema_Ngella
+THL17199_H_diadema_Ngella
+WD1705_H_diadema_E_New_Britain
+WD2047_H_diadema_Simbu_Prov
+WD2074_H_diadema_Gulf_Prov"
 
 # Build loci de novo in each sample for the single-end reads only.
 # -M — Maximum distance (in nucleotides) allowed between stacks (default 2).
