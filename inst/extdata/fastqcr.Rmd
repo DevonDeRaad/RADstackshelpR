@@ -6,6 +6,7 @@ output: html_document
 ---
 
 ```{r, message=FALSE}
+install.packages(c("gridExtra", "knitr", "ggplot2", "fastqcr"))
 library(gridExtra)
 library(knitr)
 library(ggplot2)
